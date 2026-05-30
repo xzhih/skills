@@ -1,0 +1,4 @@
+interface:
+  display_name: "DM Boundary Pass"
+  short_description: "Clarify architecture boundaries before details"
+  default_prompt: "Use $dm-boundary-pass to clarify system boundaries, layers, ownership, and where complexity should belong before discussing UI or implementation details."

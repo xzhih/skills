@@ -1,0 +1,4 @@
+interface:
+  display_name: "DM State Capture"
+  short_description: "Capture long discussion state into durable files"
+  default_prompt: "Use $dm-state-capture to capture the current truth, corrections, decisions, deferred questions, and source-of-truth pointers from this discussion."

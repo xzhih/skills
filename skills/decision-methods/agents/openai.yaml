@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Decision Methods"
+  short_description: "Manually route this conversation to the right DM skill"
+  default_prompt: "Use $decision-methods to inspect the current conversation and route to the most relevant Decision Methods skill."

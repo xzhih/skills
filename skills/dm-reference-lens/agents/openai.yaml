@@ -1,0 +1,4 @@
+interface:
+  display_name: "DM Reference Lens"
+  short_description: "Compare references against local product boundaries"
+  default_prompt: "Use $dm-reference-lens to compare the reference products or systems against this project's current boundaries and produce decision-ready recommendations."
