@@ -19,12 +19,13 @@ npx skills add xzhih/skills --all
 Install selected skills:
 
 ```sh
-npx skills add xzhih/skills --skill careful-coding decision-methods dm-boundary-pass dm-reference-lens dm-state-capture dm-weight-check
+npx skills add xzhih/skills --skill careful-coding codex-image-gen decision-methods dm-boundary-pass dm-reference-lens dm-state-capture dm-weight-check
 ```
 
 ## Skills
 
 - `careful-coding`: careful implementation, debugging, refactoring, and reviewable code changes.
+- `codex-image-gen`: generate or edit images via the Responses API `image_generation` tool, auto-detecting auth (API key / codex custom provider / ChatGPT login).
 - `decision-methods`: manual router for the Decision Methods skill set.
 - `dm-boundary-pass`: clarify architecture boundaries before implementation details.
 - `dm-reference-lens`: compare references against local product boundaries.
@@ -36,6 +37,7 @@ npx skills add xzhih/skills --skill careful-coding decision-methods dm-boundary-
 ```text
 skills/
   careful-coding/
+  codex-image-gen/
   decision-methods/
   dm-boundary-pass/
   dm-reference-lens/
