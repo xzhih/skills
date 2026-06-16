@@ -1,4 +1,0 @@
-interface:
-  display_name: "DM Weight Check"
-  short_description: "Check whether a direction is becoming too heavy"
-  default_prompt: "Use $dm-weight-check to check whether the core is absorbing too much complexity and decide what should move out, be renamed, or be deferred."

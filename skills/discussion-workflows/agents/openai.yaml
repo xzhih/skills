@@ -1,0 +1,4 @@
+interface:
+  display_name: "Discussion Workflows"
+  short_description: "Route product and architecture discussions"
+  default_prompt: "Use $discussion-workflows to clarify this product or architecture discussion, choose the right discussion actions, and produce decision-ready next steps."
