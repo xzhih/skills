@@ -10,6 +10,14 @@
 - 对话可能被压缩
 - 并行调研返回了有用内容
 
+默认写入：
+
+```text
+docs/discussion-workflows/sessions/<YYYY-MM-DD>-<slug>.md
+```
+
+同一轮连续讨论追加同一个 session 文件；新的后续讨论新建 session 文件。当前有效边界只更新 `docs/discussion-workflows/boundaries/<slug>.md`。
+
 阶段记录至少写：
 
 ```text

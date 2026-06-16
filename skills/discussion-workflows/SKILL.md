@@ -1,6 +1,6 @@
 ---
 name: discussion-workflows
-description: Use when a product, architecture, tool, or agent discussion needs to stay decision-ready. Route and combine discussion actions for comparing reference products or systems, clarifying boundaries and ownership, checking whether a direction is becoming too heavy, and capturing long or corrected discussions into durable state.
+description: Use when a product, architecture, tool, or agent discussion needs to stay decision-ready. Route and combine discussion actions for comparing reference products or systems, clarifying boundaries and ownership, checking whether a direction is becoming too heavy, and capturing long or corrected discussions into durable files under docs/discussion-workflows.
 ---
 
 # Discussion Workflows
@@ -67,7 +67,73 @@ description: Use when a product, architecture, tool, or agent discussion needs t
 2. 如果项目已有 source of truth，先读当前有效材料。
 3. 选择一个或多个动作，不要复述整套方法。
 4. 给出可拍板判断：已确认约束、判断、理由、不要走的方向、下一步。
-5. 讨论变长或用户要求时，把当前判断写入 durable files。
+5. 讨论变长或用户要求时，把当前判断写入 docs/discussion-workflows/。
+```
+
+## Storage Layout
+
+默认在当前项目内保存到：
+
+```text
+docs/discussion-workflows/
+  index.md
+  boundaries/
+  references/
+  complexity-checks/
+  sessions/
+  inbox/
+```
+
+如果用户指定其他根目录，使用用户指定目录，但保留同样的子目录结构。
+
+目录语义：
+
+```text
+index.md
+  总索引。列当前有效边界、最近讨论记录、参考对照、减重检查、未解决问题。
+
+boundaries/<slug>.md
+  一个边界或核心定义一个 canonical 文件。这里保存当前有效结论，可以持续更新。
+
+references/<YYYY-MM-DD>-<slug>.md
+  一次参考对象对照记录。记录参考了谁、借什么、不借什么、最后判断。
+
+complexity-checks/<YYYY-MM-DD>-<slug>.md
+  一次减重检查记录。记录哪里变重、复杂度应该移动到哪里、哪些内容延后。
+
+sessions/<YYYY-MM-DD>-<slug>.md
+  讨论过程记录。记录用户纠正、转向、争议、阶段判断和为什么改变判断。
+
+inbox/<YYYY-MM-DD>-<slug>.md
+  原始资料、摘录、未整理想法、还没形成判断的临时输入。
+```
+
+文件名规则：
+
+```text
+<slug> 使用 2-6 个英文小写词，kebab-case。
+日期使用本地日期 YYYY-MM-DD。
+同一天同主题已有文件时，优先更新已有文件；确实是独立讨论再加 -2、-3。
+```
+
+修改规则：
+
+```text
+边界定义：更新同一个 boundaries/<slug>.md，不为每次小改创建新边界文件。
+讨论过程：每个连续讨论阶段创建或追加一个 sessions/<YYYY-MM-DD>-<slug>.md，长期保留，不覆盖旧 session。
+参考对照：每次重要参考比较保留 dated record；同一轮比较可以更新同一个文件。
+减重检查：每次明确检查保留 dated record；后续复查新建 dated record。
+索引：每次写入或更新任何文件后，都更新 index.md。
+原始资料：先放 inbox/；形成判断后，在 index 或具体文件里链接，不把原始材料混进 canonical 边界定义。
+```
+
+读取顺序：
+
+```text
+1. 先读 docs/discussion-workflows/index.md。
+2. 再按索引读取相关 boundaries/*.md。
+3. 需要过程原因时，再读最近的 sessions/*.md。
+4. 只有需要原始证据时才读 inbox/。
 ```
 
 ## Compare References
@@ -183,6 +249,8 @@ description: Use when a product, architecture, tool, or agent discussion needs t
 
 用于对话很长、用户多次纠正、旧名称被新名称替换、讨论可能之后继续，或者用户要求落盘时。
 
+优先写入 `docs/discussion-workflows/`。不要只写聊天总结；必须让下一轮 agent 能从项目文件恢复当前判断。
+
 必须记录存在的事实：
 
 ```text
@@ -198,10 +266,10 @@ description: Use when a product, architecture, tool, or agent discussion needs t
 使用两层保存：
 
 ```text
-inbox/ 或类似目录：
+docs/discussion-workflows/inbox/
   原始资料、文章、代码摘录、调研整理、还没定论的笔记
 
-docs/ 或类似目录：
+docs/discussion-workflows/
   当前结论、主题记录、架构记录、复盘、阶段记录
 ```
 
@@ -218,6 +286,51 @@ docs/ 或类似目录：
 明确以后再说的主题
 还没解决的问题
 可能误导后续的旧文档或旧说法
+```
+
+边界文件建议结构：
+
+```text
+# <Boundary Name>
+
+## Current Definition
+当前有效定义。
+
+## Responsibilities
+这一层负责什么。
+
+## Non-Goals
+明确不负责什么。
+
+## Ownership
+复杂度归属、相关层级、外部依赖。
+
+## Open Questions
+还没定的问题。
+
+## Evidence
+链接相关 sessions/references/complexity-checks 文件。
+```
+
+session 文件建议结构：
+
+```text
+# <Session Title>
+
+## Context
+这轮为什么开始。
+
+## Turns
+关键讨论、用户纠正、重要转向。
+
+## Decisions
+这轮实际定下来的判断。
+
+## Deferred
+明确以后再说的问题。
+
+## Follow-Up Writes
+本轮更新了哪些 index/boundaries/references/complexity-checks 文件。
 ```
 
 ## Concepts To Split

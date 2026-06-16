@@ -1,15 +1,15 @@
 ---
 name: codex-image-gen
 description: >-
-  Generate or edit raster images (photos, illustrations, product mockups, icons,
-  hero images, textures, concept art) through the codex-compatible OpenAI
-  Responses API `image_generation` tool. Use this whenever the user wants to
-  create, render, or edit an image and has either an OPENAI_API_KEY or is logged
-  into codex with a ChatGPT account — even if they don't name an API. The bundled
-  script auto-detects the auth mode (API Key vs ChatGPT official login), handles
-  OAuth token refresh, SSE parsing, size validation, and saving. Trigger on
-  requests like "make me a logo", "generate a hero image", "render a 4k wallpaper",
-  "create a product mockup", "edit this photo's background".
+  Use when the user wants to generate, render, or edit raster images such as
+  photos, illustrations, product mockups, icons, hero images, textures, concept
+  art, or wallpapers through the codex-compatible OpenAI Responses API
+  `image_generation` tool. Trigger on requests like "make me a logo", "generate
+  a hero image", "render a 4k wallpaper", "create a product mockup", or "edit
+  this photo's background", even if the user does not name an API. Use when
+  credentials are available through OPENAI_API_KEY, codex provider config, or a
+  ChatGPT login; the bundled script auto-detects auth mode, refreshes OAuth
+  tokens, parses SSE, validates image size, and saves outputs.
 ---
 
 # Codex Image Generation
