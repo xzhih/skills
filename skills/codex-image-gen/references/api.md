@@ -1,8 +1,11 @@
-# Responses API image generation — raw reference
+# Image generation API — raw reference
 
-Low-level details behind `scripts/generate.py`. Read this only when debugging the
+Low-level details behind `scripts/generate.mjs`. Read this only when debugging the
 script, porting the logic elsewhere, or constructing requests by hand. For normal
 use, just call the script.
+
+`scripts/generate.mjs` is standalone: it uses Node's native `fetch`/streams and does
+not call Python or curl as a fallback.
 
 ## Contents
 - [Request body (both modes)](#request-body-both-modes)
@@ -15,7 +18,29 @@ use, just call the script.
 - [Headers: what's required](#headers-whats-required)
 - [Errors](#errors)
 
-## Request body (both modes)
+## Direct Images request body (default)
+
+The default path uses `/images/generations` for generation and `/images/edits` for
+edits. This is the path to use for 2K/4K outputs.
+
+```json
+{
+  "model": "gpt-image-2",
+  "prompt": "Generate a small cute cat. No text, no watermark.",
+  "n": 1,
+  "size": "3840x2160",
+  "quality": "high",
+  "output_format": "webp",
+  "output_compression": 95
+}
+```
+
+For ChatGPT login, the URLs are
+`https://chatgpt.com/backend-api/codex/images/generations` and
+`https://chatgpt.com/backend-api/codex/images/edits`. For API key mode, the URLs
+are `{base}/images/generations` and `{base}/images/edits`.
+
+## Responses request body (compatibility)
 
 The body is identical across modes. `instructions` is required; `input` must be a
 list of message items. The `image_generation` tool does **not** accept an `n` field.
@@ -26,15 +51,18 @@ list of message items. The `image_generation` tool does **not** accept an `n` fi
   "instructions": "You are a helpful assistant. When asked to create or edit an image, call the image_generation tool.",
   "input": [
     {
+      "type": "message",
       "role": "user",
       "content": [
         { "type": "input_text", "text": "Generate a small cute cat. No text, no watermark." }
       ]
     }
   ],
+  "tool_choice": { "type": "image_generation" },
   "tools": [
     {
       "type": "image_generation",
+      "action": "generate",
       "model": "gpt-image-2",
       "size": "1024x1024",
       "quality": "low",
@@ -146,11 +174,13 @@ Then set the result as `OPENAI_API_KEY` and the script uses mode A.
 
 **Mode B (SSE):** relevant events per `output_index`:
 - `response.image_generation_call.partial_image` → `partial_image_b64` (progressive;
-  last one is full), plus `size`/`quality`/`output_format`/`background`.
+  preview only), plus `size`/`quality`/`output_format`/`background`.
 - `response.output_item.done` → `item.result` (final b64) + metadata.
 - `response.completed` / `response.failed` terminate the stream.
 
-Accumulate the latest `result` per `output_index`; decode base64 to bytes.
+Use only a completed `image_generation_call.result` as the final image. Do not save
+`partial_image_b64` as the output: partial previews can be lower resolution than
+the requested size.
 
 ## Parameter rules (tested)
 
@@ -175,6 +205,12 @@ Verified rejections (`400 image_generation_user_error`):
 `output_format`: `png` / `jpeg` / `webp`, all verified both modes. At `1024x1024`,
 same image ≈ png 1.5 MB, webp 0.95 MB, jpeg 0.11 MB. `webp` accepts
 `output_compression` (0–100).
+
+`action`: `auto` / `generate` / `edit`. Keep `auto` for ambiguous reference-image
+workflows; use `generate` or `edit` to force behavior.
+
+`partial_images`: `0`–`3` streamed previews. Each partial image is progress output,
+not the final output to save.
 
 `background: transparent` is **not supported** by gpt-image-2.
 

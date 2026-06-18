@@ -3,21 +3,23 @@ name: codex-image-gen
 description: >-
   Use when the user wants to generate, render, or edit raster images such as
   photos, illustrations, product mockups, icons, hero images, textures, concept
-  art, or wallpapers through the codex-compatible OpenAI Responses API
-  `image_generation` tool. Trigger on requests like "make me a logo", "generate
+  art, or wallpapers through the codex-compatible Images API by default, with a
+  Responses API `image_generation` compatibility path. Trigger on requests like "make me a logo", "generate
   a hero image", "render a 4k wallpaper", "create a product mockup", or "edit
   this photo's background", even if the user does not name an API. Use when
   credentials are available through OPENAI_API_KEY, codex provider config, or a
-  ChatGPT login; the bundled script auto-detects auth mode, refreshes OAuth
+  ChatGPT login; the bundled Node script auto-detects auth mode, refreshes OAuth
   tokens, parses SSE, validates image size, and saves outputs.
 ---
 
 # Codex Image Generation
 
-Generate or edit images via the Responses API `image_generation` tool (gpt-image-2),
+Generate or edit images via the direct Images API by default (gpt-image-2),
 working with **two interchangeable auth modes**. The request body is identical
-across modes; only the endpoint and auth headers differ — and the bundled script
-hides all of that.
+across modes for the default path; only the endpoint and auth headers differ — and
+the bundled Node script hides all of that. Use `--api responses` only when you need
+the Responses `image_generation` compatibility path. The Node script is standalone:
+it does not fall back to Python or curl.
 
 ## When to use
 
@@ -35,9 +37,9 @@ existing repo's vector system, edit those vectors directly instead.
 
 | Mode | Trigger | Endpoint | Auth |
 | --- | --- | --- | --- |
-| **A. API Key (env)** | `OPENAI_API_KEY` env set | `{OPENAI_BASE_URL or api.openai.com}/v1/responses` | `Authorization: Bearer <key>` |
-| **A. API Key (codex provider)** | `~/.codex/config.toml` active `model_provider` has `base_url` + `experimental_bearer_token` (or `env_key`) | `{base_url}/responses` | `Authorization: Bearer <token>` |
-| **B. ChatGPT login** | `~/.codex/auth.json` `auth_mode=chatgpt` | `https://chatgpt.com/backend-api/codex/responses` (SSE) | OAuth `access_token` + `chatgpt-account-id` |
+| **A. API Key (env)** | `OPENAI_API_KEY` env set | `{OPENAI_BASE_URL or api.openai.com}/v1/images/generations|edits` | `Authorization: Bearer <key>` |
+| **A. API Key (codex provider)** | `~/.codex/config.toml` active `model_provider` has `base_url` + `experimental_bearer_token` (or `env_key`) | `{base_url}/images/generations|edits` | `Authorization: Bearer <token>` |
+| **B. ChatGPT login** | `~/.codex/auth.json` `auth_mode=chatgpt` | `https://chatgpt.com/backend-api/codex/images/generations|edits` | OAuth `access_token` + `chatgpt-account-id` |
 
 Auto-detect priority: **`OPENAI_API_KEY` env → codex config.toml custom provider →
 ChatGPT login (`auth.json`)**. This mirrors codex itself: if you've pointed codex at
@@ -46,29 +48,32 @@ need to think about which one — just run it. Force one with `--mode apikey|cha
 
 ## How to run
 
-Use the bundled script. It only needs Python 3 stdlib (no pip install).
+Use the bundled Node script. It only needs Node 18+ (no npm install).
 
 ```bash
-python scripts/generate.py --prompt "<description>" --out <path>
+node scripts/generate.mjs --prompt "<description>" --out <path>
 ```
 
 Common options:
 
 ```bash
 # basic
-python scripts/generate.py --prompt "a cute cat on a windowsill, soft light, no text" --out cat.png
+node scripts/generate.mjs --prompt "a cute cat on a windowsill, soft light, no text" --out cat.png
 
-# explicit resolution + format
-python scripts/generate.py --prompt "4k mountain landscape at dawn" --size 3840x2160 --format webp --out hero.webp
+# explicit resolution + format/compression
+node scripts/generate.mjs --prompt "4k mountain landscape at dawn" --size 3840x2160 --format webp --output-compression 90 --out hero.webp
 
 # multiple variants of one prompt
-python scripts/generate.py --prompt "minimal coffee brand logo" --n 3 --out logo.png
+node scripts/generate.mjs --prompt "minimal coffee brand logo" --n 3 --out logo.png
 
 # edit / use a reference image (repeatable)
-python scripts/generate.py --prompt "replace background with warm sunset" --input-image photo.png --out edited.png
+node scripts/generate.mjs --prompt "replace background with warm sunset" --input-image photo.png --action edit --out edited.png
 
 # force a mode if needed
-python scripts/generate.py --prompt "..." --mode chatgpt --out out.png
+node scripts/generate.mjs --prompt "..." --mode chatgpt --out out.png
+
+# compatibility path (may not preserve 2K/4K under ChatGPT login)
+node scripts/generate.mjs --prompt "..." --api responses --out out.png
 ```
 
 The script prints a one-line JSON summary (mode, saved paths, returned size/quality,
@@ -90,6 +95,18 @@ These come from actually exercising the endpoint — trust them over guesses.
     quality tiers or build quality-based fallbacks when running under ChatGPT login.
 - **`--format`**: `png` (default), `jpeg` (smaller, no transparency), `webp` (small,
   web-friendly). All three verified in both modes.
+- **`--api`**: `images|responses` (default `images`). Use `images` for 2K/4K and
+  high-quality output. `responses` is retained for compatibility; under ChatGPT
+  login it may return reduced dimensions even when a 4K size is requested.
+- **`--action`**: `auto|generate|edit` (default `auto`). Use `generate` to force a
+  new image and `edit` when input images are meant to be modified.
+- **`--background`**: `auto|opaque`. `transparent` is intentionally not exposed
+  because `gpt-image-2` rejects it.
+- **`--output-compression`**: `0–100` for `jpeg` / `webp` only.
+- **`--partial-images`**: `0–3` streamed previews, only used by `--api responses`.
+  The script never saves partial previews as final outputs; it waits for a completed
+  `image_generation_call.result`.
+- **`--moderation`**: `auto|low`.
 - **`--n`**: 1–10. Produces variants of the same prompt by looping the request (the
   tool itself doesn't accept an `n` field). For several *distinct* assets, call the
   script once per asset instead of using `--n`.
@@ -118,7 +135,7 @@ background and remove it locally:
    in the prompt — see the "transparent-ready subject" recipe in
    `references/prompting.md`.
    ```bash
-   python scripts/generate.py --prompt "<subject> on a perfectly flat solid #00ff00 chroma-key background, no shadows, crisp edges, generous padding, no text" --out raw.png
+   node scripts/generate.mjs --prompt "<subject> on a perfectly flat solid #00ff00 chroma-key background, no shadows, crisp edges, generous padding, no text" --out raw.png
    ```
 2. Convert the key color to alpha (needs `pip install pillow numpy`):
    ```bash
@@ -141,12 +158,15 @@ glass, smoke, soft shadows), tell the user chroma-keying may not be clean enough
   to codex.
 - `429` / `500` / `502` / `503` / timeout: transient — retry with backoff (e.g. 1s,
   3s, 8s). In mode B, `429` may also mean the ChatGPT plan's usage limit is hit.
-- Mode B is slower (≈50–80s per image, first call can be ~90s cold). For UIs, run
-  generation as an async task.
+- Responses mode is slower (≈50–80s per image, first call can be ~90s cold). For
+  UIs, run generation as an async task.
 
 ## Bundled files
 
-- `scripts/generate.py` — the main entry point (stdlib only). Run it to generate/edit.
+- `scripts/generate.mjs` — the main entry point (Node 18+, no npm packages). Run it
+  to generate/edit.
+- `scripts/generate.py` — legacy Python implementation retained for now, not used as
+  a fallback by `generate.mjs`.
 - `scripts/remove_chroma_key.py` — chroma-key → alpha for the transparency workflow
   (needs Pillow + NumPy).
 - `references/prompting.md` — prompt structure, use-case taxonomy, copy/paste recipes.
