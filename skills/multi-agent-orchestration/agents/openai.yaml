@@ -1,0 +1,10 @@
+interface:
+  display_name: "Multi-Agent Orchestration"
+  short_description: "Run long tasks with independent agents"
+  default_prompt: >-
+    Use $multi-agent-orchestration for this heavy task. Read the skill, run its
+    Heavy Task Run Loop, maintain document state, and checkpoint status. If
+    status is in_progress, continue with the next bounded action instead of
+    waiting for me to type "continue"; pause only for missing authorization,
+    capability, evidence, verification, external side-effect approval, or a
+    non-agent-decidable user decision.
