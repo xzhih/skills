@@ -1,15 +1,6 @@
 ---
 name: codex-image-gen
-description: >-
-  Use when the user wants to generate, render, or edit raster images such as
-  photos, illustrations, product mockups, icons, hero images, textures, concept
-  art, or wallpapers through the codex-compatible Images API by default, with a
-  Responses API `image_generation` compatibility path. Trigger on requests like "make me a logo", "generate
-  a hero image", "render a 4k wallpaper", "create a product mockup", or "edit
-  this photo's background", even if the user does not name an API. Use when
-  credentials are available through OPENAI_API_KEY, codex provider config, or a
-  ChatGPT login; the bundled Node script auto-detects auth mode, refreshes OAuth
-  tokens, parses SSE, validates image size, and saves outputs.
+description: Use when the user wants to generate, render, or edit raster images such as photos, illustrations, product mockups, icons, hero images, textures, concept art, wallpapers, transparent cutouts, or reference-based image edits through a codex-compatible image generation API.
 ---
 
 # Codex Image Generation
@@ -20,6 +11,14 @@ across modes for the default path; only the endpoint and auth headers differ —
 the bundled Node script hides all of that. Use `--api responses` only when you need
 the Responses `image_generation` compatibility path. The Node script is standalone:
 it does not fall back to Python or curl.
+
+## Core Contract
+
+1. **Classify the ask.** Decide whether this is generation, edit, reference-guided generation, transparent cutout, or prompt help. Done when the output path, format, size, and source image roles are clear.
+2. **Use the script.** Prefer `scripts/generate.mjs`; do not hand-roll HTTP unless debugging or porting. Done when the script prints its JSON summary and saved paths.
+3. **Preserve intent in prompts.** For anything quality-sensitive, read `references/prompting.md` before writing the final prompt. Done when the prompt states subject, scene/style, constraints, intended use, and required invariants.
+4. **Treat parameters as gates.** Bad size, transparent background, or unsupported format is a parameter problem; fix it rather than retrying blindly.
+5. **Report evidence.** Return saved path(s), mode, size/format when known, and any limitation such as ChatGPT-login fixed quality or chroma-key transparency risk.
 
 ## When to use
 
@@ -79,39 +78,17 @@ node scripts/generate.mjs --prompt "..." --api responses --out out.png
 The script prints a one-line JSON summary (mode, saved paths, returned size/quality,
 elapsed). Report the saved path(s) back to the user.
 
-## Parameters (real, tested limits)
+## Parameter Guardrails
 
-These come from actually exercising the endpoint — trust them over guesses.
+Run `node scripts/generate.mjs --help` for the current flags. Read `references/api.md`
+only when debugging the script, porting the request, or checking raw protocol details.
 
-- **`--size`**: `auto` or `WIDTHxHEIGHT`. Validity rules (enforced both client- and
-  server-side): longest edge ≤ 3840px; width and height each divisible by 16;
-  long:short ratio ≤ 3:1; total pixels between 655,360 and 8,294,400. Verified
-  working sizes: `1024x1024`, `1536x1024`, `1024x1536`, `2048x2048`, `2048x1152`,
-  `2048x1536`, `3840x2160`, `2160x3840`. `auto` lets the model choose (returned
-  e.g. `1122x1402` — note non-round dimensions).
-- **`--quality`**: `low|medium|high|auto`.
-  - Mode A: takes effect (low→cheaper/faster, high→slower/more detail).
-  - **Mode B: ignored by the backend — quality is fixed at ~medium.** Don't promise
-    quality tiers or build quality-based fallbacks when running under ChatGPT login.
-- **`--format`**: `png` (default), `jpeg` (smaller, no transparency), `webp` (small,
-  web-friendly). All three verified in both modes.
-- **`--api`**: `images|responses` (default `images`). Use `images` for 2K/4K and
-  high-quality output. `responses` is retained for compatibility; under ChatGPT
-  login it may return reduced dimensions even when a 4K size is requested.
-- **`--action`**: `auto|generate|edit` (default `auto`). Use `generate` to force a
-  new image and `edit` when input images are meant to be modified.
-- **`--background`**: `auto|opaque`. `transparent` is intentionally not exposed
-  because `gpt-image-2` rejects it.
-- **`--output-compression`**: `0–100` for `jpeg` / `webp` only.
-- **`--partial-images`**: `0–3` streamed previews, only used by `--api responses`.
-  The script never saves partial previews as final outputs; it waits for a completed
-  `image_generation_call.result`.
-- **`--moderation`**: `auto|low`.
-- **`--n`**: 1–10. Produces variants of the same prompt by looping the request (the
-  tool itself doesn't accept an `n` field). For several *distinct* assets, call the
-  script once per asset instead of using `--n`.
-- **Transparency**: gpt-image-2 does **not** support `background: transparent`.
-  Use the chroma-key workflow below instead.
+- `--size`: use `auto` or `WIDTHxHEIGHT`; longest edge must be at most 3840px, each edge divisible by 16, aspect ratio at most 3:1, and total pixels within the tested endpoint limits.
+- `--quality`: works in API-key mode; ChatGPT-login mode ignores it and stays around medium quality.
+- `--api`: use `images` by default for 2K/4K and quality-sensitive output; use `responses` only for compatibility.
+- `--action`: use `edit` when input images are targets to modify; for style/reference-only images, keep generation semantics and label each image role in the prompt.
+- `--n`: use for variants of the same prompt. For distinct assets, call the script once per asset.
+- Transparency: `gpt-image-2` does not support `background: transparent`; use the chroma-key workflow below.
 
 ## Prompting
 

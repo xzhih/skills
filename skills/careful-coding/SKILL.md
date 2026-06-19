@@ -1,6 +1,6 @@
 ---
 name: careful-coding
-description: Load when non-trivial coding work may involve implementation, debugging, refactoring, architecture, migration, feature work, or multi-file changes. Emphasizes explicit assumptions, pushback, simplicity, scope discipline, human-reviewable diffs, verification, and stopping when done. Skip for one-liners, trivial syntax/format/lint fixes, and pure code explanation.
+description: Use when non-trivial coding work involves implementation, debugging, refactoring, architecture, migration, feature work, behavior changes, or multi-file edits. Skip for one-liners, trivial syntax/format/lint fixes, and pure code explanation.
 ---
 
 # Careful Coding
@@ -36,6 +36,20 @@ Task-specific requirements may raise a lower priority when the task clearly dema
 A smaller, reviewable, correct change usually beats a more elegant architectural rewrite.
 
 Do not use this order to avoid necessary work. If correctness or long-term maintainability requires a broader change, propose the escalation explicitly before implementing it.
+
+---
+
+## Default Loop
+
+For non-trivial work, keep this loop tight:
+
+1. Inspect the real code, runtime, docs, or config that controls the requested behavior.
+2. State only material assumptions, blockers, or scope risks.
+3. Make the smallest reviewable change that reaches the requested success state.
+4. Verify with the narrowest meaningful checks available.
+5. Stop and report what changed, what was verified, and any remaining risk.
+
+Each step is complete only when it has enough evidence to support the next step. Do not use planning, cleanup, or verification as a reason to widen the task.
 
 ---
 

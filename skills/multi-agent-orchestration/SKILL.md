@@ -130,6 +130,16 @@ For Level 3-4 work, follow this loop until the run is `complete` or `paused`:
 
 This loop is the default behavior for heavy use cases such as a well-specified new project, complete requirements document, high-risk release, or behavior-preserving refactor. A checkpoint is not a stopping point unless the status is `paused` or `complete`.
 
+Each loop iteration is complete only when:
+
+- the current source of truth reflects any changed goal, plan, finding, or status
+- promoted agent output has evidence, scope, severity or decision impact, and a next action
+- verification evidence has been run, captured, or explicitly identified as the pause blocker
+- the next status is exactly one of `in_progress`, `paused`, or `complete`
+- `in_progress` immediately maps to the next bounded action
+
+Do not treat "agent replied", "review round finished", or "status was updated" as completion by itself.
+
 For user-facing major nodes, use this compact format before executing the node:
 
 ```text
