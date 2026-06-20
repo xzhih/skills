@@ -107,6 +107,45 @@ Necessary abstractions are good engineering. The goal is not to avoid abstractio
 
 Before adding a class, protocol/interface, manager, factory, adapter, registry, service layer, helper module, or configuration system, make sure it solves a current requirement, not an imagined future.
 
+### Minimal Engineering Bias
+
+Before implementing, choose the smallest correct path.
+
+Decision order:
+
+1. Do not build speculative requirements.
+2. Use the standard library when it is correct.
+3. Use platform-native features before custom code.
+4. Use existing dependencies before adding new ones.
+5. Prefer the smallest reviewable diff.
+6. Introduce abstraction only after a second real use case.
+
+Avoid:
+
+- interfaces with one implementation
+- factories with one product
+- config nobody changes
+- wrappers that only delegate
+- managers/services that only rename calls
+- future scaffolding
+- new dependencies for small utilities
+
+Do not remove:
+
+- trust-boundary validation
+- data-loss prevention
+- security checks
+- accessibility basics
+- user-explicit requirements
+- necessary hardware/runtime calibration
+
+For deliberate shortcuts, record the ceiling, upgrade trigger, and upgrade path where future maintainers or agents will naturally inspect it.
+
+Validation:
+
+- Trivial one-liners need no test.
+- Non-trivial logic needs one minimal runnable check.
+
 ### Scope, Stopping, and Escalation
 
 Touch only what is needed to reach the requested success state.
