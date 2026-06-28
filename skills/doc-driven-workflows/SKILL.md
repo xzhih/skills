@@ -9,6 +9,8 @@ description: Use when the user explicitly asks for doc-driven workflows, code/do
 
 Use this skill to prevent documentation drift. The goal is to keep project docs useful for future humans and agents without turning documentation into noisy ceremony.
 
+Doc-driven docs are a human-readable operating and implementation index. A human should be able to read them, understand how modules work and how to operate the product or system, then ask an agent to repair docs, code, or both when documented behavior and implementation diverge.
+
 Do not use this skill just because a repository has documentation. Use it only when the user asks for doc-driven work, when the user asks to review whether code and docs are aligned, or when project guidance explicitly requires doc-driven maintenance for the current kind of code or review task.
 
 Core question:
@@ -43,7 +45,7 @@ If invocation is allowed, read `references/modes-and-gates.md` and resolve the m
 
 Read `references/modes-and-gates.md` before performing bootstrap or maintenance. It defines invocation gates, resolved paths, lightweight discovery, action strength, and the project-guidance rule.
 
-Read `references/document-patterns.md` before creating or materially changing a doc-driven documentation set. It defines the default document set, operation-flow rules, contract/call-path guidance, ledger format, diagrams, and final summary style.
+Read `references/document-patterns.md` before creating or materially changing a doc-driven documentation set. It defines the default document set, human-agent workflow, operation-flow rules, contract/call-path guidance, required Mermaid diagrams, ledger format, examples, and final summary style.
 
 ## Core Workflow
 
@@ -92,6 +94,7 @@ Before claiming doc-driven work is complete:
 - Existing document language was preserved during maintenance.
 - Multilingual-team docs had their language convention restated before writing.
 - Confirmed docs contain only source-backed confirmed behavior.
+- Required Mermaid diagrams were created or updated when docs were bootstrapped or materially changed.
 - Uncertainties or suspected issues are recorded in the open-question ledger.
 - Project guidance references the resolved docs path after bootstrap.
 - Maintenance did not silently edit project guidance unless the task explicitly included doc maintenance.

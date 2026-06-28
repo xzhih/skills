@@ -6,12 +6,14 @@ Use this reference when creating or materially changing a doc-driven documentati
 
 - Default Document Set
 - Root Index
+- Human-Agent Workflow
 - System Map
 - Data And State Flows
 - Operation Flows
+- Examples
 - Contracts And Interfaces
 - Call Paths
-- Diagrams
+- Mermaid Diagrams
 - Open-Question Ledger
 - Final Summary
 
@@ -49,7 +51,28 @@ The root index should include:
 - maintenance rule
 - document map
 - short source-backed system summary
+- Mermaid overview diagram
 - links to module docs
+
+## Human-Agent Workflow
+
+Doc-driven docs are an operating and implementation index for humans and agents.
+
+The intended loop:
+
+1. A human reads docs to understand a module, operation, contract, or call path.
+2. The human notices missing, stale, surprising, or incorrect behavior.
+3. The agent checks source, runtime evidence, or project guidance.
+4. The agent chooses one outcome:
+   - update confirmed docs when code is right and docs drifted
+   - update code when docs describe the intended behavior and code drifted
+   - update both when the source-backed contract changed
+   - record uncertainty in the ledger when evidence is insufficient
+5. Confirmed docs and implementation converge again.
+
+Write docs so this loop is possible. A reader should be able to find where an operation starts, what happens, which files/functions matter, what state changes, and which contract or question to inspect next.
+
+Bootstrap docs must include Mermaid diagrams. Maintenance must update affected Mermaid diagrams when source-backed behavior, boundaries, state, or call paths change.
 
 ## System Map
 
@@ -87,6 +110,89 @@ Examples of observed feedback:
 - SDK/API: response shape, error code, thrown error
 - automation: event, log, retry, alert
 
+## Examples
+
+Examples are reference shapes, not required templates. Adapt them to the real project rather than forcing these labels or files.
+
+### Web Project
+
+For a web product, a useful flow might show:
+
+```text
+User opens /projects
+-> selects a project card
+-> edits a canvas node
+-> clicks Run
+-> frontend validates inputs and sends request
+-> backend creates task and charges or reserves credits
+-> worker processes task and stores result
+-> frontend polls or subscribes and renders success/error state
+```
+
+Mermaid reference:
+
+```mermaid
+sequenceDiagram
+  actor User
+  participant Web
+  participant API
+  participant Worker
+  participant Storage
+  User->>Web: Open project and click Run
+  Web->>Web: Validate inputs
+  Web->>API: Create task
+  API->>API: Charge or reserve credits
+  API->>Worker: Dispatch task
+  Worker->>Storage: Store result
+  Web->>API: Poll or subscribe
+  API-->>Web: Task status and result
+  Web-->>User: Render success or error state
+```
+
+Source-backed docs should let a human answer:
+
+- Which page/component owns the button, form, loading state, and error copy?
+- Which request fields are sent, and which backend route receives them?
+- Which database rows, files, queues, or external services change?
+- Which worker or background path produces the visible result?
+- Where should an agent patch docs or code if the UI and backend disagree?
+
+### App Project
+
+For a mobile or desktop app, a useful flow might show:
+
+```text
+User opens Settings
+-> toggles a permission or feature
+-> app updates local state
+-> app calls a service, sync engine, or platform API
+-> local persistence updates
+-> UI reflects success, pending sync, or recoverable failure
+```
+
+Mermaid reference:
+
+```mermaid
+stateDiagram-v2
+  [*] --> ViewingSettings
+  ViewingSettings --> UpdatingLocalState: User toggles feature
+  UpdatingLocalState --> Syncing: Call service or platform API
+  Syncing --> Synced: Success
+  Syncing --> PendingSync: Offline or retryable failure
+  Syncing --> Failed: Non-retryable failure
+  PendingSync --> Syncing: Retry or app resumes
+  Synced --> ViewingSettings: UI reflects enabled state
+  Failed --> ViewingSettings: UI shows recoverable error
+```
+
+Source-backed docs should let a human answer:
+
+- Which screen, view model, command, or intent owns the action?
+- Which platform permission, local store, background task, or sync boundary is involved?
+- What happens offline, after restart, or when the platform API fails?
+- Which observable UI state proves success or failure?
+- What source path should an agent inspect when docs and behavior diverge?
+
 ## Contracts And Interfaces
 
 Document contracts that other code, systems, or humans rely on:
@@ -116,9 +222,13 @@ entry file or actor
 
 Keep paths useful for navigation, not exhaustive stack traces.
 
-## Diagrams
+## Mermaid Diagrams
 
-Diagrams are optional. When created or maintained, use Mermaid when it improves understanding and keep it source-backed.
+Mermaid diagrams are required for doc-driven documentation sets.
+
+Bootstrap must create at least one source-backed Mermaid diagram in the root index or a relevant module doc. Material docs for operation flows, state/data flows, contracts, or call paths should include a Mermaid diagram when the project has enough structure for one.
+
+Maintenance must update diagrams when the documented behavior, system boundary, state lifecycle, call path, or interaction flow changes. Do not omit Mermaid from a doc-driven documentation set. If a tiny project cannot support a useful module-specific diagram, keep at least one root Mermaid overview diagram.
 
 Good diagram types:
 
@@ -128,7 +238,7 @@ Good diagram types:
 - data flow
 - operation journey
 
-Do not add diagrams just to satisfy a template.
+Do not add decorative diagrams. Mermaid diagrams must be traceable to source evidence and useful for human navigation.
 
 ## Open-Question Ledger
 
