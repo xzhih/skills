@@ -1,6 +1,6 @@
 ---
 name: doc-driven-workflows
-description: Use when the user explicitly asks for doc-driven workflows, documentation/code synchronization, architecture indexes, full-chain or source-linked docs, operation-flow docs, call-path maps, open-question ledgers, code/docs alignment review, or when project guidance explicitly requires maintaining an existing or declared doc-driven documentation source of truth during relevant code changes or review.
+description: Use when the user explicitly asks for doc-driven workflows, code/docs synchronization, architecture indexes, full-chain or source-linked docs, operation-flow docs, call-path maps, code/docs alignment review, or doc-driven open-question ledgers; or when project guidance requires maintaining an existing or declared doc-driven source of truth that may drift. Do not use merely because docs exist, docs are missing, or a normal code task could theoretically affect docs.
 ---
 
 # Doc-Driven Workflows
@@ -31,35 +31,13 @@ When docs serve a multilingual team, briefly restate the language convention bef
 
 ## Routing
 
-First decide whether the skill should run at all:
+Use the frontmatter description as the first gate. Presence or absence of docs never triggers this skill by itself.
 
-```text
-User explicitly asks for doc-driven docs, doc sync, architecture docs, full-chain docs,
-operation flows, call paths, code/docs alignment review, or an open-question ledger:
-  use this skill
+If invocation is allowed, read `references/modes-and-gates.md` and resolve the mode there:
 
-Project guidance explicitly says relevant code/review work must maintain doc-driven docs:
-  use this skill at natural task boundaries
-
-Repository merely contains doc-driven docs:
-  do not use this skill by that fact alone
-
-Repository lacks doc-driven docs:
-  do not bootstrap unless the user explicitly asks
-```
-
-Then choose the mode:
-
-```text
-bootstrap:
-  user explicitly asks to create/init doc-driven docs
-
-maintenance:
-  doc-driven docs already exist or are declared as source of truth,
-  and the current task may make existing docs inaccurate
-```
-
-Presence of a doc-driven docs folder makes maintenance possible, not mandatory.
+- `bootstrap` requires explicit user intent to create or initialize doc-driven docs.
+- `maintenance` requires existing or declared doc-driven docs and a current task that may make them inaccurate.
+- otherwise, no-op quietly.
 
 ## Mode Details
 

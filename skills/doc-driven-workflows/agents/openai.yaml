@@ -1,4 +1,4 @@
 interface:
   display_name: "Doc-Driven Workflows"
   short_description: "Prevent documentation drift with gated sync"
-  default_prompt: "Use $doc-driven-workflows to bootstrap or maintain source-backed docs without letting project documentation drift from code."
+  default_prompt: "Use $doc-driven-workflows to decide whether to bootstrap docs, maintain docs, record doc uncertainty, or skip without changing docs."

@@ -2,6 +2,19 @@
 
 Use this reference before bootstrap or maintenance.
 
+## Contents
+
+- Invocation Gate
+- Bootstrap Gate
+- Maintenance Gate
+- Resolved Paths
+- Lightweight Detection
+- Bootstrap Evidence Pass
+- Maintenance Discovery
+- Drift Judgment
+- Action Strength
+- Project Guidance Rule
+
 ## Invocation Gate
 
 Separate two decisions:
@@ -36,7 +49,10 @@ Create doc-driven docs for this project.
 Build architecture and operation-flow docs that stay synchronized with code.
 Set up docs/doc-driven-workflows for this repo.
 Make this codebase documentation-driven.
+Create a doc-driven open-question ledger for this repo.
 ```
+
+If the user explicitly asks only for a doc-driven open-question ledger and no doc-driven docs exist yet, treat it as a minimal bootstrap for the ledger and index needed to locate it.
 
 Not enough for bootstrap:
 
@@ -71,7 +87,7 @@ Resolve paths before writing:
    - ledger declared by docs index
    - default `doc_root/open-questions.md`
 
-Follow the `ledger_path` order above. Use the docs-index declared ledger only when no existing ledger is found under resolved `doc_root`. If multiple ledgers exist under resolved `doc_root`, choose the one declared by the docs index when it also lives under `doc_root`; otherwise choose the ledger under resolved `doc_root` and report that choice in the final summary.
+Follow the `ledger_path` order above. If multiple ledgers exist, use the ledger declared by the docs index. If no index declares the right ledger, choose the ledger under resolved `doc_root` and report that choice in the final summary.
 
 Use the resolved paths in docs and summaries. Do not hardcode the default after a user override.
 
