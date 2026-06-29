@@ -16,7 +16,7 @@ it does not fall back to Python or curl.
 
 1. **Classify the ask.** Decide whether this is generation, edit, reference-guided generation, transparent cutout, or prompt help. Done when the output path, format, size, and source image roles are clear.
 2. **Use the script.** Prefer `scripts/generate.mjs`; do not hand-roll HTTP unless debugging or porting. Done when the script prints its JSON summary and saved paths.
-3. **Preserve intent in prompts.** For anything quality-sensitive, read `references/prompting.md` before writing the final prompt. Done when the prompt states subject, scene/style, constraints, intended use, and required invariants.
+3. **Preserve intent in prompts.** Treat the user's prompt as the source of truth. Read `references/prompting.md` when the request is vague, quality-sensitive, or asks for prompt help, but use it as restraint guidance rather than a template to impose. Done when the final prompt keeps the user's exact requirements, adds only missing execution-critical constraints, and does not introduce a new concept, style, metaphor, layout, or text policy.
 4. **Treat parameters as gates.** Bad size, transparent background, or unsupported format is a parameter problem; fix it rather than retrying blindly.
 5. **Report evidence.** Return saved path(s), mode, size/format when known, and any limitation such as ChatGPT-login fixed quality or chroma-key transparency risk.
 
@@ -92,15 +92,18 @@ only when debugging the script, porting the request, or checking raw protocol de
 
 ## Prompting
 
-Quick version: structure the prompt as scene/background → subject → details →
-constraints → intended use; always add `No text, no watermark.` to avoid garbled
-text; for edits restate invariants every time (`change only X; keep Y unchanged`);
-quote required in-image text verbatim.
+Quick version: lightly structure the prompt as scene/background → subject → details →
+constraints → intended use only when that improves clarity. If the user already gave
+a detailed prompt, preserve it and only normalize contradictions or missing execution
+constraints. Use `No extra text, no watermark.` when required in-image text is present;
+use `No text, no watermark.` only when the asset should contain no text. For edits,
+restate invariants every time (`change only X; keep Y unchanged`); quote required
+in-image text verbatim.
 
-For anything beyond a one-liner — vague requests, quality-sensitive output, or a
-known asset type — read `references/prompting.md`. It has the augmentation rules, a
-use-case taxonomy, and copy/paste recipes for product shots, UI mockups, logos,
-infographics, edits, etc. Use it; don't guess at prompt structure.
+For vague requests, quality-sensitive output, or a known asset type, read
+`references/prompting.md`. Its taxonomy and recipes are guardrails, not default
+expansions. Do not turn a specific user prompt into a generic recipe, marketing
+brief, or unrelated asset template.
 
 ## Transparent images
 

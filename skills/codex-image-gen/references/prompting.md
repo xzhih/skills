@@ -1,8 +1,9 @@
 # Prompting guide
 
-How to turn a user request into a strong `--prompt`. Read this when the user's ask
-is vague, when output quality matters, or when you need a recipe for a known asset
-type. Applies to all auth modes (the prompt text is identical everywhere).
+How to turn a user request into a safe `--prompt` without taking over the user's
+intent. Read this when the user's ask is vague, when output quality matters, or when
+you need a recipe for a known asset type. Applies to all auth modes (the prompt text
+is identical everywhere).
 
 ## Contents
 - [Structure](#structure)
@@ -14,9 +15,14 @@ type. Applies to all auth modes (the prompt text is identical everywhere).
 
 ## Structure
 
-Order the prompt: **scene/backdrop → subject → key details → constraints → intended
-use**. Stating the intended use (ad, UI mock, infographic, hero) sets the polish
-level. For complex requests, use short labeled lines instead of one long paragraph:
+Order the prompt, when helpful: **scene/backdrop → subject → key details →
+constraints → intended use**. Stating the intended use (ad, UI mock, infographic,
+hero) can set the polish level. For complex requests, use short labeled lines instead
+of one long paragraph.
+
+Do not force every prompt into this schema. If the user already gave a detailed,
+well-structured prompt, preserve its wording and sequence unless a small
+normalization clearly reduces ambiguity.
 
 ```
 Use case: product-mockup
@@ -28,19 +34,26 @@ Composition: centered, wide framing with negative space on the right for copy
 Constraints: no text, no watermark, no extra props
 ```
 
-Always end with explicit negatives like `No text, no watermark.` — gpt-image-2
-otherwise tends to sprinkle garbled text.
+End with explicit negatives only when they match the request. Use `No text, no
+watermark.` for assets that should contain no text. If the user requires visible
+text, use `No extra text, no watermark.` instead and quote required text verbatim.
 
 ## How much to augment
 
 Match augmentation to the prompt's specificity — don't bury the user's intent:
 
-- **Already specific** → normalize into a clean spec, add nothing creative.
+- **Already specific** → preserve the requirements, normalize only for clarity, add
+  nothing creative.
 - **Generic** → add tasteful detail only where it materially helps.
 
 Allowed: composition/framing cues, intended-use/polish hints, practical layout,
 reasonable scene concreteness. **Not allowed:** extra characters/props, brand
 palettes/slogans/story beats, or left/right placement the layout doesn't support.
+
+Do not "improve" by changing the user's metaphor, hierarchy, information density,
+visual genre, exact wording, palette boundaries, or avoidance list. If a requested
+detail seems risky for the model, keep it and add a narrow constraint; do not replace
+it with a safer-looking generic idea.
 
 For photorealism, say `photorealistic` and call for real-world texture (pores,
 fabric wear, material grain, imperfect everyday detail) rather than glossy polish.
@@ -53,9 +66,10 @@ fabric wear, material grain, imperfect everyday detail) rather than glossy polis
   `hands gripping the handlebars`).
 - **In-image text**: put literal text in quotes or ALL CAPS, specify typography
   (style, size, color, placement), require verbatim rendering with no extra
-  characters. Spell uncommon words letter-by-letter. Dense text/diagrams come out
-  better at higher `--quality` **in mode A** (mode B fixes quality, so don't rely on
-  it there — keep the layout simple instead).
+  characters. Spell uncommon words letter-by-letter. Never add `No text` when the
+  user asked for text. Dense text/diagrams come out better at higher `--quality`
+  **in mode A** (mode B fixes quality, so don't rely on it there — keep the layout
+  simple instead).
 - **Reference images** (`--input-image`, repeatable): not every supplied image is an
   edit target. Label each by role in the prompt (`Image 1: edit target`,
   `Image 2: style reference`). Images given only for style/mood/composition → it's a
@@ -78,7 +92,9 @@ rather than rewriting the whole prompt. Edit-specific intents:
 
 ## Use-case taxonomy
 
-Pick the closest bucket — it sets the language and polish level.
+Pick the closest bucket only as internal guidance — it can set language and polish
+level, but it should not override the user's own brief or be injected into every
+final prompt.
 
 **Generate:**
 - `photorealistic-natural` — candid/editorial scenes; photography language, real texture.
@@ -99,7 +115,9 @@ Pick the closest bucket — it sets the language and polish level.
 
 ## Copy/paste recipes
 
-Templates, not the required amount of detail — trim to fit the request.
+Templates are examples, not the required amount of detail. Use them only for vague
+requests or prompt-help tasks, trim aggressively, and never replace a specific user
+brief with a generic recipe.
 
 **Product hero (white/seamless):**
 ```
@@ -138,7 +156,8 @@ typography, generous whitespace. No decorative clutter, no watermark.
 **Background replacement (edit, with --input-image):**
 ```
 Replace only the background of Image 1 with <new background>. Change only the background;
-keep the subject, its edges, lighting, and shadows unchanged. No text, no watermark.
+keep the subject, its edges, lighting, shadows, and any existing text unchanged. No new
+text, no watermark.
 ```
 
 **Transparent-ready subject (chroma-key, see SKILL.md transparency section):**
@@ -146,5 +165,6 @@ keep the subject, its edges, lighting, and shadows unchanged. No text, no waterm
 <subject> centered on a perfectly flat solid #00ff00 chroma-key background for background
 removal. One uniform color, no shadows, gradients, texture, reflections, floor plane, or
 lighting variation. Crisp edges, generous padding. Do not use #00ff00 anywhere in the
-subject. No cast/contact shadow, no reflection, no text, no watermark.
+subject. No cast/contact shadow, no reflection, no text unless explicitly requested, no
+watermark.
 ```
