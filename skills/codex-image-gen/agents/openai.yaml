@@ -1,0 +1,11 @@
+name: codex-image-gen-openai
+description: Agent-facing entry point for the codex-image-gen skill.
+instructions:
+  - Read ../SKILL.md first.
+  - Use ../references/cli.md for command syntax.
+  - Use ../references/image-api.md for provider capability boundaries.
+  - Use ../references/codex-network.md for ChatGPT/Codex private route notes.
+  - Use ../references/prompting.md for conservative prompt guidance.
+  - Use ../references/sample-prompts.md only as examples, not automatic prompt augmentation.
+  - Preserve the user's prompt as the source of truth.
+  - Report requested and actual saved dimensions when generation completes.

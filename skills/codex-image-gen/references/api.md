@@ -1,5 +1,11 @@
 # Image generation API — raw reference
 
+For day-to-day capability choices, read `image-api.md` first. This file keeps the
+lower-level request shapes and network details for debugging, porting, or comparing
+provider behavior. The CLI has grown beyond this raw reference: `generate.mjs`
+also supports `--prompt-file`, `--dry-run`, `--force`, `--out-dir`, actual-dimension
+reporting, and advanced edit guards.
+
 Low-level details behind `scripts/generate.mjs`. Read this only when debugging the
 script, porting the logic elsewhere, or constructing requests by hand. For normal
 use, just call the script.
