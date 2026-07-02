@@ -13,6 +13,16 @@ Everything else becomes follow-up work, an assumption, a hypothesis, or deferred
 
 The main agent owns promotion. Preserve useful disagreement; do not silently merge contradictions.
 
+Multi-agent output is not consensus. Consensus must be earned through adversarial comparison, evidence checking, and targeted rebuttal when the claim affects Spec, Eval, Plan, result correctness, or stop/pause decisions.
+
+Completion claims are not evidence. A task, stage, or final result becomes complete only after the moderator checks fresh evidence such as diffs, command output, rendered artifacts, screenshots, logs, citations, deployment URLs, or reproduced behavior.
+
+Agent reports can point to evidence, but they do not replace it. If the moderator cannot inspect or reproduce the proof, normalize the report as a claim, hypothesis, or gap.
+
+Raw external-agent output is useful for auditability and rebuttal, but it is not shared state by itself. Store it separately when needed; promote only normalized evidence, findings, proposals, gaps, artifacts, or decision candidates.
+
+When closing a task, stage, or run, use the evidence closure shape from `artifact-layout.md`: claim, criteria closed, evidence, verification run, reviewer/recheck status, remaining risks, and pass/fail/paused decision.
+
 ## Normalized Item Types
 
 ```text
@@ -60,6 +70,7 @@ A hypothesis can trigger investigation, but it must not force repair or plan cha
 A proposal can enter the plan only when:
 
 - it aligns with the user goal
+- it aligns with the locked Spec and Eval, or explains why they need revision
 - it respects constraints and boundaries
 - material tradeoffs or risks are stated
 - it is not contradicted by higher authority
@@ -91,10 +102,41 @@ If an agent output conflicts with higher authority:
 
 - preserve it as a conflict, hypothesis, or finding
 - route it for rebuttal or recheck when it matters
-- do not silently rewrite the plan or goal
+- do not silently rewrite the Spec, Eval, plan, or goal
 
 If two agents disagree:
 
 - compare their evidence first
 - check whether they used the same source materials
-- ask a fresh agent only when the conflict affects target correctness, result correctness, verification, or stop/pause decisions
+- ask a fresh agent only when the conflict affects target correctness, Eval quality, result correctness, verification, or stop/pause decisions
+
+## Consensus Handling
+
+Treat agreement strength as evidence-weighted:
+
+```text
+weak agreement:
+  Same model family, same context, same framing, or no evidence.
+
+useful agreement:
+  Independent first-round reviewers reach similar conclusions from source
+  materials with traceable evidence.
+
+stronger agreement:
+  Different models, reasoning profiles, contexts, or review angles converge
+  after adversarial challenge and evidence checks.
+```
+
+Do not promote a conclusion only because many agents repeated it. Promote the specific evidence, finding, proposal, or decision candidate that survives comparison.
+
+Classify unresolved agent output as:
+
+```text
+accepted
+rejected
+unresolved
+needs_source_check
+needs_runtime_check
+needs_agent_rebuttal
+needs_user_decision
+```

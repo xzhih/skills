@@ -1,10 +1,7 @@
 interface:
   display_name: "Multi-Agent Orchestration"
-  short_description: "Run long tasks with independent agents"
+  short_description: "Drive Spec/Eval work with adversarial agents"
   default_prompt: >-
-    Use $multi-agent-orchestration for this task. Read the skill, choose the
-    lowest sufficient intensity, and use agents only when they improve target
-    correctness, review, verification, or delivery. Run the Heavy Task Run Loop
-    and durable document state only for Level 3-4 work. If status is
-    in_progress, continue with the next bounded action unless a real pause
-    condition applies.
+    Use $multi-agent-orchestration at the lightest sufficient intensity to
+    coordinate Spec/Eval review, task-queue execution, adversarial repair, and
+    evidence closure while treating agent reports as claims.

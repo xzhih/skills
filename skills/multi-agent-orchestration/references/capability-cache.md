@@ -11,6 +11,7 @@ Use this reference for cache-first discovery, agent participant selection, model
 - Cache-First Flow
 - Consent Boundary
 - Shell Agent Run Preflight
+- External Session Use
 - Freshness Triggers
 - Model And Reasoning Controls
 
@@ -150,6 +151,12 @@ For `shell_agent` CLIs, distinguish discovery surfaces from task-execution surfa
 
 When a CLI reports a missing session, stale session, or unknown conversation during a task run, first check whether the invocation used a resume flag or marker-derived identifier. Re-run capability discovery against the fresh-run path before downgrading the participant's overall runnability.
 
+## External Session Use
+
+Before using external-agent resume, continue, or fork modes, read `external-agent-sessions.md`.
+
+Record one explicit session per external agent when continuity matters. Do not use "last session" semantics for parallel reviewers or adversarial rounds, because the latest session may belong to a different agent.
+
 ## Freshness Triggers
 
 Refresh when:
@@ -167,3 +174,19 @@ Refresh when:
 Record model names and reasoning/profile controls only when safely discovered.
 
 Do not hard-code a user's personal model preferences. Model assignment is a runtime decision based on task difficulty, risk, requested confidence, available capabilities, cost, privacy, authorization, current main model, and independence needs.
+
+Optimize for independent, decorrelated judgment rather than model diversity as a ritual. Prefer different models, model families, reasoning profiles, providers, or context exposures when available, especially for Spec, Eval, Plan, and final quality review.
+
+Do not require model diversity as a stop condition. If only one model family is available, preserve independence through separate agents, blind source-first first rounds, different reviewer angles, adversarial rebuttal, and evidence promotion.
+
+Record material limits when they affect confidence:
+
+```text
+model_diversity:
+context_independence:
+reasoning_profile_diversity:
+provider_or_auth_limitations:
+confidence_effect:
+```
+
+Do not treat directory-listed external models as usable until provider credentials, authentication, and a safe invocation surface are confirmed. Record how availability was discovered, not only the model name.

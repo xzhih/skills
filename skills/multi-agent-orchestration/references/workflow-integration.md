@@ -1,6 +1,6 @@
 # Workflow Integration
 
-Use this reference when another workflow, skill, plugin, host feature, or project convention may already own the task spec, plan, roadmap, goal, or status.
+Use this reference when another workflow, skill, plugin, host feature, or project convention may already own the task Spec, Eval, plan, roadmap, goal, task queue, or status.
 
 ## Contents
 
@@ -29,9 +29,11 @@ Do not hard-code particular workflow names or ecosystems. Treat any external wor
 Task-level state belongs to the active parent workflow when one exists:
 
 ```text
-spec
+Spec
+Eval
 roadmap
 plan
+task queue
 goal contract
 task status
 user-facing decisions
@@ -44,9 +46,11 @@ This skill owns orchestration-internal state:
 capability cache
 task packets
 raw agent outputs
+blackboard round state
 review contracts
 findings ledger
 repair and recheck tracking
+execution queue overlay when the parent workflow does not own one
 status checkpoints
 evidence collected for orchestration
 ```
@@ -60,11 +64,17 @@ When a parent workflow exists, keep a compact source map in `docs/multi-agent-or
 ```text
 active_parent_workflow:
 parent_spec:
+parent_eval:
 parent_roadmap:
 parent_plan:
+parent_task_queue:
 parent_goal:
 parent_status:
+active_spec:
+active_eval:
 orchestration_goal:
+active_blackboard:
+active_task_queue:
 active_findings_ledger:
 latest_status_checkpoint:
 latest_evidence:
@@ -78,6 +88,7 @@ Use only fields that apply. The source map should answer where to read and where
 Keep orchestration details local to this skill so external systems are not polluted by internal work:
 
 - raw subagent or external-agent output
+- moderator blackboard round state
 - reviewer scratch notes
 - rejected hypotheses
 - intermediate task packets
@@ -93,7 +104,9 @@ Write to the parent workflow only through accepted, useful updates:
 
 - accepted blocker or major findings that change task state
 - goal, scope, boundary, or requirement corrections
+- Eval or acceptance-quality corrections
 - plan changes that affect execution
+- task queue status or ownership changes that affect execution or handoff
 - verification or deployment evidence needed by the parent workflow
 - final handoff conclusions
 
@@ -109,7 +122,7 @@ If the user later selects a different parent workflow:
 4. Keep orchestration-internal ledgers, checkpoints, and evidence under this skill.
 5. Promote future accepted updates only to the new parent workflow.
 
-Do not maintain two competing specs, plans, roadmaps, or goal contracts for the same active task.
+Do not maintain two competing Specs, Evals, plans, task queues, roadmaps, or goal contracts for the same active task.
 
 ## Conflict Rules
 
@@ -118,6 +131,7 @@ If parent workflow documents and orchestration state disagree:
 - Parent workflow wins for user-facing task definition, unless evidence shows it is wrong.
 - Findings ledger wins for unresolved accepted blocker or major review state.
 - Evidence files win for what has actually been verified.
+- Active task queue wins for current work item state; latest checkpoint is only a summary unless supported by queue, findings, and evidence.
 - Source map wins for where future updates should go.
 
 When evidence shows the parent workflow is wrong, promote a correction request or update through the parent workflow instead of silently forking a local plan.
