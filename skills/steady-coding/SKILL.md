@@ -1,11 +1,11 @@
 ---
-name: careful-coding
-description: Use when non-trivial coding work involves implementation, debugging, refactoring, architecture, migration, feature work, behavior changes, or multi-file edits. Skip for one-liners, trivial syntax/format/lint fixes, and pure code explanation.
+name: steady-coding
+description: Use when non-trivial coding work requires stable, grounded implementation, debugging, refactoring, architecture, migration, feature work, behavior changes, or multi-file edits. Skip for one-liners, trivial syntax/format/lint fixes, and pure code explanation.
 ---
 
-# Careful Coding
+# Steady Coding
 
-Move fast. Stay reviewable.
+Move fast. Stay grounded. Keep it reviewable.
 
 ## Role
 
@@ -181,6 +181,19 @@ Clean up your own mess. Leave pre-existing mess alone.
 
 ## Leverage Patterns
 
+### First-Principles Reasoning
+
+Use first-principles reasoning when the path is unclear, constraints conflict, or a change risks becoming architectural.
+
+Reduce the problem to:
+
+- the actual success condition
+- hard constraints from code, runtime, data, API contracts, and user scope
+- observed facts versus assumptions
+- the smallest correct path that satisfies the constraints
+
+Do not use first principles as an excuse to ignore established project patterns without evidence.
+
 ### Declarative Over Imperative
 
 Prefer success criteria over step-by-step commands.
@@ -192,6 +205,20 @@ When imperative instructions leave room for interpretation, reframe:
 This lets you loop, retry, and problem-solve rather than blindly executing steps that may not lead to the actual goal.
 
 Do not use reframing to override explicit constraints. If the user gives exact boundaries, files, APIs, or steps as requirements, treat them as constraints unless they conflict with correctness or safety.
+
+### Lightweight Planning
+
+For directionally ambiguous, multi-step, or multi-file tasks, emit a short plan before executing:
+
+```text
+PLAN:
+1. [step] — [why]
+2. [step] — [why]
+3. [step] — [why]
+→ Executing unless you redirect.
+```
+
+Do not turn simple tasks into planning ceremonies.
 
 ### Test-First When Practical
 
@@ -213,19 +240,18 @@ For algorithmic work:
 
 Correctness first. Performance second.
 
-### Lightweight Planning
+### Adversarial Review
 
-For directionally ambiguous, multi-step, or multi-file tasks, emit a short plan before executing:
+Before completing non-trivial work, briefly challenge your own answer, plan, or diff.
 
-```text
-PLAN:
-1. [step] — [why]
-2. [step] — [why]
-3. [step] — [why]
-→ Executing unless you redirect.
-```
+Ask:
 
-Do not turn simple tasks into planning ceremonies.
+- What is the most likely way this is wrong?
+- Which assumption would invalidate it?
+- What regression, edge case, security issue, or data-loss path could be hidden?
+- Is there a smaller reviewable change that reaches the same success state?
+
+Act on issues found by this review. If risk remains, report it plainly. Do not let adversarial review become a reason to stall, over-explain, or avoid making a reviewable change.
 
 ---
 

@@ -19,12 +19,12 @@ npx skills add xzhih/skills --all
 Install selected skills:
 
 ```sh
-npx skills add xzhih/skills --skill careful-coding codex-image-gen discussion-workflows doc-driven-workflows multi-agent-orchestration
+npx skills add xzhih/skills --skill steady-coding codex-image-gen discussion-workflows doc-driven-workflows multi-agent-orchestration
 ```
 
 ## Skills
 
-- `careful-coding`: careful implementation, debugging, refactoring, and reviewable code changes.
+- `steady-coding`: stable, grounded implementation, debugging, refactoring, and reviewable code changes.
 - `codex-image-gen`: generate or edit images via the Responses API `image_generation` tool, auto-detecting auth (API key / codex custom provider / ChatGPT login).
 - `discussion-workflows`: route product and architecture discussions through reference comparison, boundary clarification, complexity checks, and durable state capture.
 - `doc-driven-workflows`: prevent documentation drift through explicit bootstrap and gated maintenance of source-backed docs, operation flows, call paths, and open-question ledgers.
@@ -34,7 +34,7 @@ npx skills add xzhih/skills --skill careful-coding codex-image-gen discussion-wo
 
 ```text
 skills/
-  careful-coding/
+  steady-coding/
   codex-image-gen/
   discussion-workflows/
   doc-driven-workflows/

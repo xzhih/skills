@@ -68,7 +68,7 @@ This skill owns documentation drift decisions and documentation synchronization 
 - Use brainstorming before designing a new doc-driven skill or a major documentation system.
 - Use writing-plans after an approved design when implementation planning is needed.
 - Use multi-agent-orchestration only when the user explicitly requests multiple agents or repeated review/repair.
-- Use careful-coding or a domain-specific implementation skill for actual code changes.
+- Use an appropriate implementation, review, or domain-specific workflow for actual code changes.
 
 If a companion skill is unavailable, proceed with ordinary capabilities. Mention the missing skill only when it would materially affect work quality.
 
