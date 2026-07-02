@@ -59,9 +59,9 @@ capture discussion state -> handoff
 
 ## Persistence Gate
 
-短问题可以只回答，不建文件。需要复用但还不重的判断，至少在回答中标出 `confirmed / draft / open`。
+短问题可以只回答，不建文件。需要复用但还不重的判断，内部区分 `confirmed / draft / open`；只有这样能帮助用户判断时才显式标出。
 
-出现以下任一情况，先落盘再继续深入：
+出现以下任一情况，判断是否需要落盘；只有判断会被复用、容易丢失或需要交接时才写入文件：
 
 - 用户明确要求记录
 - 讨论已经变长或可能被压缩
@@ -99,12 +99,12 @@ capture discussion state -> handoff
 
 结束一轮讨论前确认：
 
-- 当前回答区分了 `confirmed / draft / open`
+- 对非短小判断，当前回答区分了 `confirmed / draft / open`，或至少没有把三者混在一起
 - 若用户纠正过旧判断，旧判断已标记过期，不再沿用
 - 若引用了参考对象，已说明本地约束和不能照搬的部分
 - 若方案变重，已说明复杂度应移动、延后或留在外部的位置
 - 若触发落盘，已更新 index 和相关 session/boundary/reference/complexity 文件
-- 若未落盘，回答里说明这是短小判断或暂不需要持久化
+- 若可能误解为应该落盘，回答里说明这是短小判断或暂不需要持久化
 
 ## Common Mistakes
 

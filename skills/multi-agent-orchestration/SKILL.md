@@ -94,7 +94,7 @@ Do not create `docs/multi-agent-orchestration/` only because this skill was load
 
 ## Execution Preflight
 
-Use execution preflight for Level 3-4 work, well-specified new projects, behavior-preserving refactors, and other non-trivial development, debugging, documentation, or design tasks.
+Use execution preflight when the selected intensity and task risk justify it: Level 3-4 work, well-specified new projects, behavior-preserving refactors, and other non-trivial development, debugging, documentation, or design tasks inside this workflow.
 
 Before the first write or external side effect, state briefly:
 

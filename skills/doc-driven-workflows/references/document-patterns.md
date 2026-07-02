@@ -51,7 +51,7 @@ The root index should include:
 - maintenance rule
 - document map
 - short source-backed system summary
-- Mermaid overview diagram
+- useful Mermaid overview diagram when the project structure benefits from one
 - links to module docs
 
 ## Human-Agent Workflow
@@ -72,7 +72,7 @@ The intended loop:
 
 Write docs so this loop is possible. A reader should be able to find where an operation starts, what happens, which files/functions matter, what state changes, and which contract or question to inspect next.
 
-Bootstrap docs must include Mermaid diagrams. Maintenance must update affected Mermaid diagrams when source-backed behavior, boundaries, state, or call paths change.
+Bootstrap docs should include source-backed Mermaid diagrams when the project has meaningful structure, flows, state, contracts, or call paths that are easier to navigate visually. Maintenance must update affected diagrams when source-backed behavior, boundaries, state, or call paths change.
 
 ## System Map
 
@@ -224,11 +224,11 @@ Keep paths useful for navigation, not exhaustive stack traces.
 
 ## Mermaid Diagrams
 
-Mermaid diagrams are required for doc-driven documentation sets.
+Mermaid diagrams are expected for non-trivial doc-driven documentation sets when they improve human navigation.
 
-Bootstrap must create at least one source-backed Mermaid diagram in the root index or a relevant module doc. Material docs for operation flows, state/data flows, contracts, or call paths should include a Mermaid diagram when the project has enough structure for one.
+Bootstrap should create at least one source-backed Mermaid diagram in the root index or a relevant module doc when the project has enough structure for a useful diagram. Material docs for operation flows, state/data flows, contracts, or call paths should include a Mermaid diagram when the relationship is easier to understand visually.
 
-Maintenance must update diagrams when the documented behavior, system boundary, state lifecycle, call path, or interaction flow changes. Do not omit Mermaid from a doc-driven documentation set. If a tiny project cannot support a useful module-specific diagram, keep at least one root Mermaid overview diagram.
+Maintenance must update existing diagrams when the documented behavior, system boundary, state lifecycle, call path, or interaction flow changes. For tiny projects or narrow ledgers, omit diagrams when they would be decorative, speculative, or less useful than a compact source-backed text summary.
 
 Good diagram types:
 

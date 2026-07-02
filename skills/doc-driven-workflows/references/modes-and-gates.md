@@ -162,7 +162,7 @@ When in doubt between small sync and record only, choose record only.
 
 ## Project Guidance Rule
 
-Bootstrap must add a short rule to project guidance using resolved paths:
+As part of explicit bootstrap, add a short rule to project guidance using resolved paths:
 
 ```markdown
 Doc-driven workflow docs live under `<doc_root>`.

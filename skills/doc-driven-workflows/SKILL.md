@@ -45,7 +45,7 @@ If invocation is allowed, read `references/modes-and-gates.md` and resolve the m
 
 Read `references/modes-and-gates.md` before performing bootstrap or maintenance. It defines invocation gates, resolved paths, lightweight discovery, action strength, and the project-guidance rule.
 
-Read `references/document-patterns.md` before creating or materially changing a doc-driven documentation set. It defines the default document set, human-agent workflow, operation-flow rules, contract/call-path guidance, required Mermaid diagrams, ledger format, examples, and final summary style.
+Read `references/document-patterns.md` before creating or materially changing a doc-driven documentation set. It defines the default document set, human-agent workflow, operation-flow rules, contract/call-path guidance, diagram guidance, ledger format, examples, and final summary style.
 
 ## Core Workflow
 
@@ -61,16 +61,16 @@ Read `references/document-patterns.md` before creating or materially changing a 
 7. Put uncertainty in the open-question ledger.
 8. Keep user-facing output short and traceable.
 
-## Companion Skills
+## Companion Workflows
 
 This skill owns documentation drift decisions and documentation synchronization boundaries. It does not replace design, planning, coding, review, or multi-agent orchestration skills.
 
-- Use brainstorming before designing a new doc-driven skill or a major documentation system.
-- Use writing-plans after an approved design when implementation planning is needed.
-- Use multi-agent-orchestration only when the user explicitly requests multiple agents or repeated review/repair.
+- Use an appropriate design workflow before creating a new doc-driven skill or major documentation system.
+- Use an appropriate planning workflow when implementation planning is needed.
+- Use an explicit orchestration workflow only when the user requests multiple agents or repeated review/repair.
 - Use an appropriate implementation, review, or domain-specific workflow for actual code changes.
 
-If a companion skill is unavailable, proceed with ordinary capabilities. Mention the missing skill only when it would materially affect work quality.
+If another workflow is unavailable, proceed with ordinary capabilities. Mention the missing workflow only when it would materially affect work quality.
 
 ## Output Style
 
@@ -94,7 +94,7 @@ Before claiming doc-driven work is complete:
 - Existing document language was preserved during maintenance.
 - Multilingual-team docs had their language convention restated before writing.
 - Confirmed docs contain only source-backed confirmed behavior.
-- Required Mermaid diagrams were created or updated when docs were bootstrapped or materially changed.
+- Useful source-backed diagrams were created or updated when they materially improve navigation, or when existing diagrams would otherwise drift.
 - Uncertainties or suspected issues are recorded in the open-question ledger.
 - Project guidance references the resolved docs path after bootstrap.
 - Maintenance did not silently edit project guidance unless the task explicitly included doc maintenance.
@@ -111,5 +111,6 @@ Changing existing document language during maintenance
 Writing speculation into confirmed architecture docs
 Treating every question as a bug
 Forcing Web/backend/admin-shaped docs onto libraries, CLIs, infra, or small tools
+Adding diagrams that are decorative or ceremonial instead of useful for navigation
 Making noisy process updates while another skill is doing the main work
 ```
