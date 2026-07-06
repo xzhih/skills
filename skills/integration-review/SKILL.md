@@ -1,11 +1,37 @@
 ---
 name: integration-review
-description: "Review returned parallel-lane worker handoffs: scope, diffs, evidence, conflicts, lane status, coordination updates, and next safe batch selection. Use when a previous parallel-lane batch returns. Do not use for ordinary PR/code review or general branch integration."
+description: "Review returned parallel-lane worker handoffs: scope, diffs, evidence, conflicts, lane status, coordination updates, and next safe batch selection. Use when a previous parallel-lane batch returns, or when the user says lanes came back, agents finished, check what workers did, or decide what can merge. Do not use for ordinary PR/code review or general branch integration."
 ---
 
 # Integration Review
 
 Turn worker handoffs into reliable project state. Agent reports are claims until the moderator checks scope, diff, evidence, and collision risk.
+
+## Iron Law
+
+```text
+NO ACCEPTED LANE WITHOUT DIFF AND EVIDENCE REVIEW.
+```
+
+Worker summaries, green-looking handoffs, and multi-agent agreement are not enough. A lane is accepted only after the moderator inspects actual changed surfaces, scope compliance, fresh verification evidence, and collision risk.
+
+## Quick Decision
+
+Use this skill when a parallel-lane batch has returned and the moderator must classify actual lane outputs.
+
+Use it for:
+
+- normalizing worker handoffs, touched files, claimed work, non-covered scope, and blockers
+- inspecting lane diffs and evidence before accepting claims
+- deciding ready-to-merge, repair-in-lane, blocked, conflict, rejected, abandoned, or next safe batch
+- checking coordination/doc updates only when project rules require them
+
+Do not use it for:
+
+- ordinary PR/code review or general branch integration
+- deciding the original lane split; use [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md)
+- project state recovery by itself; use [project-context](../project-context/SKILL.md) as preflight
+- broad Spec/Eval or repeated adversarial review-repair; use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)
 
 ## Required Preflight
 
@@ -87,3 +113,11 @@ Lanes that must wait:
 ```
 
 Read `references/handoff-review.md` for detailed normalization and next-batch checks. Route back to [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md) when the next safe batch can proceed without a true user decision.
+
+## Red Flags
+
+- Accepting, merging, or reporting a lane as done from the worker's narrative alone.
+- Counting stale, missing, partial, or blocked verification as a pass.
+- Ignoring touched files outside the lane's owned scope.
+- Updating coordination docs from a worker claim without checking the source of truth.
+- Starting the next batch before current lanes are classified.

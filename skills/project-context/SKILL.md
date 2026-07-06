@@ -7,6 +7,31 @@ description: "Restore authoritative project state when the current request depen
 
 Recover the real project state before deciding, planning, delegating, or editing. This skill produces a compact context packet; it does not design the solution or implement changes.
 
+## Iron Law
+
+```text
+NO STATE-GOVERNED PLANNING FROM MEMORY.
+```
+
+When the request depends on handoff, lane, discussion, spec, multi-agent, or source-of-truth docs, recover current source state first. Memory, prior chat, worker claims, and stale summaries are hints, not authority.
+
+Do not plan, delegate, integrate, or update docs until the current state packet identifies the authoritative sources and the next owner workflow.
+
+## Freshness Rule
+
+Reuse the current context packet when the same goal is still active and no branch switch, lane return, doc/source-of-truth change, user goal change, or new coordination artifact has appeared. In that case, do a quick freshness check instead of rerunning full state recovery.
+
+## Boundary
+
+Use this skill as a preflight or state-recovery gate, not as the owner of the next decision. It answers "what is the current project state and which workflow owns the next move?"
+
+Common routes:
+
+- "restore context", "continue from handoff", or "where is this project?" -> produce the context packet, then route onward
+- "where did the discussion land?" -> use this only when the answer depends on persisted discussion, handoff, or source-of-truth state; then route to [discussion-workflows](../discussion-workflows/SKILL.md)
+- "returned lanes need review" -> use this only to recover lane state, then route to [integration-review](../integration-review/SKILL.md)
+- "docs may drift" -> use this only to find source-of-truth docs, then route to [doc-driven-workflows](../doc-driven-workflows/SKILL.md)
+
 ## Composition
 
 When entered through [development-workflows](../development-workflows/SKILL.md), treat this skill as the shared context gate for the rest of the workflow.
@@ -111,3 +136,11 @@ When two or more workflow doc roots exist, fill the ownership map before plannin
 Read `references/source-map.md` when a project has many documentation roots, custom equivalents, or the correct read order is unclear.
 
 Read `references/ownership-map.md` when multiple docs could plausibly own the same fact, when worker handoffs include doc changes, or before promoting discussion/agent output into source-of-truth docs.
+
+## Red Flags
+
+- Planning, dispatching, integrating, or editing docs before the current state packet exists.
+- Treating a worker handoff, old summary, or remembered decision as authoritative without checking source files.
+- Reading every doc in the repo instead of the profile-relevant roots.
+- Promoting draft/open decisions into confirmed behavior.
+- Creating workflow docs just because context is missing.

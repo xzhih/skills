@@ -11,6 +11,31 @@ description: Use when a long, corrected, or decision-heavy discussion needs reca
 
 不要默认把所有动作都跑一遍。先找当前最阻塞的问题，再选择最小足够动作。
 
+## Iron Law
+
+```text
+不要把未标记状态的讨论结论当成 confirmed。
+```
+
+讨论输出必须保持 `confirmed / draft / open` 的边界。没有用户确认、来源证据或当前轮明确收束的判断，只能作为草案、假设或开放问题，不能写成 canonical boundary，也不能交给实现流程当作已定规则。
+
+## Boundary
+
+本技能负责 discussion convergence，不负责 project state recovery、goal formulation、lane review 或 implementation。
+
+常见区分：
+
+- 用户说“先恢复上下文 / continue from handoff”：先用 [project-context](../project-context/SKILL.md) 找当前项目状态；只有恢复后需要复盘讨论结论时才进入本技能。
+- 用户说“先复盘 / 讨论到哪了”：用本技能 recap confirmed / draft / open，不新增实现方案。
+- 用户说“先问透 / 让 agent 帮我把问题问清楚”：用 [agent-grilling](../agent-grilling/SKILL.md)，因为目标还在 formulation 阶段。
+- 用户说“lane 回来了 / 哪些能合并”：用 [integration-review](../integration-review/SKILL.md)，本技能最多处理 lane 暴露出的新讨论边界。
+
+如果只是当前聊天里的复盘，不依赖持久化 handoff、discussion docs 或 source-of-truth docs，可以直接从本技能开始；只有需要核对项目文件状态时才先拉入 `project-context`。
+
+目标、问题、假设本身还没有成型时，用 `agent-grilling`。目标已经存在，但边界、责任、复杂度、参考对象或 confirmed/draft/open 状态需要收束时，用本技能。
+
+如果连续两轮在 `agent-grilling` 和本技能之间来回切换仍无法形成下一步，停止循环：把剩余内容标为 `open`，然后升级到 lane dispatch、multi-agent review-repair，或向用户提出一个真正不可代理决策。
+
 ## Workflow Composition
 
 当本技能作为组合工作流的一部分使用时，先通过 [development-workflows](../development-workflows/SKILL.md) 判断当前阶段，再用 [project-context](../project-context/SKILL.md) 恢复真实项目状态。
@@ -84,6 +109,16 @@ capture discussion state -> handoff
 当前状态：可确认、草案，或需要用户选择
 ```
 
+## Default Output
+
+```text
+Frame:
+Confirmed:
+Draft:
+Open:
+Next:
+```
+
 只有在下一个问题会扩大范围、改变责任归属、把草案写成 canonical 判断，或缺少必要上下文时才停在问题本身。不要让用户只为看到下一个待拍板问题而输入“继续”或“下一个”。
 
 ## Persistence Gate
@@ -149,6 +184,17 @@ capture discussion state -> handoff
 index 只堆判断，不区分 confirmed / draft / open
 把下一个待拍板问题藏在“下一个”提示后，要求用户额外输入才给建议
 把模板当成每次必须完整执行的流程
+```
+
+## Red Flags
+
+```text
+用户问复盘时继续新增方案
+讨论还没拍板就进入实现、派工或合并
+把 draft/open 写成 confirmed
+没有说明本地边界就照搬参考对象
+用户纠正后还沿用旧名称、旧范围或旧判断
+长讨论触发落盘条件后仍只靠聊天记忆
 ```
 
 ## One Line

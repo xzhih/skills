@@ -13,6 +13,31 @@ Doc-driven docs serve two readers at once: a human building a mental model of th
 
 Do not use this skill just because a repository has documentation. Use it only when the user asks for doc-driven work, when the user asks to review whether code and docs are aligned, or when project guidance explicitly requires doc-driven maintenance for the current kind of code or review task.
 
+## Iron Law
+
+```text
+NO DOC SYNC WITHOUT AN INVOCATION GATE AND SOURCE EVIDENCE.
+```
+
+Docs that merely exist, docs that are missing, or theoretical drift do not justify this workflow. Once the invocation gate is satisfied, every confirmed doc update must be backed by current source evidence; uncertainty belongs in the open-question ledger.
+
+## Quick Decision
+
+Use this skill when the task is about doc-driven source of truth:
+
+- bootstrap architecture, tech-stack, operation-flow, call-path, or open-question docs
+- sync code and docs after a behavior, contract, operation, or source-of-truth change
+- review whether documented behavior matches implementation
+- record source-backed uncertainty without turning it into confirmed docs
+
+Do not use it for:
+
+- ordinary docs edits that are not source-of-truth or drift-sensitive
+- discussion recap, boundary decisions, or confirmed/draft/open flow; use [discussion-workflows](../discussion-workflows/SKILL.md)
+- returned lane integration; use [integration-review](../integration-review/SKILL.md)
+- code implementation itself; use the appropriate implementation workflow
+- docs that merely exist, docs that are missing, or theoretical drift without a task/project guidance trigger
+
 ## Workflow Composition
 
 When this skill is part of a larger development workflow, route through [development-workflows](../development-workflows/SKILL.md) and restore state with [project-context](../project-context/SKILL.md) before changing docs.
@@ -140,4 +165,15 @@ Treating every question as a bug
 Forcing Web/backend/admin-shaped docs onto libraries, CLIs, infra, or small tools
 Adding diagrams that are decorative or ceremonial instead of useful for navigation
 Making noisy process updates while another skill is doing the main work
+```
+
+## Red Flags
+
+```text
+Bootstrapping because docs are absent
+Running maintenance because a code task touched any file
+Writing source guesses into confirmed docs
+Creating duplicate fact homes instead of linking
+Updating project guidance when doc maintenance was not requested
+Claiming code/docs alignment without checking current source anchors
 ```

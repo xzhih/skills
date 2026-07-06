@@ -7,6 +7,32 @@ description: "Coordinate two or more independent lane workspaces or subagent lan
 
 Coordinate parallel development lanes while the main thread remains moderator. The purpose is to remove manual copy/paste handoffs without giving up control of scope, evidence, and integration.
 
+## Iron Law
+
+```text
+NO LANE DISPATCH WITHOUT OWNED SURFACES AND A COLLISION CHECK.
+```
+
+Parallelism is safe only when each lane has an owned scope, excluded scope, allowed/forbidden surfaces, verification expectations, and a known integration path. If those are unclear, route to formulation or discussion before dispatch.
+
+## Quick Decision
+
+Use this skill when the next useful action is to coordinate two or more independent implementation or investigation lanes with clear ownership boundaries.
+
+Use it for:
+
+- parallel subagent/worktree lanes over disjoint files, modules, docs, or evidence surfaces
+- lane packet creation, direct dispatch, or manual handoff prompts
+- first safe batch selection and next-batch selection after review
+- collision control around high-risk shared files, contracts, migrations, docs, or evidence
+
+Do not use it for:
+
+- one-off review or research delegation
+- returned lane review; use [integration-review](../integration-review/SKILL.md)
+- unclear goals or risky lane decomposition; use [agent-grilling](../agent-grilling/SKILL.md) first
+- explicit Spec/Eval, adversarial review-repair, external-agent policy, or model-diverse convergence; use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)
+
 ## Required Preflight
 
 Load [project-context](../project-context/SKILL.md) first. If lane boundaries are not clear, use [discussion-workflows](../discussion-workflows/SKILL.md) before dispatch.
@@ -115,3 +141,11 @@ Why parallelism is unsafe now:
 Required boundary or integration step:
 Next moderator action:
 ```
+
+## Red Flags
+
+- Dispatching "all possible" lanes instead of the first safe batch.
+- Sharing high-collision files, migrations, contracts, or evidence packets across active lanes.
+- Asking the user to relay handoff prompts when callable subagents are available and authorized.
+- Treating a one-off research/review request as a lane batch.
+- Starting the next batch before returned lanes are reviewed.

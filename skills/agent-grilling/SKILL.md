@@ -5,7 +5,15 @@ description: Use when a goal needs agent-mediated brainstorming, requirements di
 
 # Agent Grilling
 
-Turn unclear goals into workable formulations by having agents answer, debate, and probe the questions that would otherwise interrupt the user. This skill is a focused formulation helper; it is not a full delivery workflow.
+Formulation pressure-test, not an interrogation ritual. Turn unclear goals into workable formulations by having agents answer, debate, and probe the questions that would otherwise interrupt the user. This skill is a focused formulation helper; it is not a full delivery workflow.
+
+## Iron Law
+
+```text
+NO USER QUESTION UNTIL AGENT-ANSWERABLE QUESTIONS ARE EXHAUSTED.
+```
+
+If the next question can be answered from source context, focused agents, runtime evidence, safe assumptions, or tradeoff analysis, answer it inside the workflow first. Escalate only true user decisions: taste, product direction, privacy/cost, destructive/public actions, account access, or user-owned priorities.
 
 ## Composition
 
@@ -25,6 +33,10 @@ After grilling:
 - use [discussion-workflows](../discussion-workflows/SKILL.md) when the result is a decision/boundary recap
 - use [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md) when boundaries are clear enough for worktree lanes
 - use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md) when the result needs full Spec/Eval, adversarial review-repair, external-agent policy, or repeated convergence
+
+Boundary with `discussion-workflows`: use this skill before a decision exists, when the goal, assumptions, options, or decomposition need agent-mediated formulation. Use `discussion-workflows` after enough formulation exists and the work is to recap, compare, clarify, or persist decisions.
+
+If two consecutive grilling -> discussion handoffs still cannot produce a next action, stop cycling. Preserve unresolved items as open questions, then route to lane dispatch, multi-agent review-repair, or one true user decision.
 
 If the next step is safe and inside the delegated goal, continue into it. Do not stop to ask the user to approve ordinary implementation order, lane splitting, or an evidence-backed default.
 
@@ -75,3 +87,11 @@ What not to claim yet:
 ```
 
 Read `references/formulation-grilling.md` for role details, packet shape, and stop conditions when the uncertainty is large or multi-round.
+
+## Red Flags
+
+- Asking the user broad brainstorming questions before source or agent exploration.
+- Dispatching implementation lanes while the target, boundary, or success criteria are still fuzzy.
+- Treating agent disagreement as something to forward raw to the user.
+- Producing review findings when the task is still formulation.
+- Stopping after one convenient answer while high-impact agent-answerable questions remain.

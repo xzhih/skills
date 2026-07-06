@@ -1,11 +1,31 @@
 ---
 name: development-workflows
-description: "Use when a development task needs workflow routing: continuing from handoff or coordination docs, choosing an owner workflow skill, splitting work into batches of lanes, reviewing returned lane handoffs, or handling declared doc-governed project state. Do not use for ordinary single-thread coding, routine PR/code review, or normal docs edits."
+description: "Use when a development task needs workflow routing: continuing from handoff or coordination docs, choosing an owner workflow skill, splitting work into batches of lanes, reviewing returned lane handoffs, or handling declared doc-governed project state. Do not use when one implementation, review, research, or docs skill can handle the whole request."
 ---
 
 # Development Workflows
 
 Route complex development work to the right focused skill without making the user repeat project rules or manually relay agent work. This skill is the entry point; it does not replace the focused workflows.
+
+## Iron Law
+
+```text
+ROUTE TO THE OWNER; DO NOT IMPERSONATE THE OWNER.
+```
+
+This router may choose, sequence, and hand off to focused workflow skills. It must not quietly do their work from memory. If a focused skill owns the next action, load it before planning, dispatching, reviewing, documenting, or claiming completion.
+
+## Quick Decision
+
+Use this router when the current development task needs a workflow owner or sequence, especially across context recovery, discussion, doc drift, lane dispatch, returned lane review, or heavier multi-agent review.
+
+Do not use it when the leaf owner is already obvious:
+
+- ordinary coding or debugging -> use the implementation/review workflow directly
+- clear project-state restoration -> [project-context](../project-context/SKILL.md)
+- clear returned lane review -> [integration-review](../integration-review/SKILL.md)
+- clear independent lane dispatch -> [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md)
+- explicit Spec/Eval or repeated review-repair -> [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)
 
 ## Critical Overrides
 
@@ -16,6 +36,8 @@ Follow `references/critical-overrides.md` for global rules about source truth, c
 Use this skill to decide the workflow sequence, then load the focused skill that owns the current step.
 
 Do not implement code, rewrite docs, dispatch agents, or merge lanes from this router alone. Route and coordinate.
+
+If a leaf skill trigger is already obvious from the user request, use that focused skill directly. Use this router when the owner workflow is uncertain, when multiple workflow docs may be involved, or when the task needs a sequence across context, discussion, docs, lanes, integration, or heavier review.
 
 ## Autonomous Progression
 
@@ -125,3 +147,11 @@ What not to do yet:
 ```
 
 When the next step can proceed without user input, continue into that focused skill instead of stopping at a recommendation.
+
+## Red Flags
+
+- Implementing, dispatching, reviewing, or editing docs from this router alone.
+- Asking the user to choose internal workflow sequencing when the next owner is source-evident.
+- Loading `multi-agent-orchestration` only because the task feels large.
+- Treating a routing recommendation as a completed workflow step.
+- Skipping `project-context` when the request depends on handoff, lanes, discussion state, or source-of-truth docs.
