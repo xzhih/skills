@@ -11,6 +11,20 @@ description: Use when a long, corrected, or decision-heavy discussion needs reca
 
 不要默认把所有动作都跑一遍。先找当前最阻塞的问题，再选择最小足够动作。
 
+## Workflow Composition
+
+当本技能作为组合工作流的一部分使用时，先通过 [development-workflows](../development-workflows/SKILL.md) 判断当前阶段，再用 [project-context](../project-context/SKILL.md) 恢复真实项目状态。
+
+本技能只负责讨论和边界沉淀：
+
+- 边界足够清楚、需要拆分并行实现时，交给 [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md)。
+- 开发线程返回、需要 review 或下一批推荐时，交给 [integration-review](../integration-review/SKILL.md)。
+- 讨论结论会影响 source-of-truth docs 时，交给 [doc-driven-workflows](../doc-driven-workflows/SKILL.md) 判断是否同步或记录开放问题。
+- 需要多 agent 对抗 formulation 或 pressure testing 时，交给 [agent-grilling](../agent-grilling/SKILL.md)。
+- 需要 Spec/Eval 或反复 review-repair 时，升级到 [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)。
+
+不要在讨论技能里直接派工、合并、claim hard gate pass，或维护不属于讨论状态的文档源真相。
+
 ## Routing
 
 按当前任务选择一个主动作，必要时组合第二个动作：
@@ -56,6 +70,21 @@ capture discussion state -> handoff
 3. **Explore.** 执行选中的动作，只在真正阻塞时问最小澄清问题。完成条件：得到一个可拍板判断、明确草案，或明确开放问题。
 4. **Close.** 标记每个主题状态：现在够用、以后再说、有冲突再重开。完成条件：没有继续沿用被用户纠正过的旧名称、旧边界或旧判断。
 5. **Persist when needed.** 触发落盘条件时写入 `docs/discussion-workflows/` 并更新索引。完成条件：下一轮参与者能从项目文件恢复当前判断。
+
+## Decision Handoff
+
+关闭一个讨论点后，如果同一讨论目标里已经知道下一个待拍板问题，交接给那个问题。交接不是完整展开下一个主题；默认只递一个最相关的待拍板点。
+
+交接包含：
+
+```text
+下一个要拍板的问题
+建议答案或默认方向
+为什么这个问题会影响后续判断
+当前状态：可确认、草案，或需要用户选择
+```
+
+只有在下一个问题会扩大范围、改变责任归属、把草案写成 canonical 判断，或缺少必要上下文时才停在问题本身。不要让用户只为看到下一个待拍板问题而输入“继续”或“下一个”。
 
 ## Persistence Gate
 
@@ -118,6 +147,7 @@ capture discussion state -> handoff
 用户要求复盘时继续新增设计
 子主题已经够用后还继续深入，忘了回到总问题
 index 只堆判断，不区分 confirmed / draft / open
+把下一个待拍板问题藏在“下一个”提示后，要求用户额外输入才给建议
 把模板当成每次必须完整执行的流程
 ```
 

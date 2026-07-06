@@ -1,6 +1,6 @@
 # Lifecycle And Intensity
 
-Use this reference when the task needs intensity routing, Level 3-4 lifecycle structure, or a decision about formulation before execution.
+Use this reference when the task needs intensity routing or Level 3-4 lifecycle structure. For formulation before execution, use `agent-grilling` and consume its snapshot here.
 
 ## Contents
 
@@ -20,10 +20,10 @@ Use this reference when the task needs intensity routing, Level 3-4 lifecycle st
 ## Core Boundary
 
 ```text
-source inspection -> execution preflight -> Spec draft/review/lock -> Eval draft/review/lock -> Plan draft/review/lock -> goal contract -> task queue -> execution -> review/repair -> status checkpoint
+source inspection -> optional agent-grilling snapshot -> execution preflight -> Spec draft/review/lock -> Eval draft/review/lock -> Plan draft/review/lock -> goal contract -> task queue -> execution -> review/repair -> status checkpoint
 ```
 
-Goal mode is an execution contract, not an open-ended discussion container. If execution reveals a major missing product, scope, architecture, deployment, or verification decision, pause and return to formulation.
+Goal mode is an execution contract, not an open-ended discussion container. If execution reveals a major missing product, scope, architecture, deployment, or verification decision, pause and route to `agent-grilling` or the user as appropriate.
 
 Execution preflight is a short target check before durable writes or external side effects. It should restate the goal, scope, default assumptions, clear requirements, likely ambiguities, and execution plan. It is not a confirmation checkpoint unless a real pause condition appears.
 
@@ -45,6 +45,8 @@ Routing inputs:
 - reviewer findings
 - user-requested intensity
 
+After selecting the initial level, restore or ask for the Agent Model Profile when model-selectable subagents, model-diverse review, or external agents may be used. Then decide whether external-agent participation would materially improve the current phase. If yes, ask the user for the allowed external agent(s), model(s), phases, and privacy/cost limits before any task-bearing external call. If no, proceed with host-native agents or the main-agent path.
+
 ## Levels
 
 ```text
@@ -65,7 +67,8 @@ Level 3: bounded review-repair convergence
   fresh review -> continue only while evidence requires.
 
 Level 4: full delivery lifecycle
-  Broad outcome-to-delivery goals. Includes formulation, Spec, Eval, roadmap,
+  Broad outcome-to-delivery goals. May consume an `agent-grilling` snapshot,
+  then includes Spec, Eval, roadmap,
   plan, goal contract, implementation or production, review,
   deployment/publication, evidence, and handoff.
 ```
@@ -133,7 +136,7 @@ Use a host-native goal, task, or workflow mode when the current agent runtime pr
 
 If the host exposes an explicit goal interface, such as a create/update goal capability, start or update that goal after the execution contract is clear and permitted. Do not substitute a chat summary or status note for host goal mode when the capability is available and authorized.
 
-Use host goal mode for execution continuity, not for open-ended formulation. The sequence is:
+Use host goal mode for execution continuity, not for open-ended formulation. Resolve open-ended formulation with `agent-grilling` before creating a goal contract. The sequence is:
 
 ```text
 lock Spec/Eval/Plan -> create goal contract -> start or update host goal mode when permitted -> execute bounded actions -> checkpoint status
@@ -199,7 +202,7 @@ Continue only when at least one evidence-backed reason exists:
 - an accepted blocker or major finding remains open
 - structural degradation shows the plan should be split, simplified, or corrected before more patches
 - a repair changed enough scope to require fresh review
-- evidence shows the Spec, Eval, goal contract, plan, or boundary is wrong and must return to formulation
+- evidence shows the Spec, Eval, goal contract, plan, or boundary is wrong and must route to `agent-grilling` or be revised before execution continues
 
 Ordinary next-step uncertainty should be resolved through source materials, runtime evidence, a focused agent pass, or a reversible assumption. It is not a pause reason.
 
@@ -228,8 +231,9 @@ Use Level 4 for broad outcome-to-delivery work across domains, not only software
 Keep the phases domain-neutral:
 
 ```text
-formulation:
-  Clarify target, constraints, users, risks, success criteria, and default assumptions through source-first agent passes and execution preflight.
+formulation snapshot:
+  Consume `agent-grilling` output when target, constraints, users, risks,
+  success criteria, or default assumptions were unclear.
 
 spec:
   Lock the target, boundaries, non-goals, and user-decided tradeoffs, or pause

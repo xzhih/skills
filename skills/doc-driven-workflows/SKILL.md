@@ -1,6 +1,6 @@
 ---
 name: doc-driven-workflows
-description: Use when the user explicitly asks for doc-driven workflows, code/docs synchronization, architecture indexes, full-chain or source-linked docs, operation-flow docs, call-path maps, code/docs alignment review, or doc-driven open-question ledgers; or when project guidance requires maintaining an existing or declared doc-driven source of truth that may drift. Do not use merely because docs exist, docs are missing, or a normal code task could theoretically affect docs.
+description: Use when the user explicitly asks for doc-driven workflows, code/docs synchronization, architecture or tech-stack docs, full-chain or source-linked docs, operation-flow docs, call-path maps, code/docs alignment review, or doc-driven open-question ledgers, for a single project or a multi-repo workspace; or when project guidance requires maintaining an existing or declared doc-driven source of truth that may drift. Do not use merely because docs exist, docs are missing, or a normal code task could theoretically affect docs.
 ---
 
 # Doc-Driven Workflows
@@ -9,9 +9,22 @@ description: Use when the user explicitly asks for doc-driven workflows, code/do
 
 Use this skill to prevent documentation drift. The goal is to keep project docs useful for future humans and agents without turning documentation into noisy ceremony.
 
-Doc-driven docs are a human-readable operating and implementation index. A human should be able to read them, understand how modules work and how to operate the product or system, then ask an agent to repair docs, code, or both when documented behavior and implementation diverge.
+Doc-driven docs serve two readers at once: a human building a mental model of the project, and an agent loading architecture, contracts, and design intent before changing code. A human should be able to read them, understand how the system is built and operated, then ask an agent to repair docs, code, or both when documented behavior and implementation diverge. An agent should be able to navigate them by stable headings and source anchors.
 
 Do not use this skill just because a repository has documentation. Use it only when the user asks for doc-driven work, when the user asks to review whether code and docs are aligned, or when project guidance explicitly requires doc-driven maintenance for the current kind of code or review task.
+
+## Workflow Composition
+
+When this skill is part of a larger development workflow, route through [development-workflows](../development-workflows/SKILL.md) and restore state with [project-context](../project-context/SKILL.md) before changing docs.
+
+This skill owns documentation drift decisions. It does not own:
+
+- discussion boundaries or confirmed/draft/open decision flow; use [discussion-workflows](../discussion-workflows/SKILL.md)
+- subagent/worktree lane batching; use [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md)
+- returned lane review and next-batch recommendation; use [integration-review](../integration-review/SKILL.md)
+- heavy Spec/Eval multi-agent convergence; use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)
+
+When another workflow changes source-of-truth docs, keep this skill focused on whether docs would mislead future humans or agents. Do not turn every lane into a broad doc rewrite.
 
 Core question:
 
@@ -43,16 +56,18 @@ If invocation is allowed, read `references/modes-and-gates.md` and resolve the m
 
 ## Mode Details
 
-Read `references/modes-and-gates.md` before performing bootstrap or maintenance. It defines invocation gates, resolved paths, lightweight discovery, action strength, and the project-guidance rule.
+Read `references/modes-and-gates.md` before performing bootstrap or maintenance. It defines invocation gates, resolved paths, lightweight discovery, anchor verification, action strength, and the project-guidance rule.
 
-Read `references/document-patterns.md` before creating or materially changing a doc-driven documentation set. It defines the default document set, human-agent workflow, operation-flow rules, contract/call-path guidance, diagram guidance, ledger format, examples, and final summary style.
+Read `references/document-patterns.md` before creating or materially changing a doc-driven documentation set. It defines the domain-first document set, architecture and tech-stack patterns, writing quality rules, contrastive examples, ledger format, governance, and final summary style.
+
+Read `references/project-shapes.md` during bootstrap, and during maintenance when project shape, workspace layout, or an architecture-shaping dependency may have changed. It defines shape detection, per-shape doc focus, multi-repo layering, and scale adaptation.
 
 ## Core Workflow
 
 1. Resolve whether invocation is allowed.
 2. Resolve mode: bootstrap, maintenance, or no-op.
 3. Resolve `doc_root` and `ledger_path`.
-4. Use the smallest source-backed discovery pass that can answer whether docs would drift.
+4. For bootstrap, resolve project shape(s) and scale, then run a discovery pass deep enough to write source-backed narrative and architecture docs. For maintenance, use the smallest source-backed discovery pass that can answer whether docs would drift.
 5. Choose action strength:
    - no-op
    - small sync
@@ -93,7 +108,12 @@ Before claiming doc-driven work is complete:
 - Maintenance did not run merely because a docs folder exists.
 - Existing document language was preserved during maintenance.
 - Multilingual-team docs had their language convention restated before writing.
+- The document set matched the resolved project shape and scale, including workspace layering for multi-repo work.
 - Confirmed docs contain only source-backed confirmed behavior.
+- New or changed content passes the inclusion method: it has durable reader value, stale-doc consequence, source-backed evidence, and an appropriate abstraction level.
+- Every created or materially changed document opens with a narrative overview, and no zero-information statements were added.
+- Each fact has a single home; duplicates were replaced with links, and no evidence-mirror file was created.
+- Evidence anchors in touched documents resolve to current source, and freshness anchors were updated.
 - Useful source-backed diagrams were created or updated when they materially improve navigation, or when existing diagrams would otherwise drift.
 - Uncertainties or suspected issues are recorded in the open-question ledger.
 - Project guidance references the resolved docs path after bootstrap.
@@ -109,6 +129,13 @@ Reading the whole docs tree to decide no-op
 Hardcoding docs/doc-driven-workflows after the user chose another doc_root
 Changing existing document language during maintenance
 Writing speculation into confirmed architecture docs
+Dumping source facts into tables without narrative or design intent
+Translating code line-by-line into docs
+Documenting private helpers, branches, variables, or file inventories with no durable consequence
+Creating one global evidence mirror that duplicates every fact
+Splitting one domain across system-map, operation-flow, contract, and call-path files
+Listing every dependency instead of architecture-shaping direct dependencies
+Copying reference examples or role lists as templates instead of adapting to the project
 Treating every question as a bug
 Forcing Web/backend/admin-shaped docs onto libraries, CLIs, infra, or small tools
 Adding diagrams that are decorative or ceremonial instead of useful for navigation

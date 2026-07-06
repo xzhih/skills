@@ -4,63 +4,120 @@ Use this reference when creating or materially changing a doc-driven documentati
 
 ## Contents
 
-- Default Document Set
+- Reader Model
+- Document Set
 - Root Index
+- Architecture And Tech Stack
+- Domain Documents
+- Inclusion Method
+- Writing Quality
+- Quality Heuristics
 - Human-Agent Workflow
-- System Map
-- Data And State Flows
 - Operation Flows
-- Examples
 - Contracts And Interfaces
 - Call Paths
 - Mermaid Diagrams
 - Open-Question Ledger
+- Document Governance
 - Final Summary
 
-## Default Document Set
+## Reader Model
 
-The default document set is optional and shape-aware:
+Doc-driven docs serve two readers at once:
 
-```text
-<doc_root>/
-  README.md
-  system-map.md
-  operation-flows.md
-  data-and-state-flows.md
-  contracts-and-interfaces.md
-  call-paths.md
-  open-questions.md
-```
+- A human reading the project for the first time. They need narrative and a mental model: what the system is, how it is layered, and why it works the way it does.
+- An agent loading context before changing code. It needs stable file names, greppable headings, precise source anchors, and recorded design intent so its changes do not break the architecture.
 
-Instantiate only documents justified by the observed project:
+Every document must serve both. Facts without narrative fail the human; narrative without source anchors fails the agent.
 
-- Create `operation-flows.md` only when there are human, operator, CLI, SDK, automation, or consumer flows.
-- Create `data-and-state-flows.md` only when there are meaningful persistence, lifecycle, cache, queue, file, message, migration, or recovery concerns.
-- Create `contracts-and-interfaces.md` only when there are cross-boundary contracts.
-- Create `call-paths.md` only when future humans or agents need source entry chains.
-- Merge small projects into `README.md` when separate files would be ceremony.
+## Document Set
 
-Do not force Web/backend/admin-shaped docs onto other repo shapes.
+Organize by domain, not by document form. A useful doc set usually has these roles, but file names and count should follow the project:
+
+- a root index for purpose, reading order, glossary, and agent routing
+- architecture and tech-stack context for layering, boundaries, design decisions, and key dependencies
+- domain documents for subject areas that deserve their own durable explanation
+- an open-question ledger for uncertainty, suspected drift, and product decisions
+
+Rules:
+
+- Resolve the project shape first with `project-shapes.md`. It defines shape-specific doc focus, workspace/multi-repo layering, and scale adaptation.
+- Operation flows, contracts, call paths, and data/state flows are sections inside the domain document that owns them, not global form-shaped files. A global `operation-flows.md` that mixes login, billing, and deployment scatters every domain across files and forces duplication.
+- Merge everything into `README.md` when the project is small enough that separate files would be ceremony.
+- Never create a global evidence-mirror file that repeats facts recorded elsewhere. Evidence lives next to the fact it supports, once.
 
 ## Root Index
 
-The root index should include:
+The root index is the entry point for both readers. Include:
 
-- purpose of the doc-driven docs
-- resolved `doc_root` and `ledger_path`
-- maintenance rule
-- document map
-- short source-backed system summary
-- useful Mermaid overview diagram when the project structure benefits from one
-- links to module docs
+- purpose of the doc set, resolved `doc_root` and `ledger_path`
+- maintenance rule: docs update in the same change as the code that invalidates them
+- detected project shape(s) and the evidence for that detection
+- reading order for humans: which documents to read first and why
+- routing table for agents: "changing X: read Y first" entries for the main domains
+- short glossary when project terminology is not obvious from names
+- document map with a one-line summary per document
+- source-backed Mermaid overview diagram when project structure benefits from one
+
+## Architecture And Tech Stack
+
+The architecture document explains how the system is built and why. It is often the highest-value document for an agent about to modify code. Include only source-backed content:
+
+- Layering and boundaries: the layers or module groups, the allowed dependency direction, and explicitly forbidden dependencies (for example "HTTP handlers never touch the ORM directly; they go through `internal/modules/`").
+- Design decisions and invariants (ADR-lite): decisions a future change could silently break. For each: the decision, why it holds, and evidence. Record the "why" only when source, config, tests, or project guidance state it; when the rationale is unknown, record the decision as observed and put the "why" question in the ledger.
+- Cross-cutting mechanisms: the shared patterns new code must follow: error handling, auth, idempotency, transactions, validation, logging.
+- Tech stack: only architecture-shaping direct dependencies, not a lockfile dump. For each: name, role, where it is used, and constraints or sharp edges (for example "queries are generated with `gorm.io/gen`; do not hand-write them"). Evidence comes from manifests: `package.json`, `go.mod`, `pyproject.toml`, `Cargo.toml`, or equivalent.
+
+## Domain Documents
+
+Each domain document covers one subject area end to end, so a reader never chases one topic across five files. Let the domain shape the section structure instead of copying a template. Useful sections usually answer these questions:
+
+- What is this domain responsible for, and what is explicitly outside it?
+- What are the main actors, entry points, and boundaries?
+- What operation flows, contracts, call paths, data, or state transitions are important enough to preserve?
+- What source anchors prove the current behavior?
+- What uncertainties belong in the ledger instead of confirmed docs?
+
+## Inclusion Method
+
+Do not decide by matching a fixed list of allowed topics. Decide by usefulness, durability, and source-backed confidence.
+
+Before adding anything to confirmed docs, ask:
+
+- Reader value: would this help a future human or agent understand, operate, integrate, modify, or trust the project better than reading the code alone?
+- Change consequence: if this fact becomes stale, could someone make a wrong change, call the system incorrectly, operate it incorrectly, or misunderstand an important boundary or behavior?
+- Abstraction level: is this explaining the system's shape, intent, constraint, behavior, or navigation path, instead of translating implementation mechanics into prose?
+- Durability: is this likely to remain meaningful across ordinary refactors, or is it a temporary local detail best left in code?
+- Evidence quality: can the claim be verified from source, config, tests, runtime evidence, or project guidance without speculation?
+- Single-home fit: is this the one best place for the fact, with other docs linking instead of repeating?
+
+Add the content only when the answers justify durable documentation. If the value is only "this exists in code," omit it. If the detail is useful only as a locator, make it a compact source anchor inside a broader explanation. If the evidence is incomplete, record the uncertainty in the ledger instead of writing confirmed docs.
+
+## Writing Quality
+
+- Narrative first. Every document and every major section opens with 2-5 plain sentences that build a mental model before any details. A reader who stops after the overview should still leave with a correct rough picture.
+- Value threshold. Apply the delete test before writing a statement: if removing it loses nothing that a reader could not infer from file names alone, do not write it. Ban statements like "the route exists" or "X handles Y" with no behavior.
+- One fact per statement. Split compound behavior into separate statements or a narrative paragraph. Never pack multiple behaviors into one table cell or one bullet.
+- Tables enumerate, prose explains. Use tables only for homogeneous items: config modes, contract fields, model lists, dependency lists. Never narrate behavior or flows inside table cells.
+- Evidence restraint. Inline at most 1-2 anchors per statement, choosing the most precise `path:symbol`. Move supporting evidence to a compact Evidence block at the end of the section. Evidence must support the text, not drown it.
+- Single source of truth. Each fact lives in exactly one document; every other mention links to it instead of restating it.
+- Size budget. Keep each document under roughly 300 lines. When a document outgrows the budget, split it by domain; never grow table cells or evidence lists instead.
+
+## Quality Heuristics
+
+Use these heuristics to judge the document after drafting. They are not templates:
+
+- Mental-model test: after reading the overview, can a new human explain the domain's role, boundaries, and main moving parts without reading source first?
+- Change-safety test: can an agent identify which files, contracts, invariants, and tests to inspect before changing the domain?
+- Specificity test: does every claim teach behavior, constraint, ownership, or consequence that is not obvious from filenames?
+- Evidence test: can a skeptical reader verify important claims without wading through a long path dump?
+- Shape test: does the document match this project's form, scale, and vocabulary rather than a generic Web/backend/admin layout?
 
 ## Human-Agent Workflow
 
-Doc-driven docs are an operating and implementation index for humans and agents.
-
 The intended loop:
 
-1. A human reads docs to understand a module, operation, contract, or call path.
+1. A human reads docs to understand a domain, operation, contract, or call path.
 2. The human notices missing, stale, surprising, or incorrect behavior.
 3. The agent checks source, runtime evidence, or project guidance.
 4. The agent chooses one outcome:
@@ -70,21 +127,7 @@ The intended loop:
    - record uncertainty in the ledger when evidence is insufficient
 5. Confirmed docs and implementation converge again.
 
-Write docs so this loop is possible. A reader should be able to find where an operation starts, what happens, which files/functions matter, what state changes, and which contract or question to inspect next.
-
-Bootstrap docs should include source-backed Mermaid diagrams when the project has meaningful structure, flows, state, contracts, or call paths that are easier to navigate visually. Maintenance must update affected diagrams when source-backed behavior, boundaries, state, or call paths change.
-
-## System Map
-
-Create or maintain a system map only when it helps readers understand boundaries. It can describe participants, modules, packages, processes, deployment units, devices, external systems, or storage boundaries.
-
-Keep it source-backed. Do not turn it into a speculative architecture diagram.
-
-## Data And State Flows
-
-Create or maintain data/state docs only when the project has meaningful persistence, lifecycle, cache, queue, file, message, migration, or recovery behavior.
-
-State what changes, where it lives, who owns it, what transitions are allowed, and what happens on failure or recovery.
+Write docs so this loop is possible. A reader should be able to find where an operation starts, what happens, which files and functions matter, what state changes, and which contract or question to inspect next.
 
 ## Operation Flows
 
@@ -92,153 +135,29 @@ Operation flows are written from the actor's point of view. Actors can be users,
 
 Document a flow when it is user-visible, operationally critical, contract-bearing, failure-prone, risk-sensitive, or already documented.
 
-When meaningful human, operator, consumer, automation, CLI, SDK, or service-caller interaction exists, present it in an actor-oriented flow document or section. Do not bury actor actions only inside system, data, or state-flow docs.
-
 For each relevant flow, capture:
 
 - entry point
-- action: click, type, select, drag, upload, call, confirm, schedule, or run
-- observed feedback or state transition
-- success result
-- failure result when source-backed
-- source files and functions/components
-
-Examples of observed feedback:
-
-- GUI: loading, disabled, empty, warning, success, error
-- CLI: exit code, stdout, stderr, progress output
-- SDK/API: response shape, error code, thrown error
-- automation: event, log, retry, alert
-
-## Examples
-
-Examples are reference shapes, not required templates. Adapt them to the real project rather than forcing these labels or files.
-
-### Web Project
-
-For a web product, a useful flow might show:
-
-```text
-User opens /projects
--> selects a project card
--> edits a canvas node
--> clicks Run
--> frontend validates inputs and sends request
--> backend creates task and charges or reserves credits
--> worker processes task and stores result
--> frontend polls or subscribes and renders success/error state
-```
-
-Mermaid reference:
-
-```mermaid
-sequenceDiagram
-  actor User
-  participant Web
-  participant API
-  participant Worker
-  participant Storage
-  User->>Web: Open project and click Run
-  Web->>Web: Validate inputs
-  Web->>API: Create task
-  API->>API: Charge or reserve credits
-  API->>Worker: Dispatch task
-  Worker->>Storage: Store result
-  Web->>API: Poll or subscribe
-  API-->>Web: Task status and result
-  Web-->>User: Render success or error state
-```
-
-Source-backed docs should let a human answer:
-
-- Which page/component owns the button, form, loading state, and error copy?
-- Which request fields are sent, and which backend route receives them?
-- Which database rows, files, queues, or external services change?
-- Which worker or background path produces the visible result?
-- Where should an agent patch docs or code if the UI and backend disagree?
-
-### App Project
-
-For a mobile or desktop app, a useful flow might show:
-
-```text
-User opens Settings
--> toggles a permission or feature
--> app updates local state
--> app calls a service, sync engine, or platform API
--> local persistence updates
--> UI reflects success, pending sync, or recoverable failure
-```
-
-Mermaid reference:
-
-```mermaid
-stateDiagram-v2
-  [*] --> ViewingSettings
-  ViewingSettings --> UpdatingLocalState: User toggles feature
-  UpdatingLocalState --> Syncing: Call service or platform API
-  Syncing --> Synced: Success
-  Syncing --> PendingSync: Offline or retryable failure
-  Syncing --> Failed: Non-retryable failure
-  PendingSync --> Syncing: Retry or app resumes
-  Synced --> ViewingSettings: UI reflects enabled state
-  Failed --> ViewingSettings: UI shows recoverable error
-```
-
-Source-backed docs should let a human answer:
-
-- Which screen, view model, command, or intent owns the action?
-- Which platform permission, local store, background task, or sync boundary is involved?
-- What happens offline, after restart, or when the platform API fails?
-- Which observable UI state proves success or failure?
-- What source path should an agent inspect when docs and behavior diverge?
+- action: click, type, select, upload, call, confirm, schedule, or run
+- observed feedback or state transition (GUI states, exit codes, response shapes, events)
+- success result, and failure result when source-backed
+- the 1-2 key source anchors per step
 
 ## Contracts And Interfaces
 
-Document contracts that other code, systems, or humans rely on:
-
-- API routes
-- public functions/classes
-- events/messages
-- CLI flags
-- file formats
-- config formats
-- schemas
-- external protocols
-- permission or trust rules
+Document contracts that other code, systems, or humans rely on: API routes, public functions and classes, events and messages, CLI flags, file and config formats, schemas, external protocols, permission or trust rules.
 
 Avoid listing private implementation details unless they are needed for future maintenance.
 
 ## Call Paths
 
-Call paths should be compact and source-backed:
-
-```text
-entry file or actor
--> source file:function/component
--> source file:function/service
--> source file:repository/adapter/side effect
-```
-
-Keep paths useful for navigation, not exhaustive stack traces.
+Call paths are compact source navigation chains. Each step should identify a meaningful handoff, boundary, or side effect, with a short purpose phrase. Keep paths useful for navigation, not exhaustive stack traces or line-by-line call graphs.
 
 ## Mermaid Diagrams
 
-Mermaid diagrams are expected for non-trivial doc-driven documentation sets when they improve human navigation.
+Include a source-backed Mermaid diagram when a relationship is easier to understand visually: system maps, sequence flows, state lifecycles, data flows, operation journeys.
 
-Bootstrap should create at least one source-backed Mermaid diagram in the root index or a relevant module doc when the project has enough structure for a useful diagram. Material docs for operation flows, state/data flows, contracts, or call paths should include a Mermaid diagram when the relationship is easier to understand visually.
-
-Maintenance must update existing diagrams when the documented behavior, system boundary, state lifecycle, call path, or interaction flow changes. For tiny projects or narrow ledgers, omit diagrams when they would be decorative, speculative, or less useful than a compact source-backed text summary.
-
-Good diagram types:
-
-- system map
-- sequence flow
-- state lifecycle
-- data flow
-- operation journey
-
-Do not add decorative diagrams. Mermaid diagrams must be traceable to source evidence and useful for human navigation.
+Maintenance must update existing diagrams when documented behavior, boundaries, state, or call paths change. Omit diagrams when they would be decorative, speculative, or less useful than a compact text summary.
 
 ## Open-Question Ledger
 
@@ -252,13 +171,7 @@ Levels:
 - `stale doc`: existing docs contradict current source, config, or observed behavior
 - `product decision needed`: technical behavior is possible but product, operations, trust, or experience needs a decision
 
-Statuses:
-
-- `open`
-- `needs verification`
-- `deferred`
-- `resolved`
-- `superseded`
+Statuses: `open`, `needs verification`, `deferred`, `resolved`, `superseded`.
 
 Entry format:
 
@@ -279,6 +192,15 @@ Write rules:
 - If multiple ledgers exist, use the ledger resolved by `modes-and-gates.md`.
 - Prefer lower certainty when evidence is incomplete.
 - After a fix, update status and evidence instead of deleting the entry unless the project docs define cleanup rules.
+
+Ledger hygiene: when a ledger grows past roughly 30 entries or its `resolved` entries dominate, move resolved and superseded entries to an archive section or file and say so in the final summary.
+
+## Document Governance
+
+- Freshness anchor: each document header records the last verification point: a date plus the short commit hash (`git rev-parse --short HEAD`) when available. Agents can then scope drift checks with `git diff <hash> -- <paths>` instead of re-verifying everything.
+- Machine-checkable evidence: write anchors as `path` or `path:symbol` exactly, so their existence can be verified mechanically. Anchor verification during maintenance is defined in `modes-and-gates.md`.
+- Same-change rule: a code change that invalidates a documented fact updates that fact in the same change, or records a `stale doc` ledger entry.
+- Stable navigation: keep file names and headings stable; agents locate context by grepping them. Rename only with the user's consent.
 
 ## Final Summary
 

@@ -23,6 +23,8 @@ Raw external-agent output is useful for auditability and rebuttal, but it is not
 
 When closing a task, stage, or run, use the evidence closure shape from `artifact-layout.md`: claim, criteria closed, evidence, verification run, reviewer/recheck status, remaining risks, and pass/fail/paused decision.
 
+For output imported from `agent-grilling`, normalize the accepted snapshot as scoped assumptions, decision candidates, open questions, and downstream implications. Do not run goal/path pressure testing from this skill.
+
 ## Normalized Item Types
 
 ```text
@@ -38,6 +40,12 @@ hypothesis:
 proposal:
   A suggested plan, design, implementation path, product direction, or tradeoff.
 
+tradeoff:
+  A consequence pair or comparison that clarifies why one path is better or worse than another.
+
+assumption:
+  A scoped default that can be used unless contradicted by evidence, authority, or user choice.
+
 gap:
   Missing information or uncertainty. Route through agent-first resolution before asking the user.
 
@@ -46,6 +54,9 @@ artifact:
 
 decision_candidate:
   A recommendation that may become a decision after authority, evidence, constraints, and user boundaries are checked.
+
+implication:
+  A consequence for Spec, Eval, Plan, task queue, verification, boundary, cost, privacy, or delivery risk.
 ```
 
 ## Promotion Rules

@@ -67,9 +67,9 @@ goals/
   Goal contracts, boundaries, verification, stop/pause conditions.
 
 discussions/
-  Execution preflight, multi-agent formulation records, rationale,
-  assumptions, conflicts, and decisions. Use blackboards/ for active
-  adversarial round state when it needs persistence.
+  Execution preflight, imported formulation snapshots from `agent-grilling`,
+  rationale, assumptions, conflicts, and decisions. Use blackboards/ for
+  active adversarial round state when it needs persistence.
 
 roadmaps/
   Staged delivery paths or product-to-delivery breakdowns.
@@ -357,4 +357,4 @@ how to verify or revise it:
 what would invalidate it:
 ```
 
-If later evidence contradicts an assumption, pause, repair, or return to formulation depending on severity.
+If later evidence contradicts an assumption, pause, repair, route to `agent-grilling`, or revise Spec/Eval/Plan depending on severity.

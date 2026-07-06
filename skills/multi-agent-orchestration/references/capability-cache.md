@@ -10,6 +10,7 @@ Use this reference for cache-first discovery, agent participant selection, model
 - Minimum Record
 - Cache-First Flow
 - Consent Boundary
+- Session Continuity
 - Shell Agent Run Preflight
 - External Session Use
 - Freshness Triggers
@@ -103,6 +104,8 @@ output_capture
 model_selection
 known_models
 reasoning_control
+session_continuity
+send_or_resume_surface
 safe_preflight
 requires_user_permission_for
 recommended_uses
@@ -120,7 +123,7 @@ Do not create empty fields just because they exist.
 1. Determine likely intensity and whether external-agent aggregation may be useful.
 2. Read the target project's cached capability file if it exists.
 3. If the cache covers needed host-native or already-authorized capabilities, do cheap freshness checks only.
-4. If strategy may use external, editor, protocol, paid, account-bound, or data-leaving agents, proactively ask whether the user authorizes that use before refreshing or invoking them unless already authorized.
+4. If the selected intensity and phase make external, editor, protocol, paid, account-bound, or data-leaving agents worth using, ask the user for an external-agent policy unless one is already current.
 5. If permission is not granted, mark task use as not_authorized and continue with host-native subagents or main-agent path.
 6. If permission is granted, refresh only the participants needed by the selected intensity and phase.
 7. Re-run broader discovery only when cache is missing, stale, contradicted by runtime errors, or insufficient for the requested intensity or user-requested capability.
@@ -138,6 +141,37 @@ Requires explicit user permission:
 - sending prompts, files, repo context, plans, diffs, screenshots, or artifacts to external/editor/protocol agents
 - asking an external/editor/protocol agent to review, implement, research, summarize, or generate artifacts
 - running an agent call that may consume API credits, paid usage, account quota, or leave the local trust boundary
+- selecting which external agent or external model may participate in the workflow
+
+External-agent policy should answer:
+
+```text
+allowed_external_agents:
+allowed_external_models:
+allowed_phases:
+privacy_or_context_limits:
+cost_or_budget_limits:
+stale_when:
+```
+
+Once granted, the policy can cover later phases in the same workflow. Ask again when the policy is missing, stale, contradicted, or the task crosses a new privacy, cost, account, destructive, public, or production boundary.
+
+## Session Continuity
+
+For review participants, distinguish fresh spawn from continuing the same participant.
+
+Record whether the surface supports:
+
+```text
+fresh_spawn
+send_input_to_open_agent
+resume_closed_agent
+external_resume_by_explicit_session_id
+```
+
+When Round 2 adversarial review may be needed, keep Round 1 reviewer sessions open if possible. If sessions are closed, use the recorded resume surface before spawning replacements. A replacement reviewer is a `fresh_proxy_rebuttal`, not the original reviewer.
+
+Do not close or replace Round 1 reviewers just because they are slow. Slow review is not a loss of continuity.
 
 ## Shell Agent Run Preflight
 
@@ -173,7 +207,34 @@ Refresh when:
 
 Record model names and reasoning/profile controls only when safely discovered.
 
-Do not hard-code a user's personal model preferences. Model assignment is a runtime decision based on task difficulty, risk, requested confidence, available capabilities, cost, privacy, authorization, current main model, and independence needs.
+Do not hard-code a user's personal model preferences into the installed skill. If the user declares a preferred model mix for the current project, workflow, or batch, record it as an Agent Model Profile and verify availability before dispatch. Model assignment is a runtime decision based on task difficulty, risk, requested confidence, available capabilities, cost, privacy, authorization, current main model, independence needs, and any current user-approved profile.
+
+Create or refresh the Agent Model Profile before task-bearing dispatch when implementation and review should use different models, model-diverse reviewers are useful, external agents may participate, or the user has a known preferred mix that is not yet recorded.
+
+Suggested profile:
+
+```text
+agent_model_profile:
+  implementation.primary_model:
+  implementation.fallback_model:
+  host_review.models:
+  external_review.allowed:
+  external_review.agent_tool:
+  external_review.model:
+  external_review.allowed_phases:
+  privacy_cost_limits:
+  stale_when:
+```
+
+When model diversity is requested or useful for Spec, Eval, Plan, or final quality review, create a model assignment before spawning agents:
+
+```text
+agent_id | role | model | reasoning/profile | context exposure | purpose
+```
+
+If the host exposes model overrides, do not omit the model field for model-diverse reviewers. If all reviewers use the same model, record why and preserve independence through fresh context, different review angles, adversarial rebuttal, or external agents.
+
+Do not use small, mini, or ultra-fast models as default reviewers for high-judgment phases such as Spec, Eval, Plan, architecture, or final quality review. Use them only for simple, low-risk, mechanical, or explicitly user-approved work.
 
 Optimize for independent, decorrelated judgment rather than model diversity as a ritual. Prefer different models, model families, reasoning profiles, providers, or context exposures when available, especially for Spec, Eval, Plan, and final quality review.
 

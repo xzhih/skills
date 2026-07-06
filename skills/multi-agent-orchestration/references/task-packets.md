@@ -8,6 +8,7 @@ Use this reference when creating prompts or assignments for subagent or external
 - Minimum Invariant
 - Assignment Intent
 - Delegation Topology
+- Review Versus Execution
 - Non-Review Delegation Boundaries
 - Execution Queue Packets
 - Context Exposure
@@ -45,9 +46,6 @@ When should the agent stop or report a blocker?
 Choose intent before wording the packet:
 
 ```text
-independent formulation:
-  Build or challenge the target, requirements, risks, or plan from source materials.
-
 artifact review:
   Review a Spec, Eval, plan, diff, document, implementation, deployment, or evidence package.
 
@@ -88,6 +86,28 @@ partitioned implementation:
 For Spec, Eval, Plan, and final quality review, prefer redundant or complementary same-artifact review. Do not shard the artifact by section before whole-artifact review unless the first round already happened and targeted follow-up is needed.
 
 For implementation or artifact production, prefer partitioned execution with disjoint write ownership and explicit integration points.
+
+For goal/path uncertainty before a stable artifact exists, use `agent-grilling` instead of creating formulation packets here.
+
+## Review Versus Execution
+
+Before delegating, choose whether the task is about validating an artifact, producing bounded work, or verifying evidence.
+
+Use review convergence when a concrete artifact exists and needs validation against a goal, Spec, Eval, boundary, or evidence standard.
+
+Review packets should ask for:
+
+```text
+blocker | major | minor | question | note
+```
+
+Execution packets should ask for:
+
+```text
+owned changes | evidence | blocker | touched files | verification
+```
+
+Do not ask review agents to invent the plan they are supposed to verify.
 
 ## Non-Review Delegation Boundaries
 
@@ -153,8 +173,8 @@ Choose exposure mode before wording the packet:
 ```text
 source-first:
   Give original user goal and authoritative source materials before any main-agent summary.
-  Use for independent formulation, first-round Spec/Eval/Plan/final review,
-  high-risk review, and hallucination resistance.
+  Use for first-round Spec/Eval/Plan/final review, high-risk review, and
+  hallucination resistance.
 
 artifact-focused:
   Give the artifact to inspect plus relevant goal, boundary, and verification criteria.
@@ -208,6 +228,7 @@ Use these only when they help the actual task:
 - authoritative source materials
 - scope and boundaries
 - selected participant, model, or reasoning/profile constraint
+- agent model profile reference and task-specific model assignment
 - task type
 - allowed work or review angle
 - independence requirement

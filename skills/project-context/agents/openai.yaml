@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Context"
+  short_description: "Restore source-of-truth project state"
+  default_prompt: "Use $project-context to recover the authoritative project docs, active lanes, decisions, verification conventions, and collision risks before planning or delegating work."

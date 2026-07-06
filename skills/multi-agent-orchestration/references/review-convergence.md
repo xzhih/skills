@@ -7,6 +7,8 @@ Use this reference for Level 2+ audits, Level 3 bounded review-repair convergenc
 - Level Boundary
 - Review Contract
 - Blackboard Rounds
+- Round 1 Convergence Gate
+- Reviewer Continuity
 - Per-Task Review Gates
 - Reviewer Challenge
 - Finding Standard
@@ -77,10 +79,14 @@ moderator synthesis:
   Normalize claims, evidence, conflicts, open questions, and candidate findings
   onto the blackboard.
 
+round 1 convergence gate:
+  Decide and record whether the blind results require adversarial convergence
+  before any repair, implementation, or final decision.
+
 round 2+:
-  Adversarial review. Reviewers receive the blackboard snapshot and challenge
-  high-impact claims, weak evidence, omissions, contradictions, and unresolved
-  questions.
+  Adversarial review. Original reviewers receive the blackboard snapshot when
+  session continuity is available, then challenge high-impact claims, weak
+  evidence, omissions, contradictions, and unresolved questions.
 
 convergence:
   The moderator promotes or rejects findings by evidence, updates Spec/Eval/Plan
@@ -89,6 +95,74 @@ convergence:
 ```
 
 Persist the blackboard as markdown when there are multiple rounds, the discussion affects Spec/Eval/Plan, handoff is likely, or the selected intensity is Level 3-4.
+
+## Round 1 Convergence Gate
+
+After blind reviewers return, the moderator must run this gate before accepting findings, repairing, implementing, or making a final decision from the synthesis.
+
+Record one of:
+
+```text
+round_2_required:
+  triggers:
+  packet:
+  reviewer_continuity:
+
+round_2_skipped:
+  reason:
+  evidence_checked:
+```
+
+Round 2 adversarial review is required when any Round 1 output includes:
+
+- an evidence-backed blocker
+- a major finding affecting Spec, Eval, plan, boundary, freeze gate, milestone gate, task boundary, data model, verification, result correctness, or startability
+- multiple reviewers reinforcing the same high-impact claim
+- enough findings that deduplication, root-cause grouping, priority, or scope ownership is unclear
+- an open question that affects implementation boundary, acceptance criteria, Eval quality, or whether work may start
+- same-model or same-context agreement with weak evidence on a high-impact conclusion
+- reviewer sign-off that conflicts with a preserved blocker or major finding
+
+Round 2 may be skipped only when all are true:
+
+- no blocker or major finding exists
+- no open question affects Spec, Eval, plan, boundary, verification, result correctness, or startability
+- remaining items are minor, deferred, or out of scope by the goal contract
+- the moderator has compared evidence and source coverage against the review contract
+- the skip reason is recorded
+
+When Round 2 is required, send reviewers the blackboard snapshot and ask for:
+
+```text
+Challenge any blocker/major finding you think is unsupported, duplicated,
+wrongly graded, or missing its root cause.
+Identify merged root causes and which findings should survive.
+Identify whether each surviving issue blocks startability, repair, verification,
+or only future hardening.
+Name any high-impact omission from the blackboard.
+Give revised sign-off: no blocker / no major / remaining questions / evidence checked.
+```
+
+Do not start repair or implementation from a blind-review synthesis while `round_2_required` is open.
+
+## Reviewer Continuity
+
+Round 2 is adversarial only when reviewer continuity is preserved or the substitute is labeled honestly.
+
+Default:
+
+- keep Round 1 review agents open until the convergence gate decides whether rebuttal is needed
+- record each reviewer's agent ID, session ID, model, role, and review angle when available
+- send Round 2 packets back to the original Round 1 reviewer IDs or sessions using host send/resume or external resume when supported
+
+If an original reviewer cannot be continued:
+
+- record `fresh_proxy_rebuttal` and the reason
+- give the proxy reviewer the blackboard plus the original reviewer's own output and the other reviewers' challenged claims
+- do not describe proxy output as the original reviewer changing position or signing off
+- resume any original reviewers that are still available, and use proxy reviewers only for missing perspectives
+
+Spawning new agents for Round 2 without recording this distinction is not same-reviewer adversarial review.
 
 ## Per-Task Review Gates
 
@@ -225,6 +299,7 @@ Stop when:
 Continue when:
 
 - any evidence-backed blocker or major finding remains open
+- blind review produced a required Round 2 gate that has not been completed or explicitly skipped with evidence
 - a fresh reviewer finds a new evidence-backed blocker or major issue
 - verification fails or contradicts the claimed result
 - repair changes the Spec, Eval, plan, boundary, or artifact enough that fresh review is required

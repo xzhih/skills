@@ -1,17 +1,23 @@
 ---
 name: multi-agent-orchestration
-description: Use when, and only when, the user explicitly requests multi-agent-orchestration, a Spec/Eval-driven multi-agent delivery workflow, multi-agent/subagent/external-agent orchestration, model-diverse or fresh-reviewer adversarial review, or repeated review-repair work.
+description: Use when, and only when, the user explicitly requests multi-agent-orchestration, a Spec/Eval-driven multi-agent delivery workflow, model-diverse or fresh-reviewer adversarial review, external-agent policy, repeated review-repair, or higher-intensity multi-agent convergence. Do not use for routine subagent/worktree lane dispatch or lightweight goal/path pressure testing.
 ---
 
 # Multi-Agent Orchestration
 
 ## Overview
 
-Run opt-in Spec/Eval-driven delivery workflows where independent agents help formulate the target, define quality, plan, implement, verify, and finish the task.
+Run opt-in Spec/Eval-driven delivery workflows where independent agents help define quality, plan, implement, verify, and finish the task.
 
 Multi-agent orchestration is the execution mechanism. The goal is not to make agents talk; it is to build the right Spec, build a useful Eval, execute efficiently, and keep repair moving until evidence proves completion, pause, or a required user decision.
 
 The main agent is the moderator. It owns orchestration, blackboard state, permissions, integration, verification, and final accountability.
+
+## Workflow Composition
+
+When the user asks for general document-led development coordination, start with [development-workflows](../development-workflows/SKILL.md) and [project-context](../project-context/SKILL.md). Use this skill only for explicit higher-intensity orchestration, Spec/Eval, adversarial review-repair, external-agent policy, or repeated convergence.
+
+For goal/path uncertainty before planning, prefer [agent-grilling](../agent-grilling/SKILL.md). For routine batched worktree/subagent implementation with clear lane boundaries, prefer [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md). For returned lane review, prefer [integration-review](../integration-review/SKILL.md). Escalate back here when the work exposes Eval gaps, blocker/major findings, external-agent needs, or repeated repair loops.
 
 Core pattern:
 
@@ -20,7 +26,8 @@ user goal and boundaries
   -> intensity decision
   -> capability cache, discovery, and consent as needed
   -> execution preflight after source inspection
-  -> Spec draft from source inspection and user-agent discussion
+  -> agent-grilling first if the goal or path is unclear
+  -> Spec draft from source inspection and formulation snapshot
   -> independent blind same-artifact Spec review
   -> moderator blackboard, adversarial synthesis, and evidence promotion
   -> locked Spec or required user decision
@@ -36,7 +43,7 @@ user goal and boundaries
 
 ## Explicit Activation
 
-Use this skill only when the user actively asks for multi-agent-orchestration, a Spec/Eval-driven multi-agent workflow, multi-agent/subagent/external-agent orchestration, model-diverse or fresh-reviewer adversarial review, or repeated review-repair work.
+Use this skill only when the user actively asks for multi-agent-orchestration, a Spec/Eval-driven multi-agent workflow, model-diverse or fresh-reviewer adversarial review, external-agent policy, or repeated review-repair work.
 
 Do not self-select this skill only because a task is broad, risky, ambiguous, long-running, likely to exceed context, or needs higher confidence. Without explicit user activation, use ordinary planning, review, verification, or direct execution instead.
 
@@ -55,14 +62,14 @@ Level 1:
 
 Level 2:
   Multi-agent judgment for Spec, Eval, Plan, medium work, final review,
-  research conclusions, or cross-file/cross-domain decisions.
+  research conclusions, and cross-file/cross-domain decisions.
 
 Level 3:
   Bounded adversarial review-repair convergence for complex, high-risk,
   repeatedly failing, or pre-release work.
 
 Level 4:
-  Full Spec/Eval delivery lifecycle: formulation, Spec, Eval, roadmap, plan,
+  Full Spec/Eval delivery lifecycle: Spec, Eval, roadmap, plan,
   goal contract, execution or production, review, publication/deployment if
   relevant, evidence, and handoff.
 ```
@@ -103,11 +110,17 @@ For Level 2+ judgment stages, use a blackboard protocol even when it stays in ch
 - Start from the user goal and authoritative source materials, not only from the main agent's current framing.
 - Use the smallest sufficient orchestration for the selected intensity.
 - Use agents to improve target correctness first, Eval quality second, then result correctness.
+- When the goal or solution path is unclear, route to `agent-grilling` before creating or reviewing a Plan.
+- When a concrete artifact already exists and needs validation, use review convergence. Do not force formulation work into blocker/major review language.
 - Resolve ordinary uncertainty agent-first through source materials, runtime evidence, focused agents, adversarial discussion, safe research, or reversible assumptions.
 - Ask the user only for non-agent-decidable choices, authorization, cost, privacy, destructive/public actions, critical product/business/brand/taste/user-facing decisions, or user-defined limits.
+- When a user decision is required, ask one decision at a time with the recommended answer, impact or tradeoff, and why agents or evidence cannot safely decide it.
 - Do not ask the user whether to continue, which internal work unit to do next, or how to sequence ordinary implementation, review, verification, or investigation inside a clear goal boundary.
 - Treat host-native model-selectable subagents as first-class capabilities when available.
+- Before model-selectable dispatch, restore or create the Agent Model Profile: implementation model(s), review model(s), external model(s), allowed phases, privacy/cost limits, and fallbacks.
+- Treat long-running agents as normal. Do not prod, interrupt, or close active subagents or external agents only because they take time; preserve sessions when rebuttal, recheck, or continuity may matter.
 - Require explicit authorization before sending task content to external, editor, protocol, paid, account-bound, or data-leaving agents.
+- After intensity routing, decide whether external-agent participation would materially improve confidence. If yes, ask the user whether to use external agents and which external agent(s) and model(s) are allowed before involving them.
 - Treat agent outputs as claims until normalized through the promotion gate; only evidence-backed, scoped, actionable items can change Spec, Eval, plans, findings ledgers, goals, or final decisions.
 - Treat multi-agent agreement as a signal, not a conclusion. Consensus must be earned through adversarial comparison, evidence checking, and targeted rebuttal.
 - Maintain one active parent workflow for task-level source of truth. If no parent workflow owns task state, this skill's artifact layout may own it.
@@ -184,7 +197,7 @@ For Level 3-4 work, follow this loop until the run is `complete` or `paused`:
 ```text
 1. Inspect authoritative sources, repo/runtime state, and existing workflow artifacts.
 2. Run execution preflight for the current scope when it has not already been done.
-3. Draft or update Spec; run independent blind same-artifact Spec review before locking it.
+3. If the goal or path is unclear, route to `agent-grilling` and use its formulation snapshot; then draft or update Spec and run independent blind same-artifact Spec review before locking it.
 4. Draft or update Eval; run independent blind same-artifact Eval review before broad implementation planning.
 5. Draft or update Plan; review the same whole Plan before locking execution boundaries.
 6. Create or update the goal contract; use host goal/task mode only when host policy and user/system/developer authorization permit it.
@@ -247,11 +260,31 @@ Capability cache belongs to the target project:
 docs/multi-agent-orchestration/capabilities/current-environment.md
 ```
 
+Model assignment profile belongs beside the capability cache when durable state is needed:
+
+```text
+docs/multi-agent-orchestration/capabilities/agent-model-profile.md
+```
+
 Record only agent-like participants: host subagents, shell-callable agents, editor/protocol agents, agent services, or future participant surfaces that can accept delegated work and return independent reasoning, review, plan, implementation, synthesis, or verification evidence.
 
 Generic tools, package managers, shells, scripts, and MCP task helpers are execution tools, not agent capabilities.
 
 External-agent availability is not permission. Ask before sending task content to any external, paid, account-bound, editor, protocol, networked, or data-leaving agent unless the user already authorized that use.
+
+If no current Agent Model Profile exists and Level 2+ work will use model-selectable agents, ask for the implementation and review model mix before dispatch. Reuse the recorded profile until it becomes stale or the workflow crosses a new privacy, cost, account, or side-effect boundary.
+
+If the selected intensity and phase make external agents worthwhile, pause orchestration long enough to ask for the external-agent policy:
+
+```text
+Use external agents for this workflow?
+Allowed external agent(s):
+Allowed model(s):
+Allowed phases:
+Privacy/cost limits:
+```
+
+After the user grants that policy, reuse it for later phases until the workflow ends, the policy becomes stale, or the task crosses a new privacy, cost, account, or side-effect boundary.
 
 For multi-round external agents, keep one explicit session per agent and record the session mapping before using resume or continue flags.
 
@@ -270,7 +303,7 @@ For details, read `references/workflow-integration.md`.
 
 ## Delegation
 
-Agents can formulate, review, rebut, recheck, implement bounded work, research, synthesize, produce artifacts, or verify evidence. Use implementation or artifact-production agents only when ownership boundaries are clean and the main agent can inspect, integrate, and verify the output.
+Agents can review, rebut, recheck, implement bounded work, research, synthesize, produce artifacts, or verify evidence. Use implementation or artifact-production agents only when ownership boundaries are clean and the main agent can inspect, integrate, and verify the output.
 
 Every delegated task needs a bounded task packet. Keep it as small as correctness allows.
 
@@ -285,7 +318,7 @@ What evidence or reasoning standard applies?
 When should the agent stop or report a blocker?
 ```
 
-Choose assignment intent and context exposure before wording the packet. Prefer source-first packets for independent formulation and high-risk review; use artifact-focused, finding-focused, execution-focused, or synthesis-focused packets when those fit the phase.
+Choose assignment intent and context exposure before wording the packet. Prefer source-first packets for high-risk review; use artifact-focused, finding-focused, execution-focused, or synthesis-focused packets when those fit the phase.
 
 Choose the delegation topology explicitly:
 
@@ -293,11 +326,15 @@ Choose the delegation topology explicitly:
 - Complementary lens review: multiple agents review the same whole artifact with different focus areas.
 - Partitioned implementation: agents implement different modules, files, or artifacts after ownership boundaries are clear.
 
-For Spec, Eval, Plan, and final quality review, default to redundant or complementary same-artifact review. Do not shard the artifact by section before whole-artifact review unless doing targeted follow-up after the first round.
+For unclear goals, solution paths, architecture options, product flows, or execution strategy, route to `agent-grilling` before drafting a review target. For Spec, Eval, Plan, and final quality review, default to redundant or complementary same-artifact review. Do not shard the artifact by section before whole-artifact review unless doing targeted follow-up after the first round.
 
 Discussion and review agents do not write shared blackboards, Spec, Eval, Plan, findings, or decision files by default. The moderator sends each round's context, collects outputs, normalizes them, and writes shared state. Implementation agents may edit project files only inside explicit ownership boundaries.
 
+Keep reviewer identity and session continuity explicit. When a Round 1 reviewer may be needed for rebuttal, keep its session open or record how to resume it. Round 2 adversarial review should go to the same reviewer IDs or sessions when the host or external tool supports send/resume. New agents may be used only as fresh proxy rebuttal when originals are unavailable; label that distinction and record why it was necessary.
+
 When using external agents for multiple rounds, reuse only the intended agent's explicit session ID. Do not use "continue the last session" semantics for parallel reviewers.
+
+Do not close, interrupt, or replace active reviewers only because they are slow. Long review, rebuttal, or repair rounds are expected; intervene only for cancellation, wrong-task execution, authorization or safety risk, host failure, or when the session is complete and no longer needed.
 
 For details, read `references/task-packets.md`.
 
@@ -342,7 +379,9 @@ For evidence closure shape and artifact details, read `references/output-normali
 
 Reviewer angles are focus areas, not blinders. Reviewers may challenge the Spec, Eval, plan, evidence, assumptions, and contract itself when source materials justify it.
 
-For Level 2+ judgment stages, run the first round as independent blind source-first review over the same whole artifact. In later rounds, the moderator sends the blackboard state and asks agents to challenge high-impact claims, weak evidence, omissions, contradictions, and unresolved questions.
+For Level 2+ judgment stages, run the first round as independent blind source-first review over the same whole artifact. After normalizing Round 1, run a convergence check before accepting findings, repairing, or implementing from the synthesis. If blocker, major, startability, Spec, Eval, Plan, boundary, verification, or result-correctness issues appear, the next step is a blackboard-fed adversarial round unless the moderator records an evidence-backed skip reason allowed by `references/review-convergence.md`.
+
+In later rounds, the moderator sends the blackboard state and asks agents to challenge high-impact claims, weak evidence, omissions, contradictions, and unresolved questions. Do not move directly from blind review to repair simply because reviewers agree; agreement on high-impact items is a reason to test the merged claim, not to skip rebuttal.
 
 Findings must be evidence-backed and severity-graded:
 

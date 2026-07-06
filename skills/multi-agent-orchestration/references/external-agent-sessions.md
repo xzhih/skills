@@ -16,9 +16,25 @@ For parallel or adversarial reviewers, use one stable `agent_id` and one explici
 
 Never use shared "last session" semantics for multiple agents. In `opencode`, do not use `--continue` for parallel reviewers; use `--session "$SESSION_ID"`.
 
+Long-running external agents are normal. Do not prod, interrupt, kill, close, or replace a running external session just because it has not returned quickly. Preserve active sessions when rebuttal, recheck, or reviewer continuity may matter.
+
+Intervene only when the user cancels, the agent is clearly on the wrong task, the task crosses privacy/cost/account/safety authorization, the tool reports a real failure, or the session is complete and no longer needed.
+
 ## Consent
 
 External-agent availability is not authorization. Confirm permission before sending prompts, files, repo context, diffs, screenshots, artifacts, account data, paid usage, or networked calls outside the local trust boundary.
+
+When intensity routing shows external agents would materially improve confidence, ask before invoking them:
+
+```text
+Use external agents for this workflow?
+Which external agent(s)?
+Which model(s)?
+Which phases are allowed?
+Any privacy, cost, or context limits?
+```
+
+Use only the approved external agent(s), model(s), and phases. If the user declines, continue with host-native subagents or main-agent review.
 
 For review/rebuttal/recheck, tell the external agent not to edit files. For implementation, include write boundaries and delegate only when the main agent can inspect and verify the result.
 
@@ -33,7 +49,7 @@ docs/multi-agent-orchestration/capabilities/external-agent-sessions.md
 Minimum fields:
 
 ```text
-agent_id | tool | model | role | session_id | purpose | round | stale_when
+agent_id | tool | model | role | session_id | purpose | round | policy | stale_when
 ```
 
 Store raw or summarized round outputs only when needed for auditability, handoff, or later rebuttal. Promote only normalized findings, decisions, and evidence into blackboards, reviews, tasks, plans, or evidence files.
@@ -49,11 +65,26 @@ opencode session list --format json -n 20
 opencode models <provider>
 ```
 
+Command shape:
+
+- `opencode run` takes the task packet as `message..` positionals.
+- Put the message immediately after `run`, before `--file` attachments.
+- For long packets, put the packet in `PROMPT` with a heredoc and pass `"$PROMPT"`.
+- Prefer long `--file "$PATH"` flags for attachments. Do not place the prompt after `-f` or `--file`; it can be parsed as another file path.
+- Create the output directory first, then redirect output only after all arguments.
+
 Start a fresh session:
 
 ```bash
-opencode run --dir "$PROJECT_DIR" --model "$MODEL" \
-  --title "$AGENT_ID-$PHASE" --format json "$ROUND_PACKET"
+PROMPT=$(cat <<'EOF'
+<round packet>
+EOF
+)
+mkdir -p "$(dirname "$OUTPUT_JSONL")"
+opencode run "$PROMPT" --dir "$PROJECT_DIR" --model "$MODEL" \
+  --title "$AGENT_ID-$PHASE" --format json \
+  --file "$SOURCE_1" --file "$SOURCE_2" \
+  > "$OUTPUT_JSONL"
 ```
 
 Capture `session_id` from JSON output or `opencode session list --format json`. If ambiguous, do not resume; start fresh or resolve ambiguity.
@@ -61,8 +92,11 @@ Capture `session_id` from JSON output or `opencode session list --format json`. 
 Continue the same external agent:
 
 ```bash
-opencode run --dir "$PROJECT_DIR" --session "$SESSION_ID" \
-  --model "$MODEL" --format json "$ROUND_PACKET"
+mkdir -p "$(dirname "$OUTPUT_JSONL")"
+opencode run "$ROUND_PACKET" --dir "$PROJECT_DIR" --session "$SESSION_ID" \
+  --model "$MODEL" --format json \
+  --file "$BLACKBOARD" \
+  > "$OUTPUT_JSONL"
 ```
 
 Use `--continue` only when a single serial agent intentionally owns the latest session. Use `--fork` only for intentional branches, never for blind first-round review.
@@ -100,5 +134,7 @@ If resume fails:
 2. Re-run local session discovery.
 3. Mark only resume runnability failed if fresh runs still work.
 ```
+
+If `opencode run` treats the prompt as a file path, rebuild the command with the message immediately after `run` and attachments after it.
 
 If output lacks evidence, normalize it as a claim, hypothesis, or gap. If a blind reviewer saw another reviewer's conclusions, start fresh for independence-sensitive review.

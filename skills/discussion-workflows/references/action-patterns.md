@@ -22,7 +22,7 @@ Drift Check:
   当前讨论是否偏向某个子主题，是否需要回到总边界。
 
 Next:
-  1-3 个下一步候选，并推荐一个。
+  1-3 个下一步候选，并推荐一个；如果当前讨论目标里已经知道下一个待拍板问题，优先按 Decision Handoff 递出问题、建议答案、影响和状态。
 ```
 
 如果已有 `docs/discussion-workflows/index.md`，复盘前先读 index；需要原因时再读最近 session。

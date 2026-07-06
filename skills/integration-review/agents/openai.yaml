@@ -1,0 +1,4 @@
+interface:
+  display_name: "Integration Review"
+  short_description: "Review returned lanes and evidence"
+  default_prompt: "Use $integration-review to normalize worker handoffs, verify evidence, identify conflicts or blockers, update lane status, and continue to the next safe batch when possible."
