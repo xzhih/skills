@@ -1,11 +1,15 @@
 ---
-name: parallel-lane-orchestration
-description: "Coordinate two or more independent lane workspaces or subagent lanes, lane handoff prompts, batch planning, collision control, direct worker dispatch, or next-batch selection after project context and boundaries are restored. Do not use for a single subagent review, ordinary research delegation, or routine code review."
+name: agent-lanes
+description: "Coordinate two or more independent lane workspaces or subagent lanes, lane handoff prompts, batch planning, collision control, direct worker dispatch, or next-batch selection after project context and boundaries are restored. Do not use for a single subagent review, ordinary research delegation, routine code review, same-topic multi-agent debate, product/requirements friction discussion, or same-artifact multi-agent review."
 ---
 
-# Parallel Lane Orchestration
+# Agent Lanes
 
 Coordinate parallel development lanes while the main thread remains moderator. The purpose is to remove manual copy/paste handoffs without giving up control of scope, evidence, and integration.
+
+This skill is an orchestration shape, not an implementation method. Let
+implementation skills trigger from each lane's actual task instead of binding
+them here.
 
 ## Iron Law
 
@@ -29,6 +33,8 @@ Use it for:
 Do not use it for:
 
 - one-off review or research delegation
+- same-topic debate where every agent should inspect the same material, question, or product/requirements tradeoff
+- same-artifact review where every agent should inspect the same Spec, Eval, plan, PR, diff, implementation, evidence package, or final result
 - returned lane review; use [integration-review](../integration-review/SKILL.md)
 - unclear goals or risky lane decomposition; use [agent-grilling](../agent-grilling/SKILL.md) first
 - explicit Spec/Eval, adversarial review-repair, external-agent policy, or model-diverse convergence; use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)
@@ -37,14 +43,30 @@ Do not use it for:
 
 Load [project-context](../project-context/SKILL.md) first. If lane boundaries are not clear, use [discussion-workflows](../discussion-workflows/SKILL.md) before dispatch.
 
-Use [agent-grilling](../agent-grilling/SKILL.md) first when lane decomposition or execution path needs pressure testing. Use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md) instead when the user explicitly asks for Spec/Eval delivery, external-agent policy, or repeated review-repair convergence.
+Use [agent-grilling](../agent-grilling/SKILL.md) first when lane decomposition or execution path needs pressure testing. Use [agent-debate](../agent-debate/SKILL.md) instead for same-topic debate about requirements, simplicity, necessity, usability, product friction, or user flow. Use [agent-review](../agent-review/SKILL.md) instead for same-artifact review. Use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md) when the user explicitly asks for Spec/Eval delivery, external-agent policy, or repeated review-repair convergence.
 
-Before dispatching model-selectable subagents, restore or create the Agent Model Profile from [development-workflows](../development-workflows/references/agent-model-profile.md). If no current profile exists and model choice matters, ask the user once for implementation and review model mix, then record it.
+Before dispatching model-selectable subagents, restore or create the Agent Model Profile from [dev-flow](../dev-flow/references/agent-model-profile.md). If a fresh profile matches the current lane scenario, reuse it. If no current profile exists and model choice matters, recommend an implementation/review mix from discovered capabilities, ask the user to approve it once, then record it.
+
+## Internal Flows
+
+Handle lane lifecycle inside this skill:
+
+- Use [project-context](../project-context/SKILL.md) as the context gate when
+  handoff, coordination, or source-of-truth state matters.
+- Use [discussion-workflows](../discussion-workflows/SKILL.md) internally when
+  lane boundaries are still ambiguous after context recovery.
+- Use [integration-review](../integration-review/SKILL.md) internally when
+  workers return, evidence must be checked, conflicts appear, or the next safe
+  batch must be selected.
+
+Do not ask the user to choose these internal flows. Continue from dispatch to
+review to next safe batch while evidence permits.
 
 ## Lane Rules
 
 - The main thread owns batching, lane ids, collision checks, integration, and final claims.
 - Dispatch only independent lanes with disjoint owned surfaces.
+- If all agents need the same source material and same question, stop and route to `agent-debate` or `agent-review`; categories are not lane ownership.
 - Do not use this skill for one-off subagent review or research unless it is part of a lane batch.
 - Prefer git worktrees for lane workspaces when the project is a Git repo, multiple lanes need filesystem isolation, branch-per-lane work is acceptable, and no project-declared lane mechanism conflicts.
 - Prefer direct subagent dispatch when host tools are available and the user has authorized subagents.

@@ -1,13 +1,13 @@
 ---
 name: doc-driven-workflows
-description: Use when the user explicitly asks for doc-driven workflows, code/docs synchronization, architecture or tech-stack docs, full-chain or source-linked docs, operation-flow docs, call-path maps, code/docs alignment review, or doc-driven open-question ledgers, for a single project or a multi-repo workspace; or when project guidance requires maintaining an existing or declared doc-driven source of truth that may drift. Do not use merely because docs exist, docs are missing, or a normal code task could theoretically affect docs.
+description: Use when the user explicitly invokes $doc-driven-workflows, explicitly asks for doc-driven workflows, code/docs synchronization, architecture or tech-stack docs, full-chain or source-linked docs, operation-flow docs, call-path maps, code/docs alignment review, or doc-driven open-question ledgers, for a single project or a multi-repo workspace; or when an active workflow or project guidance requires maintaining an existing or declared doc-driven source of truth that may drift. Do not use merely because docs exist, docs are missing, or a normal code task could theoretically affect docs.
 ---
 
 # Doc-Driven Workflows
 
 ## Overview
 
-Use this skill to prevent documentation drift. The goal is to keep project docs useful for future humans and agents without turning documentation into noisy ceremony.
+Use this skill as an explicit project documentation governance workflow. It can be called directly by the user, or routed from `dev-flow` when documentation governance is one step in a larger development flow. The goal is to prevent documentation drift and keep project docs useful for future humans and agents without turning documentation into noisy ceremony.
 
 Doc-driven docs serve two readers at once: a human building a mental model of the project, and an agent loading architecture, contracts, and design intent before changing code. A human should be able to read them, understand how the system is built and operated, then ask an agent to repair docs, code, or both when documented behavior and implementation diverge. An agent should be able to navigate them by stable headings and source anchors.
 
@@ -40,12 +40,12 @@ Do not use it for:
 
 ## Workflow Composition
 
-When this skill is part of a larger development workflow, route through [development-workflows](../development-workflows/SKILL.md) and restore state with [project-context](../project-context/SKILL.md) before changing docs.
+When this skill is part of a larger development workflow, route through [dev-flow](../dev-flow/SKILL.md) and restore state with [project-context](../project-context/SKILL.md) before changing docs.
 
 This skill owns documentation drift decisions. It does not own:
 
 - discussion boundaries or confirmed/draft/open decision flow; use [discussion-workflows](../discussion-workflows/SKILL.md)
-- subagent/worktree lane batching; use [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md)
+- subagent/worktree lane batching; use [agent-lanes](../agent-lanes/SKILL.md)
 - returned lane review and next-batch recommendation; use [integration-review](../integration-review/SKILL.md)
 - heavy Spec/Eval multi-agent convergence; use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)
 

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Parallel Lane Orchestration"
-  short_description: "Batch subagent lane work safely"
-  default_prompt: "Use $parallel-lane-orchestration to split a project goal into non-overlapping lane work, dispatch subagents when available, and return structured lane packets and handoffs."

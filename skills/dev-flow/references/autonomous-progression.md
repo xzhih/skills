@@ -31,9 +31,9 @@ Interrupt or close an agent only when the user cancels, the task crosses an auth
 
 ## Agent Model Profile
 
-When the workflow will use subagents, model-diverse review, external agents, or review-repair loops, restore or ask for the Agent Model Profile before dispatch. Record implementation model(s), host review model(s), external review model(s), allowed phases, privacy/cost limits, and fallbacks.
+When the workflow will use subagents, model-diverse review, external agents, or review-repair loops, restore the Agent Model Profile before dispatch. If no fresh profile matches the current scenario, recommend a concrete model mix from discovered capabilities, ask the user to approve it once, then record implementation model(s), host review model(s), external review model(s), allowed phases, privacy/cost limits, fallbacks, and reuse rules.
 
-Do not ask the user to pick routine lane order, but do ask once for model mix when the choice affects confidence, privacy, cost, external-agent authorization, or the user's preferred workflow. After it is recorded, reuse it until stale.
+Do not ask the user to pick routine lane order. Ask about model mix only when the choice affects confidence, privacy, cost, external-agent authorization, or the user's preferred workflow; ask with a recommended default, not a blank choice list. After it is recorded, reuse it for matching scenarios until stale.
 
 ## Resolve Agent-First
 

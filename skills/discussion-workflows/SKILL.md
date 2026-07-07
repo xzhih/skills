@@ -1,13 +1,13 @@
 ---
 name: discussion-workflows
-description: Use when a long, corrected, or decision-heavy discussion needs recap, boundary or scope clarification, reference comparison, complexity checks, drift control, or durable state under docs/discussion-workflows.
+description: "Use when the user explicitly invokes $discussion-workflows, or when an active workflow routes here, for long, corrected, or decision-heavy discussion governance: recap, boundary or scope clarification, reference comparison, complexity checks, drift control, or durable state under docs/discussion-workflows."
 ---
 
 # Discussion Workflows
 
 ## Overview
 
-这个技能用于让复杂讨论保持可决策、可延续、不跑偏。它不是实现指南；它只负责把发散讨论收回到当前边界、责任归属、可借鉴参考、复杂度位置、confirmed/draft/open 状态，以及是否需要落盘。
+这个技能用于让复杂讨论保持可决策、可延续、不跑偏。它可以作为用户显式调用的讨论治理入口，也可以由 `dev-flow` 或其他工作流在需要讨论收束时调用。它不是实现指南；它只负责把发散讨论收回到当前边界、责任归属、可借鉴参考、复杂度位置、confirmed/draft/open 状态，以及是否需要落盘。
 
 不要默认把所有动作都跑一遍。先找当前最阻塞的问题，再选择最小足够动作。
 
@@ -38,11 +38,13 @@ description: Use when a long, corrected, or decision-heavy discussion needs reca
 
 ## Workflow Composition
 
-当本技能作为组合工作流的一部分使用时，先通过 [development-workflows](../development-workflows/SKILL.md) 判断当前阶段，再用 [project-context](../project-context/SKILL.md) 恢复真实项目状态。
+当本技能作为独立入口使用时，直接处理讨论治理问题；只有需要核对项目文件、handoff、coordination 或 source-of-truth 状态时才先拉入 [project-context](../project-context/SKILL.md)。
+
+当本技能作为组合工作流的一部分使用时，先通过 [dev-flow](../dev-flow/SKILL.md) 判断当前阶段，再用 [project-context](../project-context/SKILL.md) 恢复真实项目状态。
 
 本技能只负责讨论和边界沉淀：
 
-- 边界足够清楚、需要拆分并行实现时，交给 [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md)。
+- 边界足够清楚、需要拆分并行实现时，交给 [agent-lanes](../agent-lanes/SKILL.md)。
 - 开发线程返回、需要 review 或下一批推荐时，交给 [integration-review](../integration-review/SKILL.md)。
 - 讨论结论会影响 source-of-truth docs 时，交给 [doc-driven-workflows](../doc-driven-workflows/SKILL.md) 判断是否同步或记录开放问题。
 - 需要多 agent 对抗 formulation 或 pressure testing 时，交给 [agent-grilling](../agent-grilling/SKILL.md)。

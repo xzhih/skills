@@ -74,6 +74,11 @@ redundant judgment:
   Multiple agents review the same whole Spec, Eval, Plan, or final result
   independently. Use to reduce framing error and expose blind spots.
 
+same-topic debate:
+  Multiple agents inspect the same product/requirements question, friction,
+  simplicity, necessity, or user-flow concern each round. Use when the goal is
+  to surface disagreement, not divide labor.
+
 complementary lens review:
   Multiple agents review the same whole artifact with different focus areas.
   Use after or alongside redundant judgment when coverage matters.
@@ -83,7 +88,7 @@ partitioned implementation:
   bounded work units. Use only after ownership boundaries are clear.
 ```
 
-For Spec, Eval, Plan, and final quality review, prefer redundant or complementary same-artifact review. Do not shard the artifact by section before whole-artifact review unless the first round already happened and targeted follow-up is needed.
+For Spec, Eval, Plan, product friction, requirements simplicity, user-flow, and final quality review, prefer redundant, same-topic, or complementary same-artifact review. Do not shard the artifact by section before whole-artifact review unless the first round already happened and targeted follow-up is needed.
 
 For implementation or artifact production, prefer partitioned execution with disjoint write ownership and explicit integration points.
 

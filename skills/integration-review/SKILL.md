@@ -29,7 +29,7 @@ Use it for:
 Do not use it for:
 
 - ordinary PR/code review or general branch integration
-- deciding the original lane split; use [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md)
+- deciding the original lane split; use [agent-lanes](../agent-lanes/SKILL.md)
 - project state recovery by itself; use [project-context](../project-context/SKILL.md) as preflight
 - broad Spec/Eval or repeated adversarial review-repair; use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)
 
@@ -112,7 +112,7 @@ Next safe batch dispatched or selected:
 Lanes that must wait:
 ```
 
-Read `references/handoff-review.md` for detailed normalization and next-batch checks. Route back to [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md) when the next safe batch can proceed without a true user decision.
+Read `references/handoff-review.md` for detailed normalization and next-batch checks. Route back to [agent-lanes](../agent-lanes/SKILL.md) when the next safe batch can proceed without a true user decision.
 
 ## Red Flags
 

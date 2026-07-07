@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agent Lanes"
+  short_description: "Batch subagent lane work safely"
+  default_prompt: "Use $agent-lanes to split a project goal into non-overlapping lane work, dispatch subagents when available, and return structured lane packets and handoffs; route same-topic debate to agent-debate and same-artifact review to agent-review."
+policy:
+  allow_implicit_invocation: false

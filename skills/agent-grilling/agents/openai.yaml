@@ -2,3 +2,5 @@ interface:
   display_name: "Agent Grilling"
   short_description: "Pressure-test unclear goals with agents"
   default_prompt: "Use $agent-grilling to run agent-mediated brainstorming, answer user-style clarification questions when possible, compare paths, and return decision candidates before planning."
+policy:
+  allow_implicit_invocation: false

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Development Workflows"
-  short_description: "Route doc-led agentic development work"
-  default_prompt: "Use $development-workflows to restore project context, choose the right workflow skills, coordinate documentation boundaries, and keep safe agentic development moving."

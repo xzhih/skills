@@ -15,6 +15,7 @@ Use this reference for cache-first discovery, agent participant selection, model
 - External Session Use
 - Freshness Triggers
 - Model And Reasoning Controls
+- Recommendation And Reuse
 
 ## Storage
 
@@ -91,6 +92,15 @@ evidence:
 freshness:
 ```
 
+Record approved model profiles separately from raw capability facts:
+
+```text
+docs/multi-agent-orchestration/capabilities/agent-model-profile.md
+```
+
+Capability cache answers "what can run here?" The Agent Model Profile answers
+"what did the user approve for this scenario?"
+
 Optional vocabulary, only when useful:
 
 ```text
@@ -123,10 +133,13 @@ Do not create empty fields just because they exist.
 1. Determine likely intensity and whether external-agent aggregation may be useful.
 2. Read the target project's cached capability file if it exists.
 3. If the cache covers needed host-native or already-authorized capabilities, do cheap freshness checks only.
-4. If the selected intensity and phase make external, editor, protocol, paid, account-bound, or data-leaving agents worth using, ask the user for an external-agent policy unless one is already current.
-5. If permission is not granted, mark task use as not_authorized and continue with host-native subagents or main-agent path.
-6. If permission is granted, refresh only the participants needed by the selected intensity and phase.
-7. Re-run broader discovery only when cache is missing, stale, contradicted by runtime errors, or insufficient for the requested intensity or user-requested capability.
+4. Read the Agent Model Profile and look for a fresh entry matching the current scenario.
+5. If a matching profile exists, reuse it after cheap freshness and authorization checks.
+6. If no matching profile exists, build a recommended mix from discovered capabilities and ask the user to approve that mix once.
+7. If the selected intensity and phase make external, editor, protocol, paid, account-bound, or data-leaving agents worth using, include external policy in the same recommendation unless one is already current.
+8. If permission is not granted, mark external task use as not_authorized and continue with host-native subagents or main-agent path.
+9. If permission is granted, refresh only the participants needed by the selected intensity and phase.
+10. Re-run broader discovery only when cache is missing, stale, contradicted by runtime errors, or insufficient for the requested intensity or user-requested capability.
 ```
 
 ## Consent Boundary
@@ -251,3 +264,41 @@ confidence_effect:
 ```
 
 Do not treat directory-listed external models as usable until provider credentials, authentication, and a safe invocation surface are confirmed. Record how availability was discovered, not only the model name.
+
+## Recommendation And Reuse
+
+When a needed model profile is missing, do not ask the user to enumerate models
+from scratch. Recommend a concrete combination based on:
+
+- scenario: discussion, review, execution, rebuttal, recheck, research, or verification
+- intensity: one-pass, multi-agent audit, review-repair, or full lifecycle
+- available host subagents and model overrides
+- external agents that are present, runnable, authenticated, and worth using
+- privacy, cost, account, and data-leaving boundaries
+- need for independent judgment, model diversity, reviewer continuity, or fresh context
+- any prior user-approved profile for a similar scenario
+
+Recommendation output should be concise:
+
+```text
+Recommended model mix:
+Use for:
+Why:
+External boundary:
+Reuse until:
+Fallback:
+```
+
+Record the accepted answer with a `scenario_key`, for example:
+
+```text
+scenario_key: agent-debate.same-topic.product-friction
+scenario_key: agent-review.spec-eval.high-confidence
+scenario_key: parallel-lane-execution.implementation-with-review
+scenario_key: adversarial-convergence.rebuttal-recheck
+```
+
+Reuse the profile silently within the same scenario after freshness checks. Ask
+again only when the scenario, confidence target, external boundary, available
+models, auth state, or user instruction changes enough that the old choice no
+longer covers the task.

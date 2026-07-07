@@ -34,13 +34,13 @@ Common routes:
 
 ## Composition
 
-When entered through [development-workflows](../development-workflows/SKILL.md), treat this skill as the shared context gate for the rest of the workflow.
+When entered through [dev-flow](../dev-flow/SKILL.md), treat this skill as the shared context gate for the rest of the workflow.
 
 After restoring context, route to:
 
 - [discussion-workflows](../discussion-workflows/SKILL.md) for boundary, decision, or drift questions
 - [doc-driven-workflows](../doc-driven-workflows/SKILL.md) for doc source-of-truth maintenance
-- [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md) for batched lane work
+- [agent-lanes](../agent-lanes/SKILL.md) for batched lane work
 - [integration-review](../integration-review/SKILL.md) for returned lane review
 - [agent-grilling](../agent-grilling/SKILL.md) for goal/path pressure testing
 - [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md) for heavier multi-agent Spec/Eval or adversarial workflows

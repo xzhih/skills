@@ -1,8 +1,10 @@
 interface:
   display_name: "Multi-Agent Orchestration"
-  short_description: "Drive heavy Spec/Eval agent workflows"
+  short_description: "Dispatch multi-agent workflows"
   default_prompt: >-
     Use $multi-agent-orchestration at the lightest sufficient intensity to
-    coordinate Spec/Eval review, task-queue execution, adversarial repair,
-    external-agent policy, and evidence closure while treating agent reports
-    as claims.
+    dispatch multi-agent discussion, artifact review, parallel lanes,
+    integration review, Spec/Eval delivery, external-agent policy, and
+    review-repair while treating agent reports as claims.
+policy:
+  allow_implicit_invocation: false

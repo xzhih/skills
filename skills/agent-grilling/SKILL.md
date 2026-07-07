@@ -17,7 +17,7 @@ If the next question can be answered from source context, focused agents, runtim
 
 ## Composition
 
-When used inside the development workflow, start from [development-workflows](../development-workflows/SKILL.md) and restore source state with [project-context](../project-context/SKILL.md).
+When used inside the development workflow, start from [dev-flow](../dev-flow/SKILL.md) and restore source state with [project-context](../project-context/SKILL.md).
 
 Use this skill when:
 
@@ -31,7 +31,7 @@ Use this skill when:
 After grilling:
 
 - use [discussion-workflows](../discussion-workflows/SKILL.md) when the result is a decision/boundary recap
-- use [parallel-lane-orchestration](../parallel-lane-orchestration/SKILL.md) when boundaries are clear enough for worktree lanes
+- use [agent-lanes](../agent-lanes/SKILL.md) when boundaries are clear enough for worktree lanes
 - use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md) when the result needs full Spec/Eval, adversarial review-repair, external-agent policy, or repeated convergence
 
 Boundary with `discussion-workflows`: use this skill before a decision exists, when the goal, assumptions, options, or decomposition need agent-mediated formulation. Use `discussion-workflows` after enough formulation exists and the work is to recap, compare, clarify, or persist decisions.
