@@ -1,7 +1,8 @@
 # Agent Model Profile
 
 Use this reference when a workflow may dispatch subagents, use named reviewers,
-involve external agents, or run review-repair loops.
+involve external agents, run review-repair loops, or claim independent agent
+coverage.
 
 ## Contents
 
@@ -15,7 +16,8 @@ involve external agents, or run review-repair loops.
 
 ## Trigger
 
-Before the first task-bearing agent dispatch, restore or create an Agent Model Profile when any of these are true:
+Before any multi-agent operation begins, restore or create an Agent Model
+Profile when any of these are true:
 
 - multiple subagents will implement, review, rebut, synthesize, or verify work
 - the workflow needs named reviewers, named workers, or external agents
@@ -23,13 +25,19 @@ Before the first task-bearing agent dispatch, restore or create an Agent Model P
 - an external, editor, protocol, paid, account-bound, or data-leaving agent may participate
 - the user has named candidate models or a preferred model mix, but the current workflow has not recorded it
 - the current scenario has no matching, fresh model profile
+- the workflow will make a final claim that depends on independent agent coverage
 
-Do not ask for a model profile for clear, low-risk, main-agent-only work.
+Do not ask for a model profile for clear, low-risk, main-agent-only work. This
+exception does not apply when the user requested a multi-agent shape, named
+agents, fresh eyes, independent review, model-diverse review, adversarial
+review, or agent-backed sign-off.
 
 ## Hard Gate
 
-This is a dispatch gate, not advice. Do not call `spawn_agent`, start an
-external agent, or send any task-bearing packet before this gate is satisfied.
+This is a multi-agent authorization gate, not advice. Do not call
+`spawn_agent`, start an external agent, assign named agents or reviewers, send
+any task-bearing packet, set up review-repair loops, or claim multi-agent /
+independent-agent coverage before this gate is satisfied.
 
 If a model profile is needed and no current matching profile exists, pause long
 enough to propose or confirm the agent/model mix. Do not auto-discover the
@@ -37,6 +45,17 @@ environment, scan installed agents, or list choices from environment-scan result
 Recommend only from a user-declared or project-recorded candidate set. If no
 candidate set exists, ask the user to provide candidate agents/models or name
 the exact participants.
+
+If the requested workflow is multi-agent-shaped and no matching approved profile
+or candidate set exists, ask the user. Do not silently reinterpret the request
+as low-risk main-agent-only work, self-review, local substitute evidence, or
+ordinary implementation unless the user explicitly approves that downgrade.
+
+While the gate is unsatisfied, the main agent may prepare source context,
+identify boundaries, and draft a bounded packet. It must not describe that work
+as independent review, fresh review, multi-agent review, model-diverse review,
+adversarial review, fresh recheck, or agent-backed sign-off. Label any
+main-agent-only pass as a local self-check or packet preparation.
 
 Ask once in this shape:
 
