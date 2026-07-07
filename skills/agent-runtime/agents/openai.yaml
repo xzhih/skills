@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Runtime"
+  short_description: "Agent profiles, capability checks, and sessions"
+  default_prompt: "Use $agent-runtime to configure approved agents, model profiles, capability checks, and external sessions."

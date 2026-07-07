@@ -38,8 +38,8 @@ No debate participant may be spawned or contacted before this preflight
 completes.
 
 1. Restore source context only as needed for the discussion.
-2. Run the dispatch gate in [agent-model-profile.md](../dev-flow/references/agent-model-profile.md) before assigning participants.
-3. Use [capability-cache.md](../agent-self-driving/references/capability-cache.md) only for user-approved model-selectable, external, paid, account-bound, or data-leaving participants.
+2. Run the dispatch gate in [agent-model-profile.md](../agent-runtime/references/agent-model-profile.md) before assigning participants.
+3. Use [capability-cache.md](../agent-runtime/references/capability-cache.md) only for user-approved model-selectable, external, paid, account-bound, or data-leaving participants.
 
 Do not send task content to external agents until external use, model, phase,
 privacy, and cost boundaries are authorized.

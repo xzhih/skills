@@ -16,9 +16,13 @@ These paths are examples and common conventions, not required project structure.
 - `docs/discussion-workflows/references/`: source-backed assessments, comparison matrices, or analysis artifacts.
 - `docs/dev-flow/`: lifecycle artifacts for Requirements, Spec, Eval, Plan,
   evidence, and handoffs.
+- `docs/agent-runtime/`: agent/model profiles, selected participants,
+  capability checks, and external-agent session ledgers.
 - `docs/spec/`: target behavior, product contracts, or implementation specs when a project declares this root.
 - `docs/spec-compliance/`: evidence that implementation matches specs when a project declares this root.
-- `docs/agent-self-driving/`: private orchestration state, source maps, blackboards, findings, capability/session records, evidence links, and agent-output records for heavier workflows.
+- `docs/agent-self-driving/`: private orchestration state, source maps,
+  blackboards, findings, evidence links, and agent-output records for heavier
+  workflows.
 - `docs/doc-driven-workflows/`: architecture, operation-flow, call-path, and open-question source-of-truth docs when the project uses doc-driven governance.
 
 ## Restore Heuristic

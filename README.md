@@ -21,7 +21,7 @@ npx skills add xzhih/skills --all
 Install the recommended workflow set, including entry skills and required internal dependencies:
 
 ```sh
-npx skills add xzhih/skills --skill steady-coding codex-image-gen dev-flow discussion-workflows doc-driven-workflows agent-self-driving agent-requirements-analysis agent-spec agent-eval agent-plan agent-debate agent-review agent-lanes agent-grilling integration-review project-context
+npx skills add xzhih/skills --skill steady-coding codex-image-gen dev-flow discussion-workflows doc-driven-workflows agent-self-driving agent-runtime agent-requirements-analysis agent-spec agent-eval agent-plan agent-debate agent-review agent-lanes agent-grilling integration-review project-context
 ```
 
 ## Skills
@@ -45,6 +45,7 @@ User-entry skills:
 Internal flow skills:
 
 - `project-context`: restores authoritative project instructions, handoff docs, coordination state, decisions, verification conventions, and collision risks.
+- `agent-runtime`: owns shared agent/model profile gates, selected participants, capability checks, OpenCode, and external session ledgers.
 - `agent-grilling`: pressure-tests unclear goals, assumptions, and decomposition before planning or dispatch.
 - `integration-review`: reviews returned lanes, normalizes claims, checks evidence, classifies blockers, and continues to the next safe batch.
 
@@ -79,13 +80,15 @@ when the workflow needs them.
 | Skill | When it is used | What happens |
 | --- | --- | --- |
 | `project-context` | An entry workflow depends on handoff, coordination, specs, lane state, project rules, verification commands, or source-of-truth docs. | Restores the real project state and identifies active decisions, live lanes, collision risks, and verification conventions. |
+| `agent-runtime` | A workflow needs approved agents, model profiles, capability/runnability checks, OpenCode, or external session continuity. | Separates authorization, runnability, and suitability; records selected participants and external sessions; prevents fake multi-agent coverage. |
 | `agent-grilling` | A goal, assumption set, plan branch, or lane decomposition is not ready for direct planning or dispatch. | Uses agents to ask and answer formulation questions, pressure-test options, and return decision candidates plus true user questions. |
 | `integration-review` | `agent-lanes` workers return, or lane evidence, scope, conflicts, blockers, and next-batch choices need review. | Checks returned work against scope and evidence, classifies blockers, identifies conflicts, and decides what can merge or what batch can safely run next. |
 
 `agent-self-driving` may maintain source maps, private blackboards,
-capability/session state, raw agent-output ledgers, and review-repair
-continuity. It should link to owner artifacts instead of duplicating
-Requirements, Spec, Eval, Plan, or doc-driven source-of-truth docs.
+raw agent-output ledgers, and review-repair continuity. `agent-runtime` owns
+capability/session state. These skills should link to owner artifacts instead
+of duplicating Requirements, Spec, Eval, Plan, or doc-driven source-of-truth
+docs.
 
 Short version:
 
@@ -221,7 +224,6 @@ handoffs/<YYYY-MM-DD>-<slug>-handoff.md
 docs/agent-self-driving/
   index.md
   blackboards/
-  capabilities/
   discussions/
   agent-outputs/
   reviews/
@@ -389,6 +391,7 @@ skills/
   agent-debate/
   agent-review/
   agent-lanes/
+  agent-runtime/
   integration-review/
   agent-self-driving/
 ```

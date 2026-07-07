@@ -203,7 +203,7 @@ available does not mean suitable
 ```
 
 If model-selectable agents, model-diverse review, or external agents may be
-used, run the dispatch gate in [agent-model-profile.md](../dev-flow/references/agent-model-profile.md) before any task-bearing dispatch. Use [capability-cache.md](references/capability-cache.md) only to record candidate sets and check user-approved participants.
+used, run the dispatch gate in [agent-model-profile.md](../agent-runtime/references/agent-model-profile.md) before any task-bearing dispatch. Use [capability-cache.md](../agent-runtime/references/capability-cache.md) only to record candidate sets and check user-approved participants.
 
 When a user-selected participant is unavailable, ask for a replacement unless
 the profile already names an approved fallback. Do not turn unavailable
@@ -237,9 +237,9 @@ Read only what the current intensity needs:
 
 - `references/lifecycle-intensity.md`: intensity routing, lifecycle boundaries, formulation and completion gates.
 - `references/workflow-integration.md`: parent workflow ownership, source maps, private orchestration state, and promoted updates.
-- `references/capability-cache.md`: user-declared participant checks, capability
+- [capability-cache.md](../agent-runtime/references/capability-cache.md): user-declared participant checks, capability
   profile vocabulary, consent, and minimal runnability checks.
-- `references/external-agent-sessions.md`: external shell/editor/protocol agent sessions, `opencode` multi-round use, session ledgers, and resume failure handling.
+- [external-agent-sessions.md](../agent-runtime/references/external-agent-sessions.md): external shell/editor/protocol agent sessions, session ledgers, and resume failure handling.
 - `references/task-packets.md`: adaptive task packet invariants, assignment intent, context exposure, non-review delegation.
 - `references/output-normalization.md`: promotion gate and normalized item types.
 - `references/artifact-layout.md`: Spec/Eval/evidence contract shapes, target-project docs layout, resume order, status checkpoints, and artifact meanings.

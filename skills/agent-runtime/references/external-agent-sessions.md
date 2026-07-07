@@ -1,13 +1,14 @@
 # External Agent Sessions
 
-Use this reference when assigning external, shell, editor, or protocol agents across rounds, especially with `opencode run` for review, rebuttal, or recheck.
+Use this reference when assigning external, shell, editor, or protocol agents
+across rounds. For OpenCode invocation, read [opencode.md](opencode.md) before
+checking availability, running a task, or resuming a session.
 
 ## Contents
 
 - Core Rules
 - Consent
 - Session Ledger
-- OpenCode Golden Path
 - Multi-Round Loop
 - Packet Minimum
 - Failure Handling
@@ -54,7 +55,7 @@ For review/rebuttal/recheck, tell the external agent not to edit files. For impl
 For reused external agents, record the mapping in:
 
 ```text
-docs/dev-flow/capabilities/external-agent-sessions.md
+docs/agent-runtime/capabilities/external-agent-sessions.md
 ```
 
 Minimum fields:
@@ -64,57 +65,6 @@ agent_id | tool | model | role | session_id | purpose | round | policy | stale_w
 ```
 
 Store raw or summarized round outputs only when needed for auditability, handoff, or later rebuttal. Promote only normalized findings, decisions, and evidence into blackboards, reviews, tasks, plans, or evidence files.
-
-## OpenCode Golden Path
-
-Safe local check:
-
-```bash
-command -v opencode
-opencode run --help
-opencode session list --format json -n 20
-opencode models <provider>
-```
-
-Run provider model-listing only when the user selected that provider and asked
-for a check. Do not use it to build an unsolicited environment-discovered
-candidate set.
-
-Command shape:
-
-- `opencode run` takes the task packet as `message..` positionals.
-- Put the message immediately after `run`, before `--file` attachments.
-- For long packets, put the packet in `PROMPT` with a heredoc and pass `"$PROMPT"`.
-- Prefer long `--file "$PATH"` flags for attachments. Do not place the prompt after `-f` or `--file`; it can be parsed as another file path.
-- Create the output directory first, then redirect output only after all arguments.
-
-Start a fresh session:
-
-```bash
-PROMPT=$(cat <<'EOF'
-<round packet>
-EOF
-)
-mkdir -p "$(dirname "$OUTPUT_JSONL")"
-opencode run "$PROMPT" --dir "$PROJECT_DIR" --model "$MODEL" \
-  --title "$AGENT_ID-$PHASE" --format json \
-  --file "$SOURCE_1" --file "$SOURCE_2" \
-  > "$OUTPUT_JSONL"
-```
-
-Capture `session_id` from JSON output or `opencode session list --format json`. If ambiguous, do not resume; start fresh or resolve ambiguity.
-
-Continue the same external agent:
-
-```bash
-mkdir -p "$(dirname "$OUTPUT_JSONL")"
-opencode run "$ROUND_PACKET" --dir "$PROJECT_DIR" --session "$SESSION_ID" \
-  --model "$MODEL" --format json \
-  --file "$BLACKBOARD" \
-  > "$OUTPUT_JSONL"
-```
-
-Use `--continue` only when a single serial agent intentionally owns the latest session. Use `--fork` only for intentional branches, never for blind first-round review.
 
 ## Multi-Round Loop
 
@@ -150,6 +100,7 @@ If resume fails:
 3. Mark only resume runnability failed if fresh runs still work.
 ```
 
-If `opencode run` treats the prompt as a file path, rebuild the command with the message immediately after `run` and attachments after it.
+For OpenCode command-shape failures, read [opencode.md](opencode.md) before
+retrying or downgrading participant availability.
 
 If output lacks evidence, normalize it as a claim, hypothesis, or gap. If a blind reviewer saw another reviewer's conclusions, start fresh for independence-sensitive review.

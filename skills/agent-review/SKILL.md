@@ -39,8 +39,8 @@ are the reviewed object.
 No reviewer may be spawned or contacted before this preflight completes.
 
 1. Identify the artifact, goal, review boundary, and evidence standard.
-2. Run the dispatch gate in [agent-model-profile.md](../dev-flow/references/agent-model-profile.md) before assigning reviewers.
-3. Use [capability-cache.md](../agent-self-driving/references/capability-cache.md) only for user-approved model-selectable or external reviewers.
+2. Run the dispatch gate in [agent-model-profile.md](../agent-runtime/references/agent-model-profile.md) before assigning reviewers.
+3. Use [capability-cache.md](../agent-runtime/references/capability-cache.md) only for user-approved model-selectable or external reviewers.
 
 Do not send task content to external reviewers until external use, model, phase,
 privacy, and cost boundaries are authorized.
@@ -55,7 +55,7 @@ Handle review governance inside this skill:
 - Use [output-normalization.md](../agent-self-driving/references/output-normalization.md)
   before promoting agent outputs into findings, decisions, evidence, or repair
   tasks.
-- Use [external-agent-sessions.md](../agent-self-driving/references/external-agent-sessions.md)
+- Use [external-agent-sessions.md](../agent-runtime/references/external-agent-sessions.md)
   when an approved external reviewer must be started, resumed, or kept pinned
   across rebuttal rounds.
 

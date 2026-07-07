@@ -54,9 +54,12 @@ Lifecycle source map, active phase, and handoff:
   docs/dev-flow/index.md and docs/dev-flow/handoffs/ unless project guidance
   declares an equivalent.
 
-Heavy multi-agent blackboards, findings, private task overlays, capability
-profiles, external-agent session ledgers, raw outputs, and orchestration
-evidence links:
+Agent runtime profiles, selected participants, capability checks, and
+external-agent session ledgers:
+  docs/agent-runtime/ when durable runtime state is needed.
+
+Heavy multi-agent blackboards, findings, private task overlays, raw outputs,
+and orchestration evidence links:
   docs/agent-self-driving/ when that workflow is active.
 
 Long-task automation state:

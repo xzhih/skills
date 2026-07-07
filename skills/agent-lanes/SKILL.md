@@ -45,7 +45,7 @@ Load [project-context](../project-context/SKILL.md) first. If lane boundaries ar
 
 Use [agent-grilling](../agent-grilling/SKILL.md) first when lane decomposition or execution path needs pressure testing. Use [agent-debate](../agent-debate/SKILL.md) instead for same-topic debate about requirements, simplicity, necessity, usability, product friction, or user flow. Use [agent-review](../agent-review/SKILL.md) instead for same-artifact review. Use [agent-self-driving](../agent-self-driving/SKILL.md) when the user explicitly asks for Spec/Eval delivery, external-agent policy, or repeated review-repair convergence.
 
-Before dispatching model-selectable subagents, run the dispatch gate in [agent-model-profile.md](../dev-flow/references/agent-model-profile.md). Do not call `spawn_agent`, start an external agent, or emit task-bearing lane packets before that gate is satisfied.
+Before dispatching model-selectable subagents, run the dispatch gate in [agent-model-profile.md](../agent-runtime/references/agent-model-profile.md). Do not call `spawn_agent`, start an external agent, or emit task-bearing lane packets before that gate is satisfied.
 
 ## Internal Flows
 

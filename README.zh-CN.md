@@ -21,7 +21,7 @@ npx skills add xzhih/skills --all
 安装推荐 workflow 集合，包括入口 skills 和必需的内部依赖：
 
 ```sh
-npx skills add xzhih/skills --skill steady-coding codex-image-gen dev-flow discussion-workflows doc-driven-workflows agent-self-driving agent-requirements-analysis agent-spec agent-eval agent-plan agent-debate agent-review agent-lanes agent-grilling integration-review project-context
+npx skills add xzhih/skills --skill steady-coding codex-image-gen dev-flow discussion-workflows doc-driven-workflows agent-self-driving agent-runtime agent-requirements-analysis agent-spec agent-eval agent-plan agent-debate agent-review agent-lanes agent-grilling integration-review project-context
 ```
 
 ## Skills
@@ -45,6 +45,7 @@ npx skills add xzhih/skills --skill steady-coding codex-image-gen dev-flow discu
 内部流程 skills：
 
 - `project-context`：恢复权威项目指令、handoff 文档、coordination 状态、决策、验证约定和冲突风险。
+- `agent-runtime`：拥有共享 agent/model profile gate、selected participants、capability checks、OpenCode 和外部 session ledgers。
 - `agent-grilling`：在计划或分发前，对不清晰的目标、假设和拆分方式做 agent pressure test。
 - `integration-review`：审查返回的 lanes，归一化声明，检查证据，分类 blockers，并在可行时推进下一批安全工作。
 
@@ -77,13 +78,14 @@ npx skills add xzhih/skills --skill steady-coding codex-image-gen dev-flow discu
 | Skill | 什么时候被用 | 会发生什么 |
 | --- | --- | --- |
 | `project-context` | 入口 workflow 依赖 handoff、coordination、spec、lane 状态、项目规则、验证命令或 source-of-truth docs。 | 恢复真实项目状态，识别当前决策、活跃 lanes、冲突风险和验证约定。 |
+| `agent-runtime` | workflow 需要 approved agents、model profiles、capability/runnability checks、OpenCode 或外部 session continuity。 | 区分 authorization、runnability 和 suitability；记录 selected participants 和 external sessions；避免假的 multi-agent 覆盖。 |
 | `agent-grilling` | 目标、假设、计划分支或 lane 拆分还不适合直接计划或分发。 | 用 agents 提问并回答 formulation 问题，pressure-test 选项，返回候选判断和真正需要问用户的问题。 |
 | `integration-review` | `agent-lanes` workers 返回，或 lane 的证据、范围、冲突、blockers、下一批选择需要审查。 | 按范围和证据检查返回工作，分类 blockers，识别冲突，决定什么能合并或下一批能安全运行什么。 |
 
 `agent-self-driving` 可以维护 source map、私有 blackboard、
-capability/session 状态、raw agent-output ledger 和 review-repair 连续性。
-它应该链接 owner artifacts，而不是复制 Requirements、Spec、Eval、Plan 或
-doc-driven source-of-truth docs。
+raw agent-output ledger 和 review-repair 连续性。`agent-runtime` 拥有
+capability/session 状态。它们应该链接 owner artifacts，而不是复制
+Requirements、Spec、Eval、Plan 或 doc-driven source-of-truth docs。
 
 速记：
 
@@ -213,7 +215,6 @@ handoffs/<YYYY-MM-DD>-<slug>-handoff.md
 docs/agent-self-driving/
   index.md
   blackboards/
-  capabilities/
   discussions/
   agent-outputs/
   reviews/
@@ -362,6 +363,7 @@ skills/
   agent-debate/
   agent-review/
   agent-lanes/
+  agent-runtime/
   integration-review/
   agent-self-driving/
 ```

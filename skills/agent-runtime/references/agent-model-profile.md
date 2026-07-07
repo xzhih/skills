@@ -188,7 +188,7 @@ Ask again when:
 Prefer the active project/workflow owner:
 
 - existing project coordination, handoff, or workflow profile if one exists
-- `docs/dev-flow/capabilities/agent-model-profile.md` for durable workflow-wide reuse
+- `docs/agent-runtime/capabilities/agent-model-profile.md` for durable workflow-wide reuse
 - lane registry or batch packet for lightweight parallel-lane work
 - in-chat context packet for repositories without durable workflow docs
 

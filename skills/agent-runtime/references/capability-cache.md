@@ -25,14 +25,14 @@ auto-discover which agents or models exist in the environment.
 User-approved capability facts belong to the target project:
 
 ```text
-docs/dev-flow/capabilities/selected-participants.md
+docs/agent-runtime/capabilities/selected-participants.md
 ```
 
 Optional snapshots are only useful for auditability, selected participant
 changes, or long Level 4 work:
 
 ```text
-docs/dev-flow/capabilities/snapshots/<YYYY-MM-DD>-<slug>.md
+docs/agent-runtime/capabilities/snapshots/<YYYY-MM-DD>-<slug>.md
 ```
 
 Do not store runtime capability facts in the installed skill, global memory, or
@@ -40,7 +40,9 @@ the skill source repository unless that repository is the active target project.
 Do not create or refresh this file by scanning the environment without a
 user-declared agent/model selection.
 
-Naming this skill is not external-agent authorization. A request like "use agent-self-driving" authorizes this orchestration workflow; it does not authorize sending task content to external agents.
+Naming a workflow skill is not external-agent authorization. A request like
+"use agent-review" or "use agent-self-driving" authorizes that orchestration
+workflow; it does not authorize sending task content to external agents.
 
 ## Positive Inclusion
 
@@ -102,7 +104,7 @@ freshness:
 Record approved model profiles separately from raw capability facts:
 
 ```text
-docs/dev-flow/capabilities/agent-model-profile.md
+docs/agent-runtime/capabilities/agent-model-profile.md
 ```
 
 Capability cache answers "what can run here?" The Agent Model Profile answers
@@ -225,6 +227,10 @@ task-execution surfaces.
 
 - Command presence, version output, or a user-requested named-agent check does
   not prove that task execution works.
+- Do not mark a user-approved `shell_agent` unavailable merely because it is
+  not a host-visible subagent tool. For approved OpenCode participants, read
+  [opencode.md](opencode.md) and run its safe local checks before deciding
+  presence, runnability, authentication, or model availability.
 - Fresh-run execution and resume/continue execution are separate capability states. Record them separately when they differ.
 - Prefer a fresh-run invocation for new task packets. Use resume flags only when intentionally continuing a known prior task.
 - Do not infer resume/session IDs from project, repository, worktree, or marker files. Confirm valid resume identifiers through the CLI's current session/list/export/help surface before passing resume flags.
@@ -301,7 +307,7 @@ surface for the external model or agent the user approved.
 
 ## Profile Reuse Evidence
 
-Use [agent-model-profile.md](../../dev-flow/references/agent-model-profile.md)
+Use [agent-model-profile.md](agent-model-profile.md)
 for selection, recommendation, approval, and reuse rules. This file records the
 evidence that makes reuse safe or unsafe.
 

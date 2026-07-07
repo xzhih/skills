@@ -35,7 +35,8 @@ Interrupt or close an agent only when the user cancels, the task crosses an auth
 
 When the workflow will use subagents, model-diverse review, external agents, or
 review-repair loops, follow the dispatch gate in
-[agent-model-profile.md](agent-model-profile.md) before dispatch.
+[agent-model-profile.md](../../agent-runtime/references/agent-model-profile.md)
+before dispatch.
 
 Do not ask the user to pick routine lane order. Ask about model mix only when the
 choice affects confidence, privacy, cost, external-agent authorization, or the

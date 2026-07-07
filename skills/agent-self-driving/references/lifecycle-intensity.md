@@ -358,6 +358,6 @@ Level 4:
   Spec, Eval, Plan, task queue, reviews, findings ledger, evidence, and final
   handoff. Prefer the focused owner locations; use
   `docs/agent-self-driving/` for blackboards, private agent outputs,
-  capability/session state, review convergence state, evidence links, and a
-  source map.
+  review convergence state, evidence links, and a source map. Use
+  `docs/agent-runtime/` for capability/session state.
 ```

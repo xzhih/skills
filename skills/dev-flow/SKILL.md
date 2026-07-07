@@ -64,7 +64,7 @@ routes to [integration-review](../integration-review/SKILL.md) internally.
 
 ## Critical Overrides
 
-Follow `references/critical-overrides.md` for global rules about source truth, claims, documentation hygiene, autonomy, and user escalation. When a user delegates a project goal, also follow `references/autonomous-progression.md`. When subagents, model-diverse review, or external agents may be used, follow `references/agent-model-profile.md`.
+Follow `references/critical-overrides.md` for global rules about source truth, claims, documentation hygiene, autonomy, and user escalation. When a user delegates a project goal, also follow `references/autonomous-progression.md`. When subagents, model-diverse review, or external agents may be used, follow [agent-runtime](../agent-runtime/SKILL.md) and its Agent Model Profile gate.
 
 Read `references/artifact-layout.md` before creating, updating, resuming, or
 linking persisted Requirements, Spec, Eval, Plan, evidence, or handoff files.
