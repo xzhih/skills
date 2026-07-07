@@ -19,7 +19,9 @@ Do not ask the user to:
 - approve every safe next batch
 - restate project rules already recoverable from source docs or code
 
-Prefer direct callable subagents when available and allowed. Manual prompts are a fallback for unavailable tools or explicit user preference.
+Prefer direct callable subagents only when a matching user-approved Agent Model
+Profile names them and the tool is already visible. Manual prompts are a
+fallback for unavailable tools or explicit user preference.
 
 ## Long-Running Agents
 
@@ -31,9 +33,14 @@ Interrupt or close an agent only when the user cancels, the task crosses an auth
 
 ## Agent Model Profile
 
-When the workflow will use subagents, model-diverse review, external agents, or review-repair loops, restore the Agent Model Profile before dispatch. If no fresh profile matches the current scenario, recommend a concrete model mix from discovered capabilities, ask the user to approve it once, then record implementation model(s), host review model(s), external review model(s), allowed phases, privacy/cost limits, fallbacks, and reuse rules.
+When the workflow will use subagents, model-diverse review, external agents, or
+review-repair loops, follow the dispatch gate in
+[agent-model-profile.md](agent-model-profile.md) before dispatch.
 
-Do not ask the user to pick routine lane order. Ask about model mix only when the choice affects confidence, privacy, cost, external-agent authorization, or the user's preferred workflow; ask with a recommended default, not a blank choice list. After it is recorded, reuse it for matching scenarios until stale.
+Do not ask the user to pick routine lane order. Ask about model mix only when the
+choice affects confidence, privacy, cost, external-agent authorization, or the
+user's preferred workflow. After a profile is recorded, reuse it for matching
+scenarios until stale.
 
 ## Resolve Agent-First
 
@@ -66,7 +73,8 @@ Ask the user only for decisions that evidence and agents cannot safely decide:
 - destructive, public, production, legal, or irreversible actions
 - user-defined limits such as time, budget, or forbidden areas
 
-When asking, present the default recommendation and the reason.
+When asking, present the decision needed, the roles involved, and why agents or
+evidence cannot decide it safely.
 
 ## Completion Standard
 

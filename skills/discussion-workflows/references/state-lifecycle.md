@@ -14,6 +14,7 @@ docs/discussion-workflows/
   complexity-checks/
   sessions/
   inbox/
+  archive/
 ```
 
 如果用户指定其他根目录，使用用户指定目录，但保留同样的子目录结构。
@@ -37,7 +38,12 @@ sessions/<YYYY-MM-DD>-<slug>.md
   讨论过程记录。记录用户纠正、转向、争议、阶段判断和为什么改变判断。
 
 inbox/<YYYY-MM-DD>-<slug>.md
-  原始资料、摘录、未整理想法、还没形成判断的临时输入。
+  原始资料、摘录、链接、外部文档、接口说明、调研笔记、未整理想法、
+  还没形成判断的临时输入。这里不是 confirmed truth。
+
+archive/
+  被废弃、替换、过期的边界、参考记录、减重检查或历史讨论索引。
+  默认不作为当前讨论真相，只用于追溯。
 ```
 
 ## File Rules
@@ -57,7 +63,11 @@ inbox/<YYYY-MM-DD>-<slug>.md
 减重检查：每次明确检查保留 dated record；后续复查新建 dated record。
 索引：每次写入或更新任何文件后，都更新 index.md。
 原始资料：先放 inbox/；形成判断后，在 index 或具体文件里链接，不把原始材料混进 canonical 边界定义。
+Inbox 晋升：inbox 只能通过 discussion synthesis、references 对照、boundary
+确认或 doc-driven refinement 晋升。不要从 inbox 原样复制到
+docs/doc-driven-workflows/，也不要从 inbox 直接派生实现结论。
 未确认建议：先写 session 的 proposed/draft，不要写进 boundary 的 current definition。
+归档：当 boundary/reference/complexity/session 不再代表当前有效判断，但仍需追踪时，移动到 archive/ 对应子目录或在原文件头部标记 Archived，并从 index 的 active 区移除。
 ```
 
 读取顺序：
@@ -67,7 +77,33 @@ inbox/<YYYY-MM-DD>-<slug>.md
 2. 再按索引读取相关 boundaries/*.md。
 3. 需要过程原因时，再读最近的 sessions/*.md。
 4. 只有需要原始证据时才读 inbox/。
+5. 只有追溯历史、解释改判或 active 文档显式链接时才读 archive/。
 ```
+
+## Archive Rules
+
+归档不是删除。出现以下情况时归档：
+
+```text
+边界定义被新 boundary 替代
+参考对照已经过期或被新比较取代
+减重检查不再适用于当前方案
+session 记录包含已废弃方向，继续放在 active index 会误导恢复
+inbox 原始材料已经整理完但仍需留痕
+```
+
+归档文件头部加：
+
+```text
+Archived: <YYYY-MM-DD>
+Status: superseded | abandoned | obsolete | wrong-assumption | completed-history
+Reason:
+Replaced by:
+Do not use as active truth because:
+```
+
+`index.md` 可以保留 `Archived` 链接区，但 active confirmed/draft/open 区不能指向
+archive 作为当前真相。
 
 ## Discussion Lifecycle
 
@@ -105,6 +141,8 @@ inbox/<YYYY-MM-DD>-<slug>.md
    - 更新相关 boundaries/<slug>.md 作为当前有效结论
    - 创建或追加 sessions/<YYYY-MM-DD>-<slug>.md 记录讨论过程
    - 按需创建 references/ 或 complexity-checks/ dated record
+   - 把原始外部资料、摘录、接口文档或调研链接放入 inbox/，但只把精炼后的
+     约束、判断和 open questions 写入 active 文档
    - 更新 index.md
 
 9. Handoff

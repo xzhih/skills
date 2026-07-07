@@ -1,6 +1,6 @@
 ---
 name: integration-review
-description: "Review returned parallel-lane worker handoffs: scope, diffs, evidence, conflicts, lane status, coordination updates, and next safe batch selection. Use when a previous parallel-lane batch returns, or when the user says lanes came back, agents finished, check what workers did, or decide what can merge. Do not use for ordinary PR/code review or general branch integration."
+description: "Use only when an active workflow routes here, to review returned lane handoffs: scope, diffs, evidence, coverage closure, conflicts, lane status, coordination updates, and next safe batch. Use when lanes came back or agents finished. Do not use for ordinary PR/code review."
 ---
 
 # Integration Review
@@ -31,7 +31,7 @@ Do not use it for:
 - ordinary PR/code review or general branch integration
 - deciding the original lane split; use [agent-lanes](../agent-lanes/SKILL.md)
 - project state recovery by itself; use [project-context](../project-context/SKILL.md) as preflight
-- broad Spec/Eval or repeated adversarial review-repair; use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)
+- broad Spec/Eval or repeated adversarial review-repair; use [agent-self-driving](../agent-self-driving/SKILL.md)
 
 ## Required Preflight
 
@@ -39,7 +39,7 @@ Load [project-context](../project-context/SKILL.md) first so review uses the cur
 
 If returned work changes source-of-truth docs or could make them stale, use [doc-driven-workflows](../doc-driven-workflows/SKILL.md) for drift decisions.
 
-If findings require adversarial review-repair or a larger Spec/Eval correction, escalate to [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md).
+If findings require adversarial review-repair or a larger Spec/Eval correction, escalate to [agent-self-driving](../agent-self-driving/SKILL.md).
 
 ## Review Flow
 
@@ -50,6 +50,8 @@ If findings require adversarial review-repair or a larger Spec/Eval correction, 
    - worker status: `review` or `blocked`
    - touched files
    - claimed implementation
+   - coverage IDs claimed: Requirement/Behavior/Eval/Task IDs when a plan
+     provides them
    - explicit non-covered scope
    - derived quality gates from formulation or lane packet
    - verification commands and results
@@ -72,6 +74,8 @@ If findings require adversarial review-repair or a larger Spec/Eval correction, 
    - UI/Admin/browser evidence exists when required
    - `git diff --check` or equivalent whitespace check ran
    - blocked evidence records the raw blocker instead of claiming pass
+   - every claimed coverage ID has matching evidence, or is explicitly marked
+     not covered with a blocker or deferral
 
 5. Decide moderator state:
    - ready-to-merge
@@ -106,6 +110,8 @@ Repair-needed lanes:
 Conflicts:
 Evidence accepted:
 Evidence missing or weak:
+Coverage closed:
+Coverage still open:
 Derived gates passed or failed:
 Coordination/doc updates:
 Next safe batch dispatched or selected:

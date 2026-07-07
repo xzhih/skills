@@ -14,9 +14,11 @@ These paths are examples and common conventions, not required project structure.
 - `docs/discussion-workflows/index.md`: decision index for confirmed, draft, open, overlap, and blocked discussion records.
 - `docs/discussion-workflows/boundaries/`: implementation boundaries and excluded surfaces.
 - `docs/discussion-workflows/references/`: source-backed assessments, comparison matrices, or analysis artifacts.
-- `docs/spec/`: target behavior, product contracts, or implementation specs.
-- `docs/spec-compliance/`: evidence that implementation matches specs.
-- `docs/multi-agent-orchestration/`: Spec/Eval, plans, task queues, findings, evidence, and agent-output records for heavier workflows.
+- `docs/dev-flow/`: lifecycle artifacts for Requirements, Spec, Eval, Plan,
+  evidence, and handoffs.
+- `docs/spec/`: target behavior, product contracts, or implementation specs when a project declares this root.
+- `docs/spec-compliance/`: evidence that implementation matches specs when a project declares this root.
+- `docs/agent-self-driving/`: private orchestration state, source maps, blackboards, findings, capability/session records, evidence links, and agent-output records for heavier workflows.
 - `docs/doc-driven-workflows/`: architecture, operation-flow, call-path, and open-question source-of-truth docs when the project uses doc-driven governance.
 
 ## Restore Heuristic

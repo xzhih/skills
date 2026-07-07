@@ -1,6 +1,6 @@
 ---
 name: agent-debate
-description: Use only when the user explicitly invokes $agent-debate, or when a loaded workflow skill routes here, to run same-topic multi-agent discussion for requirements, product friction, simplicity, necessity, usability, user flow, tradeoffs, or decision clarity. Do not use for parallel implementation lanes, returned lane integration, ordinary code review, or single-agent brainstorming.
+description: "Use only when the user explicitly invokes $agent-debate, or when a loaded workflow routes here, for same-topic multi-agent debate on shared material: requirements, product friction, simplicity, necessity, usability, user flow, tradeoffs, or decision clarity. Do not use for lanes, returned-lane review, code review, or single-agent brainstorming."
 ---
 
 # Agent Debate
@@ -23,6 +23,8 @@ for independent work lanes.
 
 - deciding whether a proposal is too heavy, necessary, simple, usable, or aligned with user flow
 - clarifying product, UX, requirements, architecture, or workflow friction
+- resolving requirements-stage open questions that agents can answer from the
+  same source material before escalating true user decisions
 - turning disagreement into a decision-ready blackboard
 - repeatedly debating blocker/major disagreements until they are resolved, deferred, or escalated
 
@@ -32,10 +34,12 @@ when agents should own different implementation or investigation surfaces.
 
 ## Preflight
 
+No debate participant may be spawned or contacted before this preflight
+completes.
+
 1. Restore source context only as needed for the discussion.
-2. Restore or create the Agent Model Profile from [agent-model-profile.md](../dev-flow/references/agent-model-profile.md).
-3. Use [capability-cache.md](../multi-agent-orchestration/references/capability-cache.md) when model-selectable, external, paid, account-bound, or data-leaving agents may participate.
-4. If no matching model profile exists, recommend a concrete model mix and ask for approval once.
+2. Run the dispatch gate in [agent-model-profile.md](../dev-flow/references/agent-model-profile.md) before assigning participants.
+3. Use [capability-cache.md](../agent-self-driving/references/capability-cache.md) only for user-approved model-selectable, external, paid, account-bound, or data-leaving participants.
 
 Do not send task content to external agents until external use, model, phase,
 privacy, and cost boundaries are authorized.
@@ -52,9 +56,6 @@ Handle adjacent discussion work inside this skill:
   or durable discussion notes.
 - Use [agent-review](../agent-review/SKILL.md) when the discussion produces a
   concrete artifact that needs review instead of more debate.
-
-Do not ask the user to choose these internal flows. Choose the next flow from
-the evidence and continue unless a true user decision remains.
 
 ## Round Protocol
 
@@ -120,6 +121,7 @@ What not to claim yet:
 
 - Splitting agents by board section before they all inspect the same material.
 - Treating multi-agent agreement as proof.
-- Asking the user to choose model mix without a recommendation.
+- Auto-discovering models from the environment or dispatching a recommended
+  mix before the user approves it.
 - Ending after Round 1 while blocker/major disagreement remains.
 - Letting agents write shared blackboards directly.

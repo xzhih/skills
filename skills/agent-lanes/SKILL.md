@@ -1,6 +1,6 @@
 ---
 name: agent-lanes
-description: "Coordinate two or more independent lane workspaces or subagent lanes, lane handoff prompts, batch planning, collision control, direct worker dispatch, or next-batch selection after project context and boundaries are restored. Do not use for a single subagent review, ordinary research delegation, routine code review, same-topic multi-agent debate, product/requirements friction discussion, or same-artifact multi-agent review."
+description: "Use only when the user explicitly invokes $agent-lanes, or when an active workflow routes here, to coordinate two or more independent lane/worktree/subagent tasks with owned surfaces, collision checks, coverage IDs, handoff prompts, direct dispatch, or next-batch selection. Do not use for debate, review, or returned-lane integration."
 ---
 
 # Agent Lanes
@@ -37,15 +37,15 @@ Do not use it for:
 - same-artifact review where every agent should inspect the same Spec, Eval, plan, PR, diff, implementation, evidence package, or final result
 - returned lane review; use [integration-review](../integration-review/SKILL.md)
 - unclear goals or risky lane decomposition; use [agent-grilling](../agent-grilling/SKILL.md) first
-- explicit Spec/Eval, adversarial review-repair, external-agent policy, or model-diverse convergence; use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)
+- explicit Spec/Eval, adversarial review-repair, external-agent policy, or model-diverse convergence; use [agent-self-driving](../agent-self-driving/SKILL.md)
 
 ## Required Preflight
 
 Load [project-context](../project-context/SKILL.md) first. If lane boundaries are not clear, use [discussion-workflows](../discussion-workflows/SKILL.md) before dispatch.
 
-Use [agent-grilling](../agent-grilling/SKILL.md) first when lane decomposition or execution path needs pressure testing. Use [agent-debate](../agent-debate/SKILL.md) instead for same-topic debate about requirements, simplicity, necessity, usability, product friction, or user flow. Use [agent-review](../agent-review/SKILL.md) instead for same-artifact review. Use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md) when the user explicitly asks for Spec/Eval delivery, external-agent policy, or repeated review-repair convergence.
+Use [agent-grilling](../agent-grilling/SKILL.md) first when lane decomposition or execution path needs pressure testing. Use [agent-debate](../agent-debate/SKILL.md) instead for same-topic debate about requirements, simplicity, necessity, usability, product friction, or user flow. Use [agent-review](../agent-review/SKILL.md) instead for same-artifact review. Use [agent-self-driving](../agent-self-driving/SKILL.md) when the user explicitly asks for Spec/Eval delivery, external-agent policy, or repeated review-repair convergence.
 
-Before dispatching model-selectable subagents, restore or create the Agent Model Profile from [dev-flow](../dev-flow/references/agent-model-profile.md). If a fresh profile matches the current lane scenario, reuse it. If no current profile exists and model choice matters, recommend an implementation/review mix from discovered capabilities, ask the user to approve it once, then record it.
+Before dispatching model-selectable subagents, run the dispatch gate in [agent-model-profile.md](../dev-flow/references/agent-model-profile.md). Do not call `spawn_agent`, start an external agent, or emit task-bearing lane packets before that gate is satisfied.
 
 ## Internal Flows
 
@@ -59,18 +59,19 @@ Handle lane lifecycle inside this skill:
   workers return, evidence must be checked, conflicts appear, or the next safe
   batch must be selected.
 
-Do not ask the user to choose these internal flows. Continue from dispatch to
-review to next safe batch while evidence permits.
-
 ## Lane Rules
 
 - The main thread owns batching, lane ids, collision checks, integration, and final claims.
 - Dispatch only independent lanes with disjoint owned surfaces.
+- Preserve the coverage chain from the accepted plan. Each lane must list the
+  Requirement/Behavior/Eval/Task IDs it owns and the evidence it must return.
 - If all agents need the same source material and same question, stop and route to `agent-debate` or `agent-review`; categories are not lane ownership.
 - Do not use this skill for one-off subagent review or research unless it is part of a lane batch.
 - Prefer git worktrees for lane workspaces when the project is a Git repo, multiple lanes need filesystem isolation, branch-per-lane work is acceptable, and no project-declared lane mechanism conflicts.
-- Prefer direct subagent dispatch when host tools are available and the user has authorized subagents.
-- Fall back to handoff prompts only when subagents are unavailable or the user wants manual threads.
+- Prefer direct subagent dispatch only when the user has approved a matching
+  Agent Model Profile and the named subagent surface is already available.
+- Fall back to handoff prompts when the user requests manual threads or the
+  approved subagent surface is not available.
 - Do not launch every possible lane. Send one safe batch, integrate it, then select and dispatch the next safe batch unless a true user decision is required.
 - Do not combine feature discussion, implementation, hard-gate evidence, and final integration in one lane unless the task is tiny.
 - Keep high-collision files, API contracts, migrations, shared components, and evidence packets single-owner per batch.
@@ -100,6 +101,7 @@ For each lane, include:
 ```text
 Lane id:
 Goal:
+Coverage IDs:
 Lane workspace:
 Branch:
 Base branch:
@@ -115,6 +117,7 @@ Implementation rules:
 Derived quality gates:
 Verification commands:
 Evidence expectations:
+Non-skippable requirements:
 Package-manager/artifact rules:
 Handoff format:
 Stop/blocker conditions:
@@ -128,7 +131,11 @@ Read `references/lane-packets.md` for the full packet shape and worker return fo
 
 When using subagents:
 
-- If host subagent tools are not already visible, discover them before falling back to manual prompts.
+- Do not auto-discover host subagent tools. Use the user-approved profile and
+  already visible tools; otherwise follow the Agent Model Profile gate or emit
+  manual prompts.
+- Use the Agent Model Profile for implementation/review model and identity
+  rules.
 - Spawn workers only for concrete, bounded, self-contained lanes.
 - Tell workers they are not alone in the codebase and must not revert others' edits.
 - Tell workers to edit only their assigned lane workspace and report exact changed files.
@@ -151,6 +158,7 @@ For a new batch:
 Current state:
 Safe parallel lanes:
 Lanes intentionally delayed:
+Coverage assigned:
 Collision risks:
 Dispatched agents or fallback handoff prompts:
 Integration checklist:
@@ -168,6 +176,7 @@ Next moderator action:
 
 - Dispatching "all possible" lanes instead of the first safe batch.
 - Sharing high-collision files, migrations, contracts, or evidence packets across active lanes.
-- Asking the user to relay handoff prompts when callable subagents are available and authorized.
+- Asking the user to relay handoff prompts when a user-approved callable
+  subagent profile is available and authorized.
 - Treating a one-off research/review request as a lane batch.
 - Starting the next batch before returned lanes are reviewed.

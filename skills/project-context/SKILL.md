@@ -1,6 +1,6 @@
 ---
 name: project-context
-description: "Restore authoritative project state when the current request depends on handoff, coordination, spec, lane, discussion, multi-agent, or declared source-of-truth docs before planning, delegation, integration, or doc maintenance. Do not use merely because a repository has AGENTS.md or ordinary project docs."
+description: "Use only when an active workflow routes here, to restore authoritative project state before planning, delegation, integration, or doc maintenance: handoff, coordination, specs, lanes, discussion state, source-of-truth docs, verification conventions, and collision risks. Do not use merely because ordinary docs exist."
 ---
 
 # Project Context
@@ -43,7 +43,7 @@ After restoring context, route to:
 - [agent-lanes](../agent-lanes/SKILL.md) for batched lane work
 - [integration-review](../integration-review/SKILL.md) for returned lane review
 - [agent-grilling](../agent-grilling/SKILL.md) for goal/path pressure testing
-- [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md) for heavier multi-agent Spec/Eval or adversarial workflows
+- [agent-self-driving](../agent-self-driving/SKILL.md) for heavier multi-agent Spec/Eval or adversarial workflows
 
 ## Profile Discovery
 
@@ -75,6 +75,10 @@ doc-governed:
 spec/evidence-governed:
   The request depends on specs, compliance, evidence, or hard gates.
 
+dev-flow-governed:
+  The request depends on Requirements, Spec, Eval, Plan, lifecycle evidence,
+  or handoffs under `docs/dev-flow/`.
+
 heavy multi-agent:
   An active multi-agent Spec/Eval workflow owns the task.
 ```
@@ -104,6 +108,7 @@ Draft decisions:
 Open questions:
 Overlap/collision risks:
 Doc source-of-truth roots:
+Dev-flow artifact root:
 Ownership map:
   Task-state owner:
   Lane-status owner:
@@ -121,6 +126,11 @@ Next workflow to continue:
 Keep the packet concise. Link or name source files instead of copying large sections.
 
 When two or more workflow doc roots exist, fill the ownership map before planning, dispatch, integration, or doc maintenance. If ownership is unclear, read `references/ownership-map.md`.
+
+Treat `doc-driven-workflows` as the owner for durable architecture,
+operation-flow, call-path, tech-stack, and source-backed open-question docs.
+Treat `agent-self-driving` docs as private orchestration state and
+source maps unless a user explicitly chose them as the only task-state owner.
 
 ## Rules
 

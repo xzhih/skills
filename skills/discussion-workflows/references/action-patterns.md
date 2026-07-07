@@ -2,6 +2,17 @@
 
 这个文件只在 `discussion-workflows/SKILL.md` 已触发，并且顶层动作提示不够用时再读。
 
+## 目录
+
+- Recap Current State
+- Check Subtopic Drift
+- Compare References
+- Clarify Boundaries
+- Check Complexity
+- Capture Discussion State
+- Concepts To Split
+- Evidence Check
+
 ## Recap Current State
 
 用于用户要求复盘、讨论进入新阶段，或者执行者发现上下文开始变重。
@@ -176,7 +187,14 @@ Return Point:
 当前还没解决什么
 ```
 
-原始资料和当前判断不要混在一起。原始资料、文章、代码摘录、未定论笔记进 `inbox/`；当前结论、边界、复盘和阶段记录进对应的 canonical 文件。
+原始资料和当前判断不要混在一起。原始资料、文章、代码摘录、外部接口文档、
+调研笔记和未定论材料进 `inbox/`；当前结论、边界、复盘和阶段记录进对应的
+canonical 文件。
+
+`inbox/` 不是 confirmed truth。需要长期复用时，先把 raw material 通过
+reference comparison、discussion synthesis 或 boundary clarification 精炼成
+confirmed/draft/open，再写入 owner artifact。只有 source-backed、single-home、
+有长期读者价值的内容才路由到 `doc-driven-workflows`。
 
 ## Concepts To Split
 

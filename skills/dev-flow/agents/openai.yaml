@@ -1,6 +1,6 @@
 interface:
   display_name: "Dev Flow"
   short_description: "Route development lifecycle work"
-  default_prompt: "Use $dev-flow to restore project context, identify the current development lifecycle phase, route through Spec/Eval/Plan, execution, review/test, repair/recheck, and coordinate docs or agent workflows when needed."
+  default_prompt: "Use $dev-flow as the development lifecycle spine: restore context, route through requirements/spec/eval/plan with R/B/E/T coverage IDs, execute, review/test, repair/recheck, and coordinate doc-driven truth or agent workflows when needed."
 policy:
   allow_implicit_invocation: false

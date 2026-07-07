@@ -1,6 +1,6 @@
 interface:
   display_name: "Agent Debate"
   short_description: "Run same-topic agent debate"
-  default_prompt: "Use $agent-debate to run a moderated same-topic multi-agent discussion with shared source material, blackboard synthesis, rebuttal rounds, and evidence-backed convergence."
+  default_prompt: "Use $agent-debate to run a moderated same-topic multi-agent discussion with shared source material, blackboard synthesis, rebuttal rounds, evidence-backed convergence, and resolution of agent-answerable requirements questions."
 policy:
   allow_implicit_invocation: false

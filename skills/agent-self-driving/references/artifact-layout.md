@@ -23,23 +23,25 @@ Use this reference when the selected intensity requires durable state, continuit
 Runtime artifacts belong to the target project:
 
 ```text
-docs/multi-agent-orchestration/
+docs/agent-self-driving/
   index.md
   blackboards/
   capabilities/
-  specs/
-  evals/
-  goals/
   discussions/
-  roadmaps/
-  plans/
-  tasks/
   agent-outputs/
   reviews/
   evidence/
+  archive/
 ```
 
 Do not store task runtime facts inside the installed skill or global memory unless explicitly asked.
+
+This is an orchestration-state layout, not the default home for project truth.
+When `dev-flow` and focused owner skills are active, Requirements, Spec, Eval,
+Plan, lifecycle evidence, and handoffs belong under `docs/dev-flow/` or a
+project-declared equivalent and are only linked from `index.md`. Create
+`specs/`, `evals/`, `plans/`, `tasks/`, `goals/`, or `roadmaps/` here only as a
+thin overlay, or when no parent workflow owns those artifacts.
 
 If the target project is unclear, first resolve it from the current working directory, source materials, explicit user request, or existing repo context. Ask the user only when multiple plausible targets remain or choosing one would create external side effects or write into the wrong project.
 
@@ -55,32 +57,13 @@ blackboards/
   review, claims, evidence, conflicts, open questions, decisions, and sign-offs.
 
 capabilities/
-  Agent capability profile for this target project and environment.
-
-specs/
-  Spec contracts when this skill owns target definition.
-
-evals/
-  Eval contracts when this skill owns completion, quality, and evidence criteria.
-
-goals/
-  Goal contracts, boundaries, verification, stop/pause conditions.
+  User-approved agent/model profile, selected participant checks, and external
+  session mappings for this target project.
 
 discussions/
   Execution preflight, imported formulation snapshots from `agent-grilling`,
   rationale, assumptions, conflicts, and decisions. Use blackboards/ for
   active adversarial round state when it needs persistence.
-
-roadmaps/
-  Staged delivery paths or product-to-delivery breakdowns.
-
-plans/
-  Executable plans and iteration policies.
-
-tasks/
-  Execution queues, active task status, ownership boundaries, allowed writes
-  or outputs, dependencies, linked findings, repair/recheck state,
-  verification, structural drift signals, and per-task review gates.
 
 agent-outputs/
   Raw or summarized agent round outputs, external-agent session mappings, and
@@ -91,6 +74,10 @@ reviews/
 
 evidence/
   Commands, screenshots, logs, deployment URLs, test results, source citations, and final proof.
+
+archive/
+  Completed, superseded, abandoned, or wrong-assumption orchestration state
+  preserved for traceability only.
 ```
 
 ## Resume Order
@@ -98,19 +85,24 @@ evidence/
 When resuming a long task, restore state from artifacts before continuing:
 
 ```text
-1. docs/multi-agent-orchestration/index.md
+1. docs/agent-self-driving/index.md
 2. active parent workflow source map, if present
-3. parent Spec, Eval, plan, roadmap, goal, or status when the source map names one
-4. active Spec under specs/ and Eval under evals/ when this skill owns them
-5. active goal contract under goals/ when this skill owns it
-6. current plan under plans/ when this skill owns it
-7. active task queue under tasks/ when broad execution has started
-8. active blackboard under blackboards/ when round state exists
-9. findings ledger and review contract under reviews/
-10. relevant raw agent output under agent-outputs/ when needed for rebuttal or handoff
-11. latest evidence under evidence/
-12. capability cache and external session ledger when assigning agents
+3. `docs/dev-flow/index.md` and its active Requirements, Spec, Eval, Plan,
+   evidence, and handoff links when present
+4. focused owner artifacts from agent-requirements-analysis, agent-spec,
+   agent-eval, agent-plan, agent-lanes, or integration-review when active
+5. orchestration-owned Spec/Eval/goal/plan/task overlays only when this skill
+   truly owns them
+6. active task queue or lane coordination state when broad execution has started
+7. active blackboard under blackboards/ when round state exists
+8. findings ledger and review contract under reviews/
+9. relevant raw agent output under agent-outputs/ when needed for rebuttal or handoff
+10. latest evidence under evidence/
+11. user-approved agent profile and external session ledger when assigning agents
 ```
+
+Do not read `archive/` during normal resume. Read it only when the active index
+links to it, a contradiction requires history, or the user asks for provenance.
 
 Then decide exactly one state:
 
@@ -137,6 +129,7 @@ Use the smallest useful source map:
 
 ```text
 active_parent_workflow:
+parent_requirements:
 parent_spec:
 parent_eval:
 parent_roadmap:
@@ -144,8 +137,10 @@ parent_plan:
 parent_task_queue:
 parent_goal:
 parent_status:
+active_requirements:
 active_spec:
 active_eval:
+active_plan:
 orchestration_goal:
 active_blackboard:
 active_task_queue:
@@ -159,6 +154,11 @@ last_promoted_update:
 If no parent workflow owns task state, this skill may own the task-level artifacts under its default layout.
 
 When a parent workflow exists, `specs/`, `evals/`, `goals/`, `roadmaps/`, `plans/`, and `tasks/` should usually contain only a thin orchestration overlay or be omitted. Do not maintain duplicate active task documents.
+
+When durable architecture, operation-flow, call-path, tech-stack, or
+source-backed open-question docs are needed, do not create them here. Route to
+`doc-driven-workflows` and link the resulting source-of-truth docs from
+`index.md` or evidence files.
 
 ## State Update Rules
 
@@ -200,15 +200,41 @@ after finding status changes:
   Update the findings ledger, resolution, and recheck evidence before treating
   blocker or major findings as closed.
 
-after capability or authorization changes:
-  Update the capability cache before assigning packets that depend on the new
-  capability state.
+after selected participant or authorization changes:
+  Update the user-approved agent profile before assigning packets that depend on
+  the new participant state.
 
 before pause, complete, or handoff:
   Verify `index.md` points to the current parent workflow, Spec/Eval sources,
   goal, plan, active task queue, blackboard when active, external session
   ledger when active, findings ledger, latest evidence, and latest checkpoint.
 ```
+
+## Archive Rules
+
+Archive orchestration state when it is no longer active but should remain
+traceable:
+
+- completed self-driving runs
+- abandoned or superseded blackboards
+- raw agent outputs for a replaced review round
+- old capability snapshots or external-agent ledgers
+- evidence packages that no longer close the current Eval
+- wrong-assumption task overlays
+
+Move files under `archive/` using the same subfolder names when useful. Add:
+
+```text
+Archived: <YYYY-MM-DD>
+Status: superseded | abandoned | obsolete | wrong-assumption | completed-history
+Reason:
+Replaced by:
+Evidence:
+Do not use as active truth because:
+```
+
+Update `index.md` so active fields point only to current state. Archived state
+may be linked from an `Archived` section for provenance.
 
 If host goal/task mode is active, keep host status and document status aligned at each checkpoint. If they disagree, evidence files win for what has actually been verified; repair the source map or host status before continuing.
 
@@ -236,7 +262,9 @@ For Level 4, "full staged artifacts" means complete traceability, not maximum le
 
 ## Spec Contract Shape
 
-Use the smallest shape that makes the target reviewable:
+Use this only when this skill truly owns target definition. Otherwise route to
+`agent-spec` and link the owner artifact from `index.md`. The smallest shape
+that makes the target reviewable is:
 
 ```text
 Outcome:
@@ -253,7 +281,9 @@ Spec is not complete when it only restates the user's words. It should make wron
 
 ## Eval Contract Shape
 
-Use Eval to define both completion and quality:
+Use this only when this skill truly owns Eval. Otherwise route to `agent-eval`
+and link the owner artifact from `index.md`. Eval defines both completion and
+quality:
 
 ```text
 Completion criteria:
@@ -269,7 +299,8 @@ Completion criteria answer "is it done?" Quality criteria answer "is it good eno
 
 ## Goal Contract Shape
 
-Use the smallest sufficient form:
+Use this only when execution continuity needs a goal contract and no parent
+workflow or host goal mode owns one. Use the smallest sufficient form:
 
 ```text
 GOAL:
@@ -341,6 +372,11 @@ reviews/<YYYY-MM-DD>-<slug>-findings.md
 evidence/<YYYY-MM-DD>-<slug>-evidence.md
 blackboards/<YYYY-MM-DD>-<slug>-blackboard.md
 ```
+
+These names are valid only for orchestration-owned artifacts or thin overlays.
+Do not create duplicate Spec/Eval/Plan/task documents here when `agent-spec`,
+`agent-eval`, `agent-plan`, `agent-lanes`, a project handoff, or
+`doc-driven-workflows` owns the corresponding fact.
 
 Use one findings ledger per goal or major review boundary. Link to it from goal, plan, and evidence docs instead of duplicating finding state.
 

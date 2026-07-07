@@ -14,6 +14,6 @@
 每个大主题结束时，标记：现在够用了 / 以后再说 / 有冲突再重开。
 先做讨论记录，再做主题记录；主题变多后，补减重检查和整体复盘。
 长对话要主动做阶段记录，写清当前判断、以后再说的问题、以哪些文档为准、还有哪些问题没解决。
-原始资料进 docs/discussion-workflows/inbox，提炼后的当前结论进 docs/discussion-workflows/boundaries 或 index，不要混在一起。
+原始资料进 docs/discussion-workflows/inbox，它不是 confirmed truth；提炼后的当前结论进 docs/discussion-workflows/boundaries 或 index，需要长期项目真相时再经过 doc-driven refinement。
 每轮复盘都问：我们刚刚是在澄清边界，还是又偷偷把一个局部做成了大方案？
 ```

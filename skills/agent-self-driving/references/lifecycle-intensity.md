@@ -20,8 +20,23 @@ Use this reference when the task needs intensity routing or Level 3-4 lifecycle 
 ## Core Boundary
 
 ```text
-source inspection -> optional agent-grilling snapshot -> execution preflight -> Spec draft/review/lock -> Eval draft/review/lock -> Plan draft/review/lock -> goal contract -> task queue -> execution -> review/repair -> status checkpoint
+source inspection -> optional formulation -> requirements -> Spec -> Eval -> Plan -> goal contract when needed -> execution -> review/repair -> status checkpoint
 ```
+
+In the current skill set, those phase artifacts are normally owned by:
+
+```text
+requirements: agent-requirements-analysis
+Spec: agent-spec
+Eval: agent-eval
+Plan: agent-plan
+parallel execution: agent-lanes
+returned work: integration-review
+durable project source-of-truth docs: doc-driven-workflows
+```
+
+This skill coordinates and persists orchestration state only where continuity,
+review convergence, external-agent sessions, or evidence tracking require it.
 
 Goal mode is an execution contract, not an open-ended discussion container. If execution reveals a major missing product, scope, architecture, deployment, or verification decision, pause and route to `agent-grilling` or the user as appropriate.
 
@@ -45,7 +60,9 @@ Routing inputs:
 - reviewer findings
 - user-requested intensity
 
-After selecting the initial level, restore or ask for the Agent Model Profile when model-selectable subagents, model-diverse review, or external agents may be used. Then decide whether external-agent participation would materially improve the current phase. If yes, ask the user for the allowed external agent(s), model(s), phases, and privacy/cost limits before any task-bearing external call. If no, proceed with host-native agents or the main-agent path.
+After selecting the initial level, follow the Agent Model Profile dispatch gate
+when model-selectable subagents, model-diverse review, or external agents may be
+used. Then proceed with the approved participant profile.
 
 ## Levels
 
@@ -73,13 +90,19 @@ Level 4: full delivery lifecycle
   deployment/publication, evidence, and handoff.
 ```
 
-Level 4 is not a verbosity mandate. Use compact artifacts when the deliverable is small, as long as formulation, execution, review, external side effects, and evidence remain traceable.
+Level 4 is not a verbosity mandate. Use compact owner artifacts when the
+deliverable is small, as long as formulation, execution, review, external side
+effects, and evidence remain traceable.
 
 ## Spec/Eval Delivery Spine
 
-Use Spec and Eval as the main control surfaces:
+Use the focused owner skills as the main control surfaces:
 
 ```text
+Requirements:
+  Goal, users, flow, scope, non-goals, constraints, risks, confirmed/draft/open,
+  and true user decisions.
+
 Spec:
   Target, boundaries, users, constraints, non-goals, and user-decided tradeoffs.
 
@@ -142,7 +165,10 @@ Use host goal mode for execution continuity, not for open-ended formulation. Res
 lock Spec/Eval/Plan -> create goal contract -> start or update host goal mode when permitted -> execute bounded actions -> checkpoint status
 ```
 
-If the host has no goal mode, or the host goal mode is unavailable in the current runtime, emulate continuity with durable project artifacts under `docs/multi-agent-orchestration/` and restore from them before continuing.
+If the host has no goal mode, or the host goal mode is unavailable in the
+current runtime, emulate continuity with the active parent workflow plus a thin
+orchestration index under `docs/agent-self-driving/`. Restore owner
+artifacts first, then private orchestration state.
 
 ## Plan Execution Contract
 
@@ -328,7 +354,10 @@ Level 3:
   ledger, plans, task queue, and evidence.
 
 Level 4:
-  Persist full staged artifacts: blackboard, discussions, Spec/Eval, roadmap,
-  plan, task queue, goal contract, reviews, findings ledger,
-  deployment/publication evidence, and final handoff.
+  Persist full staged owner artifacts and orchestration state: requirements,
+  Spec, Eval, Plan, task queue, reviews, findings ledger, evidence, and final
+  handoff. Prefer the focused owner locations; use
+  `docs/agent-self-driving/` for blackboards, private agent outputs,
+  capability/session state, review convergence state, evidence links, and a
+  source map.
 ```

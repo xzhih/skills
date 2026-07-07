@@ -2,6 +2,23 @@
 
 Use this reference when the user has a real goal but the requirements, design tree, execution path, or success criteria are not yet clear enough to draft or lock a plan, lane packet, Spec, or Eval.
 
+## Contents
+
+- Purpose
+- Brainstorming Rhythm
+- Expert Translation
+- Root-Cause Probing
+- Roles
+- Topology
+- Round Policy
+- Griller Contract
+- Agent-Answered Questions
+- Derived Standards And Gates
+- Normalized Output
+- User Escalation
+- Formulation Snapshot
+- Stop Conditions
+
 ## Purpose
 
 Agent grilling moves brainstorming burden from the user into bounded agent exploration first, while preserving a root-cause probing posture.

@@ -38,6 +38,8 @@ Organize by domain, not by document form. A useful doc set usually has these rol
 - architecture and tech-stack context for layering, boundaries, design decisions, and key dependencies
 - domain documents for subject areas that deserve their own durable explanation
 - an open-question ledger for uncertainty, suspected drift, and product decisions
+- an `archive/` area for superseded or abandoned docs that must remain
+  traceable but are not active source of truth
 
 Rules:
 
@@ -82,6 +84,13 @@ Each domain document covers one subject area end to end, so a reader never chase
 
 Do not decide by matching a fixed list of allowed topics. Decide by usefulness, durability, and source-backed confidence.
 
+Raw intake from `docs/discussion-workflows/inbox/` is evidence input, not
+doc-driven content. Before promotion, transform raw excerpts, external docs,
+research notes, screenshots, or agent outputs into the project-specific
+contract, operation flow, call path, constraint, risk, or open question they
+prove. If that transformation is not possible yet, keep the material in
+discussion state or the ledger instead of confirmed docs.
+
 Before adding anything to confirmed docs, ask:
 
 - Reader value: would this help a future human or agent understand, operate, integrate, modify, or trust the project better than reading the code alone?
@@ -96,6 +105,10 @@ Add the content only when the answers justify durable documentation. If the valu
 ## Writing Quality
 
 - Narrative first. Every document and every major section opens with 2-5 plain sentences that build a mental model before any details. A reader who stops after the overview should still leave with a correct rough picture.
+- Refined truth only. Do not paste raw API docs, vendor docs, role lists,
+  external examples, agent transcripts, or inbox notes into durable docs. Extract
+  the local obligation, behavior, constraint, risk, and evidence, then link to
+  the raw material only when provenance matters.
 - Value threshold. Apply the delete test before writing a statement: if removing it loses nothing that a reader could not infer from file names alone, do not write it. Ban statements like "the route exists" or "X handles Y" with no behavior.
 - One fact per statement. Split compound behavior into separate statements or a narrative paragraph. Never pack multiple behaviors into one table cell or one bullet.
 - Tables enumerate, prose explains. Use tables only for homogeneous items: config modes, contract fields, model lists, dependency lists. Never narrate behavior or flows inside table cells.
@@ -201,6 +214,35 @@ Ledger hygiene: when a ledger grows past roughly 30 entries or its `resolved` en
 - Machine-checkable evidence: write anchors as `path` or `path:symbol` exactly, so their existence can be verified mechanically. Anchor verification during maintenance is defined in `modes-and-gates.md`.
 - Same-change rule: a code change that invalidates a documented fact updates that fact in the same change, or records a `stale doc` ledger entry.
 - Stable navigation: keep file names and headings stable; agents locate context by grepping them. Rename only with the user's consent.
+
+## Archive Governance
+
+Archived docs are historical evidence, not active project truth. Use an
+`archive/` folder under the resolved `doc_root` for:
+
+- domain docs replaced by a new source-of-truth document
+- stale architecture or operation-flow docs that should not guide future work
+- resolved or superseded ledger batches
+- abandoned design directions worth preserving for rationale
+
+Before archiving, ensure the active root index no longer routes agents to the
+archived file as current truth. Link the replacement or current active doc.
+
+Add an archive header:
+
+```text
+Archived: <YYYY-MM-DD>
+Status: superseded | abandoned | obsolete | wrong-assumption | completed-history
+Reason:
+Replaced by:
+Evidence:
+Do not use as active truth because:
+```
+
+Normal maintenance should not read `archive/` unless an active doc links it, a
+contradiction needs history, or the user asks for provenance. Never copy
+archived claims back into confirmed docs without rechecking current source
+evidence.
 
 ## Final Summary
 

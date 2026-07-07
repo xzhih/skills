@@ -24,6 +24,26 @@ promoted updates only
 
 Do not hard-code particular workflow names or ecosystems. Treat any external workflow that owns task state the same way, whether it comes from another skill, plugin, host runtime, repository convention, or user-selected process.
 
+When this skill is explicitly used as a long-task controller for a new project
+or new requirement, the default parent workflow is `dev-flow` and its focused
+owner skills:
+
+```text
+requirements -> agent-requirements-analysis
+Spec -> agent-spec
+Eval -> agent-eval
+Plan -> agent-plan
+parallel execution -> agent-lanes
+returned-lane review -> integration-review
+durable project source-of-truth docs -> doc-driven-workflows
+```
+
+`agent-self-driving` owns the automation loop, private blackboards,
+agent-output ledgers, review convergence state, capability/session state, and
+evidence links. It does not become a second source of truth for project
+architecture, operation flows, call paths, product requirements, Spec, Eval, or
+Plan when those owners are active.
+
 ## Ownership Types
 
 Task-level state belongs to the active parent workflow when one exists:
@@ -43,7 +63,7 @@ final handoff
 This skill owns orchestration-internal state:
 
 ```text
-capability cache
+user-approved agent profile
 task packets
 raw agent outputs
 blackboard round state
@@ -55,11 +75,15 @@ status checkpoints
 evidence collected for orchestration
 ```
 
-If no parent workflow owns task-level state, this skill may own both task-level artifacts and orchestration-internal state under `docs/multi-agent-orchestration/`.
+If no parent workflow owns task-level state, first prefer routing to `dev-flow`
+or the relevant focused owner. This skill may own task-level artifacts under
+`docs/agent-self-driving/` only when no suitable parent exists, the user
+explicitly wants orchestration-owned durable state, or continuity would otherwise
+be lost.
 
 ## Source Map
 
-When a parent workflow exists, keep a compact source map in `docs/multi-agent-orchestration/index.md` instead of copying external documents:
+When a parent workflow exists, keep a compact source map in `docs/agent-self-driving/index.md` instead of copying external documents:
 
 ```text
 active_parent_workflow:
@@ -92,7 +116,7 @@ Keep orchestration details local to this skill so external systems are not pollu
 - reviewer scratch notes
 - rejected hypotheses
 - intermediate task packets
-- capability discovery evidence
+- user-approved agent/model profile evidence
 - detailed findings status and recheck tracking
 - internal status checkpoints
 
@@ -109,6 +133,8 @@ Write to the parent workflow only through accepted, useful updates:
 - task queue status or ownership changes that affect execution or handoff
 - verification or deployment evidence needed by the parent workflow
 - final handoff conclusions
+- durable architecture, operation-flow, call-path, or doc-driven uncertainty
+  updates only through `doc-driven-workflows`
 
 Do not promote raw agent output, unaccepted findings, private reviewer disagreement, or low-value intermediate notes.
 

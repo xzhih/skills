@@ -17,6 +17,14 @@ Use these rules across the development workflow skills.
 - Prefer small source-backed updates over broad documentation rewrites.
 - Record uncertainty in an open-question ledger or discussion inbox instead of confirmed docs.
 
+## Internal Flow Ownership
+
+- When a loaded workflow lists internal flow skills, choose the next flow from
+  evidence and the current blocker. Do not ask the user to choose ordinary
+  internal flows.
+- Ask the user only for true user decisions, authorization boundaries, or
+  workflow preferences they have not already provided.
+
 ## Parallel Work
 
 - Parallelize only after ownership boundaries, excluded surfaces, verification, and integration expectations are clear.
@@ -27,7 +35,9 @@ Use these rules across the development workflow skills.
 
 - After the user delegates a goal, keep progressing through the workflow until completion, a true blocker, or an explicit user redirect.
 - Do not make the user a message bus for prompts, worker summaries, routine next-batch choices, or ordinary agent disagreements.
-- Prefer direct callable subagents when available and authorized; use manual prompts only as fallback or by user request.
+- Prefer direct callable subagents only when named in a matching user-approved
+  Agent Model Profile and already visible; use manual prompts as fallback or by
+  user request.
 - Resolve uncertainty with source evidence, focused agents, or reversible assumptions before escalating.
 - Continue non-overlapping work when one lane blocks.
 

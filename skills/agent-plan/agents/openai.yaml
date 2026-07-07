@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agent Plan"
+  short_description: "Plan execution and lane candidates"
+  default_prompt: "Use $agent-plan to convert locked Spec and Eval artifacts into T-* tasks with a Requirement/Behavior/Eval coverage matrix, files/interfaces, exact verification, evidence expectations, and safe lane candidates."
+policy:
+  allow_implicit_invocation: false

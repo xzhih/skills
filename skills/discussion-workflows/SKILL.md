@@ -1,6 +1,6 @@
 ---
 name: discussion-workflows
-description: "Use when the user explicitly invokes $discussion-workflows, or when an active workflow routes here, for long, corrected, or decision-heavy discussion governance: recap, boundary or scope clarification, reference comparison, complexity checks, drift control, or durable state under docs/discussion-workflows."
+description: "Use when the user explicitly invokes $discussion-workflows, or when an active workflow routes here, for long/corrected/decision-heavy discussion governance: recap, boundaries, reference comparison, complexity checks, drift control, confirmed/draft/open state, inbox material, or durable discussion notes."
 ---
 
 # Discussion Workflows
@@ -48,9 +48,37 @@ description: "Use when the user explicitly invokes $discussion-workflows, or whe
 - 开发线程返回、需要 review 或下一批推荐时，交给 [integration-review](../integration-review/SKILL.md)。
 - 讨论结论会影响 source-of-truth docs 时，交给 [doc-driven-workflows](../doc-driven-workflows/SKILL.md) 判断是否同步或记录开放问题。
 - 需要多 agent 对抗 formulation 或 pressure testing 时，交给 [agent-grilling](../agent-grilling/SKILL.md)。
-- 需要 Spec/Eval 或反复 review-repair 时，升级到 [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)。
+- 需要 Spec/Eval 或反复 review-repair 时，升级到 [agent-self-driving](../agent-self-driving/SKILL.md)。
 
 不要在讨论技能里直接派工、合并、claim hard gate pass，或维护不属于讨论状态的文档源真相。
+
+## Reference Intake And Inbox
+
+`docs/discussion-workflows/inbox/` 是原始资料入口，不是项目真相入口。
+
+放进 inbox 的内容包括：
+
+- 外部 API 文档、SDK 说明、供应商文档、链接、摘录、截图
+- 调研材料、参考案例、旧方案片段、未整理想法
+- 在 requirements/spec/eval/plan 形成前收集到的证据和疑问
+
+Inbox 材料默认是 `raw` 或 `unprocessed`。不要直接把它当成
+confirmed behavior、实现依据或 doc-driven source of truth；也不要把外部文档
+整段复制进长期项目文档。
+
+晋升路径：
+
+```text
+raw inbox material
+  -> discussion synthesis / references comparison
+  -> confirmed / draft / open state
+  -> stage artifact or doc-driven refinement
+```
+
+当材料需要进入 [doc-driven-workflows](../doc-driven-workflows/SKILL.md)
+管理的长期项目真相时，必须先精炼：抽取项目相关的约束、契约、操作流、
+调用路径、风险和证据；未确认内容留在 open-question ledger 或 discussion
+state 中。
 
 ## Routing
 

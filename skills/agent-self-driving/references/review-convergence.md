@@ -41,7 +41,7 @@ Escalate to Level 3 when:
 Every review round needs an explicit review contract. For Level 1 it can be inline. For Level 2+ persist it when review state must survive:
 
 ```text
-docs/multi-agent-orchestration/reviews/<YYYY-MM-DD>-<slug>-review-contract.md
+docs/agent-self-driving/reviews/<YYYY-MM-DD>-<slug>-review-contract.md
 ```
 
 Use only fields that help:
@@ -226,13 +226,13 @@ Findings without clear evidence are hypotheses. They can trigger investigation, 
 Use standalone ledgers under:
 
 ```text
-docs/multi-agent-orchestration/reviews/
+docs/agent-self-driving/reviews/
 ```
 
 Suggested file:
 
 ```text
-docs/multi-agent-orchestration/reviews/<YYYY-MM-DD>-<slug>-findings.md
+docs/agent-self-driving/reviews/<YYYY-MM-DD>-<slug>-findings.md
 ```
 
 Track enough to preserve convergence:

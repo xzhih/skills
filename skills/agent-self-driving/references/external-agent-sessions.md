@@ -2,6 +2,16 @@
 
 Use this reference when assigning external, shell, editor, or protocol agents across rounds, especially with `opencode run` for review, rebuttal, or recheck.
 
+## Contents
+
+- Core Rules
+- Consent
+- Session Ledger
+- OpenCode Golden Path
+- Multi-Round Loop
+- Packet Minimum
+- Failure Handling
+
 ## Core Rules
 
 Choose the lightest session strategy:
@@ -34,7 +44,8 @@ Which phases are allowed?
 Any privacy, cost, or context limits?
 ```
 
-Use only the approved external agent(s), model(s), and phases. If the user declines, continue with host-native subagents or main-agent review.
+Use only the approved external agent(s), model(s), and phases. If the user
+declines, continue with host-native subagents or main-agent review.
 
 For review/rebuttal/recheck, tell the external agent not to edit files. For implementation, include write boundaries and delegate only when the main agent can inspect and verify the result.
 
@@ -43,7 +54,7 @@ For review/rebuttal/recheck, tell the external agent not to edit files. For impl
 For reused external agents, record the mapping in:
 
 ```text
-docs/multi-agent-orchestration/capabilities/external-agent-sessions.md
+docs/agent-self-driving/capabilities/external-agent-sessions.md
 ```
 
 Minimum fields:
@@ -56,7 +67,7 @@ Store raw or summarized round outputs only when needed for auditability, handoff
 
 ## OpenCode Golden Path
 
-Safe local discovery:
+Safe local check:
 
 ```bash
 command -v opencode
@@ -64,6 +75,10 @@ opencode run --help
 opencode session list --format json -n 20
 opencode models <provider>
 ```
+
+Run provider model-listing only when the user selected that provider and asked
+for a check. Do not use it to build an unsolicited environment-discovered
+candidate set.
 
 Command shape:
 
@@ -131,7 +146,7 @@ If resume fails:
 
 ```text
 1. Check for --continue or guessed session IDs.
-2. Re-run local session discovery.
+2. Re-run the local session check for the user-selected external agent.
 3. Mark only resume runnability failed if fresh runs still work.
 ```
 

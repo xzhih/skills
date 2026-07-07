@@ -1,0 +1,10 @@
+interface:
+  display_name: "Agent Self-Driving"
+  short_description: "Run long-task automation"
+  default_prompt: >-
+    Use $agent-self-driving as an explicit long-task controller that keeps
+    dev-flow, agent workflows, external-agent policy, review-repair, evidence,
+    and closure moving until completion or a true user decision; route ordinary
+    debate, review, lanes, and returned-lane work to their focused skills.
+policy:
+  allow_implicit_invocation: false

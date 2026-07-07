@@ -1,6 +1,6 @@
 ---
 name: doc-driven-workflows
-description: Use when the user explicitly invokes $doc-driven-workflows, explicitly asks for doc-driven workflows, code/docs synchronization, architecture or tech-stack docs, full-chain or source-linked docs, operation-flow docs, call-path maps, code/docs alignment review, or doc-driven open-question ledgers, for a single project or a multi-repo workspace; or when an active workflow or project guidance requires maintaining an existing or declared doc-driven source of truth that may drift. Do not use merely because docs exist, docs are missing, or a normal code task could theoretically affect docs.
+description: "Use when the user explicitly invokes $doc-driven-workflows, asks for doc-driven/code-docs sync, architecture/tech-stack/operation-flow/call-path docs, alignment review, or open-question ledgers; or when active workflow/project guidance requires maintaining declared source-of-truth docs. Do not use merely because docs exist."
 ---
 
 # Doc-Driven Workflows
@@ -42,12 +42,59 @@ Do not use it for:
 
 When this skill is part of a larger development workflow, route through [dev-flow](../dev-flow/SKILL.md) and restore state with [project-context](../project-context/SKILL.md) before changing docs.
 
+## Unique Truth Boundary
+
+This skill is the only workflow that writes durable, source-backed project truth
+for architecture, tech stack, operation flows, call paths, project operating
+model, and doc-driven open-question ledgers.
+
+Other workflow docs are not project truth by default:
+
+- `discussion-workflows` records discussion state and confirmed/draft/open
+  decisions.
+- `agent-requirements-analysis`, `agent-spec`, `agent-eval`, and `agent-plan`
+  own stage artifacts.
+- `agent-lanes` and `integration-review` own coordination, handoff, evidence,
+  and returned-lane review state.
+- `agent-self-driving` owns private orchestration state, source maps,
+  agent-output ledgers, blackboards, and review convergence.
+
+When another workflow discovers a durable architecture, operation, call-path, or
+doc-driven uncertainty update, it should route here instead of writing a
+parallel source-of-truth document.
+
+## Refinement Gate
+
+`docs/doc-driven-workflows/` is refined long-term project truth, not a raw
+material repository.
+
+Material from `docs/discussion-workflows/inbox/`, agent outputs, review notes,
+lane handoffs, external API docs, SDK docs, or research excerpts may enter
+doc-driven docs only after it passes this refinement gate:
+
+- The source is currently traceable: current source, config, tests, runtime
+  evidence, project guidance, or official external documentation can be linked.
+- The content has lasting value for future readers: architecture, contracts,
+  operation flows, call paths, constraints, risks, trust boundaries, or
+  open questions, not chat transcript or copied excerpts.
+- The fact has one selected home: write it to the best owning document and link
+  to that home from other places.
+- Raw material has been translated into project semantics: the contract, flow,
+  constraint, failure mode, call path, open question, or evidence the project
+  actually needs to maintain.
+- Unconfirmed material goes to the open-question ledger, not confirmed docs.
+
+Do not copy whole external interface docs, vendor docs, examples, role lists, or
+raw agent output from inbox into doc-driven docs. Keep source links or short
+excerpts in discussion inbox/reference when provenance matters; doc-driven docs
+keep only the refined conclusions the project should trust and maintain.
+
 This skill owns documentation drift decisions. It does not own:
 
 - discussion boundaries or confirmed/draft/open decision flow; use [discussion-workflows](../discussion-workflows/SKILL.md)
 - subagent/worktree lane batching; use [agent-lanes](../agent-lanes/SKILL.md)
 - returned lane review and next-batch recommendation; use [integration-review](../integration-review/SKILL.md)
-- heavy Spec/Eval multi-agent convergence; use [multi-agent-orchestration](../multi-agent-orchestration/SKILL.md)
+- heavy Spec/Eval multi-agent convergence; use [agent-self-driving](../agent-self-driving/SKILL.md)
 
 When another workflow changes source-of-truth docs, keep this skill focused on whether docs would mislead future humans or agents. Do not turn every lane into a broad doc rewrite.
 
@@ -103,7 +150,7 @@ Read `references/project-shapes.md` during bootstrap, and during maintenance whe
 
 ## Companion Workflows
 
-This skill owns documentation drift decisions and documentation synchronization boundaries. It does not replace design, planning, coding, review, or multi-agent orchestration skills.
+This skill owns documentation drift decisions and documentation synchronization boundaries. It does not replace design, planning, coding, review, or agent self-driving skills.
 
 - Use an appropriate design workflow before creating a new doc-driven skill or major documentation system.
 - Use an appropriate planning workflow when implementation planning is needed.

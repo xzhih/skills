@@ -2,6 +2,14 @@
 
 Use this reference when integrating agent outputs into plans, ledgers, goals, evidence, decisions, or final handoff.
 
+## Contents
+
+- Promotion Gate
+- Normalized Item Types
+- Promotion Rules
+- Conflict Handling
+- Consensus Handling
+
 ## Promotion Gate
 
 Agent output is not automatically source of truth.

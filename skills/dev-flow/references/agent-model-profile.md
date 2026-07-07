@@ -1,38 +1,66 @@
 # Agent Model Profile
 
-Use this reference when a workflow may dispatch subagents, choose model-diverse reviewers, involve external agents, or run review-repair loops.
+Use this reference when a workflow may dispatch subagents, use named reviewers,
+involve external agents, or run review-repair loops.
+
+## Contents
+
+- Trigger
+- Hard Gate
+- Profile Shape
+- User Selection
+- Reuse Rules
+- Where To Record
+- Packet Rule
 
 ## Trigger
 
 Before the first task-bearing agent dispatch, restore or create an Agent Model Profile when any of these are true:
 
 - multiple subagents will implement, review, rebut, synthesize, or verify work
-- model diversity would improve confidence for Spec, Eval, Plan, architecture, UX/product judgment, or final quality review
-- implementation and review should intentionally use different model strengths
+- the workflow needs named reviewers, named workers, or external agents
+- implementation and review should intentionally use different agents or models
 - an external, editor, protocol, paid, account-bound, or data-leaving agent may participate
-- the user has a known preferred model mix, but the current workflow has not recorded it
+- the user has named candidate models or a preferred model mix, but the current workflow has not recorded it
 - the current scenario has no matching, fresh model profile
 
 Do not ask for a model profile for clear, low-risk, main-agent-only work.
 
 ## Hard Gate
 
-If a model profile is needed and no current matching profile exists, pause long enough to ask the user for the model mix. Do not ask as a blank form. First inspect the current need, available known capabilities, and any stale profiles, then recommend a concrete default combination with tradeoffs.
+This is a dispatch gate, not advice. Do not call `spawn_agent`, start an
+external agent, or send any task-bearing packet before this gate is satisfied.
+
+If a model profile is needed and no current matching profile exists, pause long
+enough to propose or confirm the agent/model mix. Do not auto-discover the
+environment, scan installed agents, or list choices from environment-scan results.
+Recommend only from a user-declared or project-recorded candidate set. If no
+candidate set exists, ask the user to provide candidate agents/models or name
+the exact participants.
 
 Ask once in this shape:
 
 ```text
-Recommended model mix:
-Why this fits:
+Recommended agent/model mix:
+Candidate set used:
+Roles needed:
+Review independence:
 Reuse scope:
 External use / cost / privacy:
-Fallback if unavailable:
-Approve this mix for <scope>, or tell me the models to use?
+Approve this mix, or specify different agents/models for <scope>?
 ```
 
-After the user answers, record the profile and continue. When a fresh profile already matches the same scenario, reuse it without asking again. Mention reuse only when it affects privacy, cost, confidence, or an external-agent boundary.
+After the user answers, record the profile and continue. When a fresh profile
+already matches the same scenario, reuse it without asking again. Mention reuse
+only when it affects privacy, cost, confidence, or an external-agent boundary.
 
-Do not silently pick all models for high-judgment multi-agent work. Do not send task content to external agents without explicit authorization, even if the model profile names them.
+Do not silently pick models for high-judgment multi-agent work. Do not send task
+content to external agents without explicit authorization, even if the model
+profile names them.
+
+Candidate-set examples may include user-named options such as `gpt5.5`,
+`gpt5.4`, `deepseek-v4-pro`, or `flash`. Treat examples as candidates only when
+the user or project profile supplied them; they are not global defaults.
 
 ## Profile Shape
 
@@ -47,6 +75,7 @@ agent_model_profile:
     primary_model:
     fallback_model:
     allowed_roles:
+    same_model_workers_allowed:
   host_review:
     models:
     roles:
@@ -60,7 +89,6 @@ agent_model_profile:
   repair_recheck:
     same_reviewer_continuity:
     fresh_reviewer_model:
-  recommended_default:
   user_approved:
   reuse_when:
   unavailable_or_unverified:
@@ -77,43 +105,46 @@ external_review.provider_or_model: deepseek
 external_review.allowed_phases: review only unless separately authorized
 ```
 
-Treat this as a user profile, not a universal default. Verify availability before dispatch.
+Treat this as a user profile, not a universal default. Implementation workers
+may use the same approved model when the goal is consistent execution. Reviewers
+must be distinct agent sessions; prefer different models, providers, reasoning
+profiles, or context exposure when the approved candidate set allows it. If only
+one review model is approved, use separate fresh reviewer sessions/lenses and
+record the limitation. Do only minimal verification for the user-selected agents
+before dispatch.
 
-## Scenario Defaults
+## User Selection
 
-Use these as recommendation patterns after capability discovery. Replace example
-model names with actually available names and any current user preference.
+Use these role prompts when recommending or asking the user to choose
+agents/models. They are candidate-set instructions, not auto-discovery
+instructions, and must not be converted into a global default model choice by
+the agent.
 
 ```text
 agent-debate / same-topic debate:
-  moderator: current main model or strongest planning model
-  host_review: two strong reasoning models or profiles when available
-  external_review: one diverse external model only when authorized and useful
+  recommend moderator and debate participants from the approved candidate set
+  ask whether external participants are allowed when any external candidate is included
   continuity: preserve the same reviewers for rebuttal rounds
 
 agent-review:
-  host_review: at least one fresh reviewer; use two model-diverse reviewers for
-    Spec, Eval, architecture, UX/product judgment, or final quality
-  external_review: optional high-confidence pass when privacy/cost allow
+  recommend one or more distinct reviewer agents from the approved candidate set
+  prefer model/provider/context diversity for review when available
+  ask whether external review is allowed when any external candidate is included
   recheck: use fresh context or a different model after material repair
 
 parallel-lane-execution:
-  implementation: strongest reliable coding model or project default
-  review: different model/profile when practical; external review only if
-    specifically authorized for review
+  recommend implementation workers and review agents separately when both are needed
+  implementation workers may share one approved model; reviewers must be distinct agents
   continuity: workers may be one-shot; reviewers need identity when rebuttal may matter
 
 low-risk focused review or research:
-  host_review: one focused reviewer or main-agent inline review
-  external_review: no by default
+  recommend a light reviewer only when independent judgment materially helps
 ```
 
-If the user has repeatedly preferred a concrete mix in this project, recommend
-that mix first, but still verify capability freshness and external authorization.
-For example, if the current project profile says internal GPT 5.5 as moderator,
-internal GPT 5.4/5.5 as host reviewers, and `opencode` DeepSeek v4 Pro as an
-external reviewer for review-only phases, reuse that profile for matching
-discussion or review scenarios until stale.
+If the user has repeatedly preferred a concrete mix in this project, reuse it
+only when it is recorded in a fresh matching profile. If it is not recorded,
+recommend from the current candidate set, ask approval or correction, and then
+record it.
 
 ## Reuse Rules
 
@@ -121,11 +152,11 @@ Reuse a recorded profile when all are true:
 
 - `scenario_key` matches the current work shape
 - the scope still applies: project, workflow, batch, or task
-- model/provider/runtime freshness checks pass
+- minimal runnability checks for the user-selected participants pass
 - external-agent authorization, cost, and privacy boundaries still cover this phase
 - the confidence target has not increased beyond what the profile covered
 
-Ask again, with a new recommendation, when:
+Ask again when:
 
 - the user requests a different model, provider, confidence level, or external agent
 - the scenario changes from discussion to execution, or from low-risk review to high-judgment review
@@ -138,7 +169,7 @@ Ask again, with a new recommendation, when:
 Prefer the active project/workflow owner:
 
 - existing project coordination, handoff, or workflow profile if one exists
-- `docs/multi-agent-orchestration/capabilities/agent-model-profile.md` for durable heavy workflows
+- `docs/agent-self-driving/capabilities/agent-model-profile.md` for durable heavy workflows
 - lane registry or batch packet for lightweight parallel-lane work
 - in-chat context packet for repositories without durable workflow docs
 
@@ -148,4 +179,6 @@ Do not write personal model preferences into an unrelated project source-of-trut
 
 Every task-bearing packet should include the selected participant/model when the host or external tool supports model selection. Every returned handoff or review should record the model actually used when known.
 
-If the requested model is unavailable, stale, unauthorized, or cannot be verified, record the limitation and either use an approved fallback or ask the user when the fallback changes confidence materially.
+If the requested model is unavailable, stale, unauthorized, or cannot be
+verified, record the limitation and ask the user for a replacement unless the
+profile already names an approved fallback for this exact scenario.

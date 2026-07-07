@@ -9,6 +9,11 @@ You are working in {project}. You are not alone in the codebase: other lanes may
 
 Lane id:
 Objective:
+Coverage IDs:
+  requirements:
+  behaviors:
+  evals:
+  tasks:
 Repository path:
 Lane workspace:
 Branch:
@@ -37,6 +42,9 @@ Implementation rules:
 Derived quality gates:
 - ...
 
+Non-skippable requirements:
+- ...
+
 Verification:
 - ...
 
@@ -49,8 +57,10 @@ Handoff must include:
 - participant/model actually used when known
 - touched files
 - implementation summary
+- coverage closed and coverage still open
 - explicit non-covered scope
 - verification commands and results
+- evidence for each claimed Eval/Task ID
 - documentation impact: none | proposed doc update | stale-doc ledger entry | assigned doc write
 - browser/UI evidence status when relevant, including raw error if failed
 - merge conflict notes
@@ -63,6 +73,9 @@ Handoff must include:
 - Lanes have disjoint owned files, API contracts, component families, migrations, evidence packets, or docs.
 - No lane depends on another lane in the same batch unless dependency is read-only and already merged.
 - Each lane has a meaningful verification path.
+- Each lane owns explicit coverage IDs or is an approved setup/dependency lane.
+- Non-skippable requirements and Eval IDs are visible in the packet and must be
+  answered in the handoff.
 - If no project lane mechanism is declared and editable isolation is useful, consider git worktrees before falling back to shared-checkout lanes.
 - Shared coordination and handoff docs are moderator-owned by default. Workers may update them only when the lane explicitly owns a non-overlapping doc region.
 - High-risk or unclear boundaries were discussed before dispatch.

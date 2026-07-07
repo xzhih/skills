@@ -1,14 +1,15 @@
 ---
-name: multi-agent-orchestration
-description: Use only when the user explicitly invokes $multi-agent-orchestration, or when an active workflow already owns multi-agent orchestration, to choose among multi-agent discussion, multi-agent review, parallel lanes, integration review, external-agent policy, Spec/Eval delivery, and repeated review-repair. Do not use for routine subagent/worktree lane dispatch or lightweight goal/path pressure testing.
+name: agent-self-driving
+description: "Use only when the user explicitly invokes $agent-self-driving, or an active self-driving workflow already owns the task, for long-task automation that should continue through dev-flow, agents, review/repair, lanes, external-agent policy, evidence, and closure until completion or a true user decision. Do not use for routine lanes."
 ---
 
-# Multi-Agent Orchestration
+# Agent Self-Driving
 
-Opt-in dispatcher for multi-agent workflows: discussion, artifact review,
-parallel lanes, returned-lane integration, Spec/Eval delivery, external-agent
-policy, and repeated review-repair. The main thread is always the moderator: it
-owns the blackboard, permissions, integration, verification, and final claims.
+Opt-in dispatcher for multi-agent workflows and long-task automation:
+discussion, artifact review, parallel lanes, returned-lane integration,
+dev-flow-driven requirements/Spec/Eval/Plan delivery, external-agent policy,
+and repeated review-repair. The main thread is always the moderator: it owns
+the blackboard, permissions, integration, verification, and final claims.
 
 ## Iron Law
 
@@ -22,33 +23,84 @@ Agents may improve coverage, challenge framing, and find defects, but the modera
 
 Use this skill only when the user explicitly asks for one of these:
 
-- `multi-agent-orchestration` or a Spec/Eval-driven workflow
-- one focused reviewer, researcher, or fresh-eyes agent for a bounded artifact or question; route review work to [agent-review](../agent-review/SKILL.md)
-- multiple agents for target correctness, Eval quality, or final result correctness; route artifact review to [agent-review](../agent-review/SKILL.md)
-- same-topic debate about requirements, product friction, necessity, simplicity, usability, user flow, or whether a proposal is too heavy; route to [agent-debate](../agent-debate/SKILL.md)
-- model-diverse, fresh-reviewer, adversarial, or repeated review-repair work
+- `agent-self-driving`, long-task automation, or a Spec/Eval-driven workflow
+- a new project, new requirement, or broad outcome where the user provides a
+  direction and expects the agent to keep moving until an MVP, completed
+  deliverable, or true pause condition
+- model-diverse, adversarial, or repeated review-repair work that needs a
+  controller across review, repair, recheck, and evidence
 - external, shell, editor, protocol, or account-bound agents
 - a long task that needs durable multi-agent state and evidence-backed closure
 
 Do not use it for:
 
+- one focused reviewer, researcher, or fresh-eyes pass over a bounded artifact;
+  use [agent-review](../agent-review/SKILL.md)
+- ordinary same-artifact review, even with multiple reviewers; use
+  [agent-review](../agent-review/SKILL.md)
+- same-topic debate about requirements, product friction, necessity,
+  simplicity, usability, user flow, or whether a proposal is too heavy; use
+  [agent-debate](../agent-debate/SKILL.md)
 - routine subagent/worktree lane dispatch with clear ownership; use [agent-lanes](../agent-lanes/SKILL.md)
 - unclear goals, branches, or lane boundaries that need formulation first; use [agent-grilling](../agent-grilling/SKILL.md)
 - returned lane handoffs; use [integration-review](../integration-review/SKILL.md)
-- ordinary document-led development routing; start with [dev-flow](../dev-flow/SKILL.md) and [project-context](../project-context/SKILL.md)
+- ordinary document-led development routing when the user did not explicitly
+  opt into orchestration; start with [dev-flow](../dev-flow/SKILL.md) and
+  [project-context](../project-context/SKILL.md)
 - confidence theater: broad, risky, or long work is not enough without an explicit multi-agent/Spec/Eval/review-repair trigger
+
+## Explicit Long-Task Mode
+
+When the user explicitly invokes this skill with a direction for a new project,
+new requirement, or broad delivery goal, treat this skill as the automation
+controller and [dev-flow](../dev-flow/SKILL.md) as the development lifecycle
+spine.
+
+Default sequence:
+
+```text
+project-context
+  -> dev-flow phase detection
+  -> agent-requirements-analysis
+  -> agent-spec
+  -> agent-eval
+  -> agent-plan
+  -> agent-review for risky artifacts
+  -> agent-lanes or direct execution
+  -> integration-review for returned lanes
+  -> implementation eval/review/fix
+  -> doc-driven-workflows only when its gate permits
+  -> completion evidence or true pause
+```
+
+Continue automatically while the next action is inside the approved goal,
+source-evident, reversible enough, and verifiable. Do not stop after producing
+only Requirements, Spec, Eval, Plan, one lane batch, or one repair if the goal
+contract still has unfinished work.
+
+Pause only for a true user decision: product direction, taste, priority,
+privacy/cost/account authorization, destructive/public action, deployment
+target, external-agent approval, missing credentials, unavailable verification
+with no acceptable substitute, or a blocker that agents and evidence cannot
+resolve safely.
+
+For a new project or MVP, completion means the smallest useful deliverable that
+satisfies the locked Spec and Eval, with evidence and review state. It does not
+mean every possible hardening item is done unless the goal contract requires it.
 
 ## First Move
 
 1. Restore the user goal, current repo/runtime state, and any active parent workflow.
-2. Select the lowest sufficient intensity from the ladder below.
-3. Classify the agent shape and delegate to the focused skill when possible:
+2. If the request is explicit long-task mode, use `dev-flow` as the parent
+   workflow and keep this skill as the automation controller.
+3. Select the lowest sufficient intensity from the ladder below.
+4. Classify the agent shape and delegate to the focused skill when possible:
    - same-topic product/requirements debate -> [agent-debate](../agent-debate/SKILL.md)
-   - same-artifact review -> [agent-review](../agent-review/SKILL.md)
+   - one-pass or same-artifact review -> [agent-review](../agent-review/SKILL.md)
    - independent implementation/investigation lanes -> [agent-lanes](../agent-lanes/SKILL.md)
    - returned lane handoffs -> [integration-review](../integration-review/SKILL.md)
-4. Check whether host subagents or external agents are actually needed for this phase.
-5. Ask the user before sending task content to external, paid, account-bound, editor, protocol, networked, or data-leaving agents unless they already authorized that exact use.
+5. Check whether host subagents or external agents are actually needed for this phase.
+6. Ask the user before sending task content to external, paid, account-bound, editor, protocol, networked, or data-leaving agents unless they already authorized that exact use.
 
 ## Agent Shape Gate
 
@@ -104,23 +156,25 @@ Level 4: full delivery lifecycle
 
 Read `references/lifecycle-intensity.md` whenever routing is not obvious or the work is Level 3-4.
 
-## Spec/Eval Spine
+## Dev-Flow Spine
 
-For Level 2+ delivery work, use Spec and Eval as the control surfaces:
+For Level 2+ delivery work, use the focused lifecycle owner skills rather than
+recreating their artifacts inside this skill:
 
 ```text
-source inspection
-  -> optional agent-grilling formulation snapshot
-  -> execution preflight
-  -> Spec draft/review/lock
-  -> Eval draft/review/lock
-  -> Plan draft/review/lock
-  -> goal contract and task queue when needed
-  -> execution, review, repair, verification
-  -> evidence-backed status: in_progress | paused | complete
+agent-requirements-analysis owns requirements state
+agent-spec owns Spec state
+agent-eval owns Eval state
+agent-plan owns Plan and lane-candidate state
+agent-lanes owns parallel execution batches
+integration-review owns returned-lane review
+doc-driven-workflows owns durable project source-of-truth docs
+agent-self-driving owns private orchestration state and continuity
 ```
 
-Keep artifacts compact. Full lifecycle does not mean long documents; it means the target, Eval, plan, side effects, evidence, and stop/pause state are traceable.
+Keep artifacts compact. Full lifecycle does not mean long documents; it means
+the target, Eval, plan, side effects, evidence, owner docs, and stop/pause state
+are traceable.
 
 ## Minimum Execution Gates
 
@@ -136,6 +190,9 @@ These gates stay in the entry file because missing them changes behavior:
 
 ## Runtime Capability Contract
 
+Do not dispatch host subagents, external agents, shell/editor/protocol agents,
+or task-bearing reviewer packets before this contract is satisfied.
+
 Before dispatching agents, separate these states:
 
 ```text
@@ -145,21 +202,12 @@ authenticated does not mean authorized_for_task
 available does not mean suitable
 ```
 
-If model-selectable agents, model-diverse review, or external agents may be used, restore or create the Agent Model Profile before task-bearing dispatch. Reuse a fresh profile when its scenario, scope, confidence target, and external boundary match the current work. If no matching profile exists, recommend a concrete model mix from discovered capabilities and ask the user to approve it once; do not ask the user to enumerate models from scratch.
+If model-selectable agents, model-diverse review, or external agents may be
+used, run the dispatch gate in [agent-model-profile.md](../dev-flow/references/agent-model-profile.md) before any task-bearing dispatch. Use [capability-cache.md](references/capability-cache.md) only to record candidate sets and check user-approved participants.
 
-If external agents would improve confidence, ask for:
-
-```text
-Recommended model mix:
-Use for:
-Why:
-External boundary:
-Reuse until:
-Fallback:
-Approve this mix?
-```
-
-When capabilities are missing, degrade to the lightest host-native or main-agent path and record that limitation. Do not turn unavailable automation into fake multi-agent evidence.
+When a user-selected participant is unavailable, ask for a replacement unless
+the profile already names an approved fallback. Do not turn unavailable
+automation into fake multi-agent evidence.
 
 ## Moderator Rules
 
@@ -171,8 +219,15 @@ When capabilities are missing, degrade to the lightest host-native or main-agent
 - Ask the user only for non-agent-decidable choices: product direction, brand/taste, privacy/cost, account access, destructive/public actions, deployment, or user-defined limits.
 - Ask one user decision at a time with the recommended default, impact/tradeoff, and why agents or evidence cannot decide it safely.
 - Do not ask the user to pick ordinary internal sequencing when evidence and the active goal can decide it.
-- Maintain one active parent workflow for task-level source of truth; do not create competing top-level Spec, Eval, plan, task queue, or goal docs when another workflow already owns them.
-- Do not create `docs/multi-agent-orchestration/` only because this skill loaded; persist state only when continuity, auditability, external side effects, or Level 3-4 work requires it.
+- Maintain one active parent workflow for task-level source of truth. In
+  explicit long-task mode, that parent is normally `dev-flow` plus its focused
+  owner skills. Do not create competing top-level Requirements, Spec, Eval,
+  plan, task queue, or goal docs when another workflow already owns them.
+- Use `doc-driven-workflows` as the only durable architecture/operation/call-path
+  source-of-truth writer. Other workflow docs are coordination, discussion,
+  review, or private orchestration state unless promoted through the owning
+  workflow.
+- Do not create `docs/agent-self-driving/` only because this skill loaded; persist state only when continuity, auditability, external side effects, or Level 3-4 work requires it.
 - Do not claim a task, stage, or run is complete without fresh moderator-inspected evidence.
 - If status is `in_progress`, continue to the next bounded action instead of stopping at a recommendation.
 
@@ -182,7 +237,8 @@ Read only what the current intensity needs:
 
 - `references/lifecycle-intensity.md`: intensity routing, lifecycle boundaries, formulation and completion gates.
 - `references/workflow-integration.md`: parent workflow ownership, source maps, private orchestration state, and promoted updates.
-- `references/capability-cache.md`: cache-first discovery, capability profile vocabulary, consent, freshness.
+- `references/capability-cache.md`: user-declared participant checks, capability
+  profile vocabulary, consent, and minimal runnability checks.
 - `references/external-agent-sessions.md`: external shell/editor/protocol agent sessions, `opencode` multi-round use, session ledgers, and resume failure handling.
 - `references/task-packets.md`: adaptive task packet invariants, assignment intent, context exposure, non-review delegation.
 - `references/output-normalization.md`: promotion gate and normalized item types.

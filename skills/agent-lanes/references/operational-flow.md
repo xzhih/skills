@@ -2,6 +2,18 @@
 
 Use this reference when dispatching workers directly, persisting lane state, or computing the next batch.
 
+## Contents
+
+- Moderator Loop
+- Long-Running Workers
+- Direct Dispatch Procedure
+- Autonomous Batch Continuation
+- Lane Registry Shape
+- Lane States
+- Transitions
+- Lane Workspace Contract
+- Next Batch Algorithm
+
 ## Moderator Loop
 
 ```text
@@ -10,7 +22,7 @@ restore context
   -> preclaim coordination ownership
   -> create or verify lane workspaces
   -> record base branch and base commit
-  -> dispatch callable subagents when available
+  -> dispatch callable subagents when selected by the user profile and visible
   -> record agent/session ids
   -> collect structured handoffs
   -> inspect diffs and evidence
@@ -37,7 +49,8 @@ Interrupt or close a worker only when it is cancelled, clearly on the wrong task
 
 ## Direct Dispatch Procedure
 
-1. Discover or confirm the host subagent surface.
+1. Confirm the user-approved host subagent surface is visible; do not scan for
+   unapproved agent surfaces.
 2. Create one worker per lane only after owned and forbidden surfaces are clear.
 3. Give each worker a complete lane packet.
 4. Record dispatch metadata:
@@ -59,7 +72,8 @@ expected handoff:
 6. Collect structured handoffs from workers.
 7. Route returned lanes to `integration-review`.
 
-If no callable subagent surface exists, emit manual prompts and mark dispatch mode as `manual`.
+If no user-approved callable subagent surface is visible, emit manual prompts
+and mark dispatch mode as `manual`.
 
 ## Autonomous Batch Continuation
 
@@ -168,4 +182,6 @@ Before continuing with another batch:
 5. Delay lanes depending on unmerged review work.
 6. Choose the maximal safe set with disjoint owned surfaces and verification paths.
 7. Keep high-collision docs, contracts, migrations, and evidence packets single-owner.
-8. Dispatch the next safe set when callable subagents are available, or emit fallback prompts only when direct dispatch is unavailable or requested.
+8. Dispatch the next safe set when callable subagents are selected by the
+   user-approved profile and visible, or emit fallback prompts when direct
+   dispatch is unavailable or requested.
