@@ -25,14 +25,14 @@ auto-discover which agents or models exist in the environment.
 User-approved capability facts belong to the target project:
 
 ```text
-docs/agent-runtime/capabilities/selected-participants.md
+docs/dev-flow/capabilities/selected-participants.md
 ```
 
 Optional snapshots are only useful for auditability, selected participant
 changes, or long Level 4 work:
 
 ```text
-docs/agent-runtime/capabilities/snapshots/<YYYY-MM-DD>-<slug>.md
+docs/dev-flow/capabilities/snapshots/<YYYY-MM-DD>-<slug>.md
 ```
 
 Do not store runtime capability facts in the installed skill, global memory, or
@@ -104,7 +104,7 @@ freshness:
 Record approved model profiles separately from raw capability facts:
 
 ```text
-docs/agent-runtime/capabilities/agent-model-profile.md
+docs/dev-flow/capabilities/agent-model-profile.md
 ```
 
 Capability cache answers "what can run here?" The Agent Model Profile answers

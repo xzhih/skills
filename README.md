@@ -45,7 +45,7 @@ User-entry skills:
 Internal flow skills:
 
 - `project-context`: restores authoritative project instructions, handoff docs, coordination state, decisions, verification conventions, and collision risks.
-- `agent-runtime`: owns shared agent/model profile gates, selected participants, capability checks, OpenCode, and external session ledgers.
+- `agent-runtime`: internal agent/model runtime rules; records live in `docs/dev-flow/capabilities/`.
 - `agent-grilling`: pressure-tests unclear goals, assumptions, and decomposition before planning or dispatch.
 - `integration-review`: reviews returned lanes, normalizes claims, checks evidence, classifies blockers, and continues to the next safe batch.
 
@@ -80,15 +80,13 @@ when the workflow needs them.
 | Skill | When it is used | What happens |
 | --- | --- | --- |
 | `project-context` | An entry workflow depends on handoff, coordination, specs, lane state, project rules, verification commands, or source-of-truth docs. | Restores the real project state and identifies active decisions, live lanes, collision risks, and verification conventions. |
-| `agent-runtime` | A workflow needs approved agents, model profiles, capability/runnability checks, OpenCode, or external session continuity. | Separates authorization, runnability, and suitability; records selected participants and external sessions; prevents fake multi-agent coverage. |
+| `agent-runtime` | A workflow needs approved agents, model profiles, capability/runnability checks, OpenCode, or external session continuity. | Applies runtime gates and records state in `docs/dev-flow/capabilities/`. |
 | `agent-grilling` | A goal, assumption set, plan branch, or lane decomposition is not ready for direct planning or dispatch. | Uses agents to ask and answer formulation questions, pressure-test options, and return decision candidates plus true user questions. |
 | `integration-review` | `agent-lanes` workers return, or lane evidence, scope, conflicts, blockers, and next-batch choices need review. | Checks returned work against scope and evidence, classifies blockers, identifies conflicts, and decides what can merge or what batch can safely run next. |
 
-`agent-self-driving` may maintain source maps, private blackboards,
-raw agent-output ledgers, and review-repair continuity. `agent-runtime` owns
-capability/session state. These skills should link to owner artifacts instead
-of duplicating Requirements, Spec, Eval, Plan, or doc-driven source-of-truth
-docs.
+Runtime capability/session records live in `docs/dev-flow/capabilities/`.
+`agent-self-driving` may maintain source maps, private blackboards, raw
+agent-output ledgers, and review-repair continuity.
 
 Short version:
 

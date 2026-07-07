@@ -56,7 +56,7 @@ Lifecycle source map, active phase, and handoff:
 
 Agent runtime profiles, selected participants, capability checks, and
 external-agent session ledgers:
-  docs/agent-runtime/ when durable runtime state is needed.
+  docs/dev-flow/capabilities/.
 
 Heavy multi-agent blackboards, findings, private task overlays, raw outputs,
 and orchestration evidence links:

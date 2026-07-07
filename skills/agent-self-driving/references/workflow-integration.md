@@ -39,8 +39,8 @@ durable project source-of-truth docs -> doc-driven-workflows
 ```
 
 `agent-self-driving` owns the automation loop, private blackboards,
-agent-output ledgers, review convergence state, and evidence links. It links
-to `agent-runtime` for capability/session state. It does not become a second source of truth for project
+agent-output ledgers, review convergence state, and evidence links. Runtime
+capability/session records live in `docs/dev-flow/capabilities/`. It does not become a second source of truth for project
 architecture, operation flows, call paths, product requirements, Spec, Eval, or
 Plan when those owners are active.
 

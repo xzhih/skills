@@ -1,6 +1,6 @@
 ---
 name: agent-runtime
-description: "Use when a workflow may assign host subagents, shell/editor/protocol/external agents, named reviewers or workers, model-selectable/model-diverse participants, Agent Model Profiles, capability checks, OpenCode, or external session continuity."
+description: "Use only when an active workflow routes here for host subagents, shell/editor/protocol/external agents, named reviewers or workers, model-selectable/model-diverse participants, Agent Model Profiles, capability checks, OpenCode, or external session continuity. Do not use as a user-facing entry workflow."
 ---
 
 # Agent Runtime

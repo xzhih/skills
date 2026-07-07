@@ -359,5 +359,5 @@ Level 4:
   handoff. Prefer the focused owner locations; use
   `docs/agent-self-driving/` for blackboards, private agent outputs,
   review convergence state, evidence links, and a source map. Use
-  `docs/agent-runtime/` for capability/session state.
+  `docs/dev-flow/capabilities/` for capability/session state.
 ```

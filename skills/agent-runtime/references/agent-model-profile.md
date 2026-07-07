@@ -185,14 +185,9 @@ Ask again when:
 
 ## Where To Record
 
-Prefer the active project/workflow owner:
-
-- existing project coordination, handoff, or workflow profile if one exists
-- `docs/agent-runtime/capabilities/agent-model-profile.md` for durable workflow-wide reuse
-- lane registry or batch packet for lightweight parallel-lane work
-- in-chat context packet for repositories without durable workflow docs
-
-Do not write personal model preferences into an unrelated project source-of-truth doc unless the user asked for durable project configuration.
+```text
+docs/dev-flow/capabilities/agent-model-profile.md
+```
 
 ## Packet Rule
 

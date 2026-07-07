@@ -55,7 +55,7 @@ For review/rebuttal/recheck, tell the external agent not to edit files. For impl
 For reused external agents, record the mapping in:
 
 ```text
-docs/agent-runtime/capabilities/external-agent-sessions.md
+docs/dev-flow/capabilities/external-agent-sessions.md
 ```
 
 Minimum fields:

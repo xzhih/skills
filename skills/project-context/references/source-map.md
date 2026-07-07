@@ -16,7 +16,7 @@ These paths are examples and common conventions, not required project structure.
 - `docs/discussion-workflows/references/`: source-backed assessments, comparison matrices, or analysis artifacts.
 - `docs/dev-flow/`: lifecycle artifacts for Requirements, Spec, Eval, Plan,
   evidence, and handoffs.
-- `docs/agent-runtime/`: agent/model profiles, selected participants,
+- `docs/dev-flow/capabilities/`: agent/model profiles, selected participants,
   capability checks, and external-agent session ledgers.
 - `docs/spec/`: target behavior, product contracts, or implementation specs when a project declares this root.
 - `docs/spec-compliance/`: evidence that implementation matches specs when a project declares this root.
