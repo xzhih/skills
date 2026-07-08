@@ -250,6 +250,8 @@ Ask:
 - Which assumption would invalidate it?
 - What regression, edge case, security issue, or data-loss path could be hidden?
 - Is there a smaller reviewable change that reaches the same success state?
+- What am I least confident about right now?
+- What might be the biggest omission or blind spot in the current situation?
 
 Act on issues found by this review. If risk remains, report it plainly. Do not let adversarial review become a reason to stall, over-explain, or avoid making a reviewable change.
 
@@ -271,6 +273,7 @@ Act on issues found by this review. If risk remains, report it plainly. Do not l
 - Quantify when possible
 - When stuck, say so and describe what you've tried
 - Don't hide uncertainty behind confident language
+- After non-trivial work, proactively name the area of lowest confidence and the most plausible missed issue when either would help the human review or decide next steps.
 
 ### Change Description
 
