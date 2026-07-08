@@ -52,6 +52,53 @@ Internal flow skills:
 `agent-self-driving` may call internal flow skills, but is a direct entry
 when explicitly invoked for long-task automation.
 
+## Product vs Implementation
+
+Workflow skills split into two lines, joined by handoff artifacts (Requirements
+→ Spec → Eval → Plan → code/evidence). They are not two install sets; they are
+two job types so product judgment and delivery mechanics stay separate.
+
+```text
+Product line (what / why / what "good" means)
+  discussion, grilling, debate, requirements, Spec, Eval, durable docs
+
+Implementation line (how / who changes what / is the change good enough)
+  Plan, lanes, coding, integration of returned work, code/module review
+
+Control plane (route, resume, multi-agent runtime)
+  dev-flow, agent-self-driving, project-context, agent-runtime
+
+Shared reviewer (not a third product philosophy)
+  agent-review — same tool for Spec/Plan contracts and for module diffs
+```
+
+| Question type | Line | Typical skills |
+| --- | --- | --- |
+| Should we build it, scope, behavior, tradeoffs, “too heavy”? | Product | `discussion-workflows`, `agent-grilling`, `agent-debate`, `agent-requirements-analysis`, `agent-spec`, `agent-eval`, `doc-driven-workflows` |
+| Task split, files/APIs, parallel work, module quality, merge readiness? | Implementation | `agent-plan`, `agent-lanes`, `steady-coding`, `integration-review`, `agent-review` on diffs/code |
+| Which phase next, continue from Spec, long-task loop? | Control | `dev-flow`, `agent-self-driving`, `project-context`, `agent-runtime` |
+
+**Product line** owns intent, boundaries, user-visible behavior, and how to
+prove correctness. Outputs are decisions and contracts for humans and downstream
+skills—not file-level change lists.
+
+**Implementation line** owns decomposition, owned surfaces, execution, and
+verification against those contracts. Outputs are tasks, diffs, tests, evidence,
+and merge/lane status.
+
+**`agent-review`** is a shared gate on one concrete artifact: a Spec, Eval,
+Plan, PR, module diff, implementation slice, or final package. It is not
+`agent-debate` (product tradeoffs) and not `integration-review` (returned-lane
+batch status). Spec and Plan each require an `agent-review` pass before Eval or
+execution/lanes unless the user explicitly waives it.
+
+**Exploration vs delivery (product):** dry inspiration may use
+`agent-grilling` → `agent-debate` → human read; a known direction may use
+`agent-requirements-analysis` then a human pass. Neither is mandatory before
+every Spec. **Self-driving** may start at any reached phase (for example from a
+locked Spec) and only run the remaining delivery work—it should not rewind
+product work without cause.
+
 ## Development Lifecycle
 
 For non-trivial development work, `dev-flow` uses this lifecycle as the default
@@ -73,9 +120,9 @@ Each phase has an exit gate:
 | Phase | Exit gate |
 | --- | --- |
 | Analyze Requirements | `agent-requirements-analysis` has separated confirmed, draft, and open points; agent-answerable questions have been resolved through context or debate; goal, non-goals, product friction, and constraints are not mixed. |
-| Lock Spec | Goal, scope, non-goals, user-visible behavior, constraints, and affected surfaces are clear enough to review or implement. |
+| Lock Spec | Goal, scope, non-goals, user-visible behavior, constraints, and affected surfaces are clear; a mandatory `agent-review` of the whole Spec has closed (or the user waived it) before Eval. |
 | Lock Eval | Acceptance checks, test points, manual checks, failure conditions, and evidence expectations define how to prove correctness. |
-| Lock Plan | Execution order, touched files/modules, risks, verification commands, lane candidates, and stop or rollback conditions are known. |
+| Lock Plan | Execution order, touched files/modules, risks, verification commands, lane candidates, and stop or rollback conditions are known; a mandatory `agent-review` of the whole Plan has closed (or the user waived it) before execution or lanes. |
 | Execute Plan | Changes stay within the plan boundary and produce evidence for what changed and what was not changed. |
 | Review + Test | Implementation is checked against Spec and Eval with inspectable test or manual-verification evidence. |
 | Repair + Recheck | Accepted blocker/major findings are fixed and rechecked, rejected with evidence, deferred as non-blocking, or escalated as blocked. |
@@ -120,8 +167,10 @@ High-risk task:
   review requirements, Spec, Eval, Plan, implementation, and final result; use repair -> recheck
 ```
 
-Review is not only a final step. Use `agent-review` for high-impact Spec, Eval,
-Plan, implementation, or final-result checks when one framing may miss issues.
+Review is not only a final step. `agent-spec` and `agent-plan` require
+`agent-review` on the whole artifact before Eval or execution. Also use
+`agent-review` for Eval, implementation modules, diffs, or final results when
+risk warrants or when you want an independent pass.
 
 Documentation governance is also a lifecycle gate: use `doc-driven-workflows`
 when a locked Spec, accepted implementation, or review finding would make

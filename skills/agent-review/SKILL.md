@@ -43,6 +43,11 @@ Before sending review work:
 - First round is blind, independent, and source-first when risk matters.
 - Reviewer agreement is not proof.
 - Accept findings only with artifact/source evidence.
+- Treat **hollowness as a defect**: vague goals, missing concrete detail,
+  hollow checks, placeholder tasks, or gaps that force implementers to invent
+  decisions are at least **major** (blocker if the next gate would rely on
+  them). Prefer detailed-and-concrete over short-and-vague; reject long-and-empty
+  the same way. See mode-gate Substance Rule.
 - Use [review-convergence.md](../agent-self-driving/references/review-convergence.md)
   for blocker/major findings, rebuttal, or recheck.
 - Use [output-normalization.md](../agent-self-driving/references/output-normalization.md)

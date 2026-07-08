@@ -24,7 +24,8 @@ Apply:
 - [mode-gate.md](../dev-flow/references/mode-gate.md)
 - [coverage-trace.md](../dev-flow/references/coverage-trace.md)
 
-Return only what Plan needs. Do not print empty headings.
+Return only what Plan needs. Do not print empty headings. Do not confuse
+brevity with hollow checks.
 
 ## Use For
 
@@ -36,6 +37,40 @@ Return only what Plan needs. Do not print empty headings.
 Use [agent-spec](../agent-spec/SKILL.md) when behavior is still unclear. Use
 [agent-plan](../agent-plan/SKILL.md) when checks and evidence are ready.
 
+## Depth (detailed, not empty)
+
+Eval proves the Spec with **concrete checks and oracles**—detailed enough to
+catch wrong implementations, not a short restatement of the goal and not empty
+test theater. Apply mode-gate **Substance Rule**.
+
+Minimum content (scale wording, not skip the slots):
+
+```text
+Per important Spec behavior:
+  check or evidence path (automated command, named test, or manual steps)
+  pass/fail signal a stranger can apply
+  failure conditions that would catch a plausible wrong implementation
+Trace: behavior -> check/evidence
+Fixtures/data/setup when the check depends on them
+Regression or risk checks when change could break nearby behavior
+Untestable/deferred entries: reason, risk, owner—not silent omission
+Implementation evidence expectations (what Plan/workers must attach)
+```
+
+Thin Eval red flags (block Plan readiness):
+
+```text
+- "works as expected" / "manual QA" with no steps or oracle
+- one vague check covering many unrelated behaviors
+- no failure condition that a wrong but "happy path" build would hit
+- no link from check back to a Spec behavior
+- inventing tests for draft/open Spec items as if confirmed
+- whole Eval is a short bullet list for multi-behavior Specs
+```
+
+Self-check: **Would a wrong implementation still "pass" this Eval?** If yes,
+deepen failure conditions and oracles.
+
 ## Process
 
 ```text
@@ -44,6 +79,7 @@ read locked Spec and test context
   -> identify automated, manual, and untestable coverage
   -> name failure conditions that catch wrong implementations
   -> preserve behavior-to-evidence trace at the selected weight
+  -> expand until anti-thin bar passes
   -> review or debate only when coverage risk warrants
   -> hand off to Plan only when ready
 ```
@@ -56,6 +92,7 @@ when one testing frame may miss important risk.
 
 Move to Plan only when:
 
+- Depth (anti-thin) bar is met—not only "has a checks section"
 - every important behavior has an acceptance check or manual evidence path
 - every check/evidence path traces to the behavior it proves
 - failure conditions are explicit enough to catch wrong implementations
