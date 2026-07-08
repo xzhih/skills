@@ -39,6 +39,9 @@ runnable, and recordable.
 
 ## Required References
 
+- Read [worker-lifecycle.md](../dev-flow/references/worker-lifecycle.md) before
+  dispatching, waiting on, resuming, closing, or re-dispatching any worker or
+  external/session agent.
 - Read [agent-model-profile.md](references/agent-model-profile.md) before any
   multi-agent operation, named participant assignment, model-diverse review,
   external-agent use, review-repair loop, or claim of independent agent
@@ -58,3 +61,5 @@ runnable, and recordable.
 Do not use this skill to choose requirements, Spec, Eval, Plan, lane
 decomposition, review findings, or implementation changes. Agent outputs remain
 claims until the owning workflow normalizes and verifies them.
+
+Short polling timeouts are runtime state, not failure evidence.

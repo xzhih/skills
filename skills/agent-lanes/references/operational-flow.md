@@ -5,7 +5,6 @@ Use this reference when dispatching workers directly, persisting lane state, or 
 ## Contents
 
 - Moderator Loop
-- Long-Running Workers
 - Direct Dispatch Procedure
 - Autonomous Batch Continuation
 - Lane Registry Shape
@@ -33,19 +32,6 @@ restore context
 ```
 
 Manual prompt output is the fallback, not the default, when callable subagent tools exist.
-
-## Long-Running Workers
-
-Do not treat a long-running worker as blocked only because it has not replied yet. Avoid repeated waits, progress pings, or close/interrupt actions.
-
-While workers run:
-
-- continue non-overlapping moderator work
-- prepare integration or evidence checks
-- inspect shared context that does not depend on worker output
-- wait only when the next critical-path action requires the result
-
-Interrupt or close a worker only when it is cancelled, clearly on the wrong task, violating scope or safety boundaries, reported failed by the host, or completed and no longer needed for continuity.
 
 ## Direct Dispatch Procedure
 

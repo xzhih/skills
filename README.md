@@ -84,13 +84,25 @@ Each phase has an exit gate:
 For persisted, high-risk, or multi-agent work, preserve the coverage chain:
 
 ```text
-R-* requirement -> B-* Spec behavior -> E-* Eval evidence -> T-* Plan task -> evidence
+requirement -> Spec behavior -> Eval evidence -> Plan task -> evidence
 ```
 
-This prevents execution from silently dropping requirements. `agent-plan` says
-which Requirement/Behavior/Eval IDs each task covers, `agent-lanes` carries
-those IDs into lane packets, and `integration-review` checks whether every
-non-deferred ID has evidence, a blocker, or an explicit deferral.
+This prevents execution from silently dropping requirements. `agent-plan` keeps
+task coverage traceable to requirements and evidence, `agent-lanes` carries that
+trace into lane packets, and `integration-review` checks whether every
+non-deferred trace item has evidence, a blocker, or an explicit deferral.
+
+Executable tasks use checkbox state for progress:
+
+```text
+- [ ] not started
+- [x] completed with evidence
+- [!] blocked or needs repair
+- [-] deferred with reason
+```
+
+Checkboxes track task status; coverage trace explains why the task exists and
+what evidence closes it.
 
 Scale the ceremony to the task:
 

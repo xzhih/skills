@@ -5,10 +5,8 @@ description: "Use only when the user explicitly invokes $agent-review, or when a
 
 # Agent Review
 
-Run a moderator-owned multi-agent review of one artifact. The core move is
-whole-artifact review before targeted follow-up: independent agents inspect the
-same artifact, findings are normalized, and material issues trigger rebuttal or
-fresh recheck.
+Review one concrete artifact or result. The moderator owns scope, normalization,
+repair decisions, and final claims.
 
 ## Iron Law
 
@@ -16,130 +14,72 @@ fresh recheck.
 REVIEW THE SAME ARTIFACT BEFORE SHARDING FOLLOW-UP.
 ```
 
-Do not split a Spec, Eval, plan, PR, or final result by section before a whole
-artifact review round. Targeted follow-up is allowed only after the first round
-identifies bounded issues.
+Do not split by section in Round 1. Every reviewer sees the whole artifact
+unless a later targeted follow-up is justified.
 
 ## Use For
 
-- one focused reviewer or multi-agent review of a Spec, Eval, Plan, roadmap,
-  design proposal, PR, diff, implementation, deployment, evidence package, or
-  final result
-- high-confidence artifact review where one framing may miss issues
-- fresh review after repair
-- model-diverse review for architecture, UX/product judgment, verification, or final quality
+- one focused review or multi-agent review of Spec, Eval, Plan, design, diff,
+  implementation, evidence, deployment, or final result
+- model-diverse review when one framing may miss issues
+- fresh recheck after repair
 
-Use [agent-debate](../agent-debate/SKILL.md) when the main goal is open
-product/requirements debate. Use [integration-review](../integration-review/SKILL.md)
-when returned lane handoffs, lane status, conflicts, and next-batch decisions
-are the reviewed object.
+Use [agent-debate](../agent-debate/SKILL.md) for open product/requirements
+debate. Use [integration-review](../integration-review/SKILL.md) for returned
+lane status, conflicts, and next batches.
 
 ## Preflight
 
-No reviewer may be spawned or contacted before this preflight completes.
+Before sending review work:
 
-1. Identify the artifact, goal, review boundary, and evidence standard.
-2. Run the dispatch gate in [agent-model-profile.md](../agent-runtime/references/agent-model-profile.md) before assigning reviewers.
-3. Use [capability-cache.md](../agent-runtime/references/capability-cache.md) only for user-approved model-selectable or external reviewers.
+- identify artifact, goal, boundary, and evidence standard
+- use [agent-runtime](../agent-runtime/SKILL.md) before model-selectable,
+  callable, session, or external reviewers
+- get authorization before sending content to external, paid, account-bound, or
+  data-leaving reviewers
 
-Do not send task content to external reviewers until external use, model, phase,
-privacy, and cost boundaries are authorized.
+## Review Rules
 
-## Internal Flows
-
-Handle review governance inside this skill:
-
+- First round is blind, independent, and source-first when risk matters.
+- Reviewer agreement is not proof.
+- Accept findings only with artifact/source evidence.
 - Use [review-convergence.md](../agent-self-driving/references/review-convergence.md)
-  when blocker/major findings, conflicting sign-off, rebuttal, or fresh recheck
-  are needed.
+  for blocker/major findings, rebuttal, or recheck.
 - Use [output-normalization.md](../agent-self-driving/references/output-normalization.md)
-  before promoting agent outputs into findings, decisions, evidence, or repair
-  tasks.
-- Use [external-agent-sessions.md](../agent-runtime/references/external-agent-sessions.md)
-  when an approved external reviewer must be started, resumed, or kept pinned
-  across rebuttal rounds.
+  before promoting agent output into findings or repair tasks.
 
-## Review Topology
-
-Choose the lightest topology that fits:
+## Packet Minimum
 
 ```text
-single fresh review:
-  one focused reviewer for a bounded artifact or question
-
-redundant judgment:
-  multiple reviewers inspect the same whole artifact independently
-
-complementary lens review:
-  multiple reviewers inspect the same whole artifact with different lenses
-
-fresh recheck:
-  a fresh reviewer or different model reviews after repair
+Artifact
+Goal
+Boundary
+Required checks
+Evidence rules
+Finding scale: blocker | major | minor | question | note
+Sign-off options
+Stop condition
 ```
-
-Use the Agent Model Profile for reviewer identity, model diversity, and
-independence rules.
-
-Complementary lenses do not mean section ownership. Every reviewer still sees
-the whole artifact unless the moderator assigns a targeted follow-up after the
-first round.
-
-## Review Contract
-
-Every reviewer packet needs:
-
-```text
-Artifact:
-Goal / source materials:
-Review boundary:
-Required checks:
-Evidence rules:
-Output: blocker | major | minor | question | note
-Sign-off:
-Stop condition:
-```
-
-First-round review should be blind, independent, and source-first when the
-artifact affects Spec, Eval, plan, architecture, UX/product judgment, result
-correctness, or final quality. Do not include other reviewers' conclusions or
-the moderator's preferred answer in Round 1.
-
-## Findings And Recheck
-
-The moderator normalizes outputs into:
-
-```text
-Accepted findings:
-Rejected findings:
-Duplicated or merged findings:
-Evidence gaps:
-Questions:
-Required repair:
-Recheck owner:
-```
-
-Run rebuttal or fresh recheck when there is an evidence-backed blocker, a major
-finding, conflicting sign-off, weak evidence on a high-impact claim, or repair
-that changes the reviewed surface materially.
 
 ## Output
 
+Keep synthesis short:
+
 ```text
-Review target:
-Participants/model mix:
 Accepted blocker/major:
 Minor/deferred:
-Rejected findings:
+Rejected:
 Evidence checked:
-Repair or recheck needed:
-Sign-off status:
-What not to claim yet:
+Repair or recheck:
+Sign-off:
 ```
+
+Omit empty headings.
 
 ## Red Flags
 
-- Sharding review by section before whole-artifact review.
-- Treating reviewer agreement as proof.
-- Accepting findings without source or artifact evidence.
-- Asking reviewers to invent the plan they are supposed to verify.
+- Sharding before whole-artifact review.
+- Treating agreement as proof.
+- Accepting findings without evidence.
+- Asking reviewers to invent the plan they should verify.
 - Claiming sign-off while accepted blocker/major findings remain.

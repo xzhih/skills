@@ -1,15 +1,12 @@
 ---
 name: agent-lanes
-description: "Use only when the user explicitly invokes $agent-lanes, or when an active workflow routes here, to coordinate two or more independent lane/worktree/subagent tasks with owned surfaces, collision checks, coverage IDs, handoff prompts, direct dispatch, or next-batch selection. Do not use for debate, review, or returned-lane integration."
+description: "Use only when the user explicitly invokes $agent-lanes, or when an active workflow routes here, to coordinate two or more independent lane/worktree/subagent tasks with owned surfaces, collision checks, coverage trace, handoff prompts, direct dispatch, or next-batch selection. Do not use for debate, review, or returned-lane integration."
 ---
 
 # Agent Lanes
 
-Coordinate parallel development lanes while the main thread remains moderator. The purpose is to remove manual copy/paste handoffs without giving up control of scope, evidence, and integration.
-
-This skill is an orchestration shape, not an implementation method. Let
-implementation skills trigger from each lane's actual task instead of binding
-them here.
+Coordinate parallel work while the main thread remains moderator. This skill
+owns lane batching and packets, not implementation method.
 
 ## Iron Law
 
@@ -17,166 +14,93 @@ them here.
 NO LANE DISPATCH WITHOUT OWNED SURFACES AND A COLLISION CHECK.
 ```
 
-Parallelism is safe only when each lane has an owned scope, excluded scope, allowed/forbidden surfaces, verification expectations, and a known integration path. If those are unclear, route to formulation or discussion before dispatch.
+## Shared Rules
 
-## Quick Decision
+Use [mode-gate.md](../dev-flow/references/mode-gate.md),
+[coverage-trace.md](../dev-flow/references/coverage-trace.md), and
+[task-checkboxes.md](../dev-flow/references/task-checkboxes.md). Use
+[agent-runtime](../agent-runtime/SKILL.md) for callable/external worker
+capability, authorization, and session lifecycle. Lane implementation is
+Multi-agent / Lane mode.
 
-Use this skill when the next useful action is to coordinate two or more independent implementation or investigation lanes with clear ownership boundaries.
+## Use For
 
-Use it for:
+- independent implementation or investigation lanes
+- subagent/worktree/manual handoff packets
+- first safe batch and next-batch selection
+- collision control for shared files, APIs, migrations, docs, or evidence
 
-- parallel subagent/worktree lanes over disjoint files, modules, docs, or evidence surfaces
-- lane packet creation, direct dispatch, or manual handoff prompts
-- first safe batch selection and next-batch selection after review
-- collision control around high-risk shared files, contracts, migrations, docs, or evidence
+Do not use for same-topic debate, same-artifact review, one-off research, or
+returned lane review. Use [integration-review](../integration-review/SKILL.md)
+when workers return.
 
-Do not use it for:
+## Dispatch Gate
 
-- one-off review or research delegation
-- same-topic debate where every agent should inspect the same material, question, or product/requirements tradeoff
-- same-artifact review where every agent should inspect the same Spec, Eval, plan, PR, diff, implementation, evidence package, or final result
-- returned lane review; use [integration-review](../integration-review/SKILL.md)
-- unclear goals or risky lane decomposition; use [agent-grilling](../agent-grilling/SKILL.md) first
-- explicit Spec/Eval, adversarial review-repair, external-agent policy, or model-diverse convergence; use [agent-self-driving](../agent-self-driving/SKILL.md)
+Before dispatch:
 
-## Required Preflight
+- restore relevant project context
+- each lane has owned scope and excluded scope
+- shared/high-collision surfaces have one owner
+- coverage trace and task checkboxes are assigned when provided by the plan
+- verification and evidence expectations are clear
+- integration path and blocker rules are clear
+- model-selectable/external agents pass `agent-runtime`
 
-Load [project-context](../project-context/SKILL.md) first. If lane boundaries are not clear, use [discussion-workflows](../discussion-workflows/SKILL.md) before dispatch.
+If boundaries are unclear, route to [agent-grilling](../agent-grilling/SKILL.md)
+or [discussion-workflows](../discussion-workflows/SKILL.md) first.
 
-Use [agent-grilling](../agent-grilling/SKILL.md) first when lane decomposition or execution path needs pressure testing. Use [agent-debate](../agent-debate/SKILL.md) instead for same-topic debate about requirements, simplicity, necessity, usability, product friction, or user flow. Use [agent-review](../agent-review/SKILL.md) instead for same-artifact review. Use [agent-self-driving](../agent-self-driving/SKILL.md) when the user explicitly asks for Spec/Eval delivery, external-agent policy, or repeated review-repair convergence.
+## Batch Rule
 
-Before dispatching model-selectable subagents, run the dispatch gate in [agent-model-profile.md](../agent-runtime/references/agent-model-profile.md). Do not call `spawn_agent`, start an external agent, or emit task-bearing lane packets before that gate is satisfied.
+Dispatch the first safe batch, not every possible lane. Review returned work
+before starting the next batch.
 
-## Internal Flows
+Prefer worktrees when filesystem isolation is useful and compatible with the
+project. Use manual prompts only when callable agents are unavailable or the
+user requests them.
 
-Handle lane lifecycle inside this skill:
+## Packet Minimum
 
-- Use [project-context](../project-context/SKILL.md) as the context gate when
-  handoff, coordination, or source-of-truth state matters.
-- Use [discussion-workflows](../discussion-workflows/SKILL.md) internally when
-  lane boundaries are still ambiguous after context recovery.
-- Use [integration-review](../integration-review/SKILL.md) internally when
-  workers return, evidence must be checked, conflicts appear, or the next safe
-  batch must be selected.
-
-## Lane Rules
-
-- The main thread owns batching, lane ids, collision checks, integration, and final claims.
-- Dispatch only independent lanes with disjoint owned surfaces.
-- Preserve the coverage chain from the accepted plan. Each lane must list the
-  Requirement/Behavior/Eval/Task IDs it owns and the evidence it must return.
-- If all agents need the same source material and same question, stop and route to `agent-debate` or `agent-review`; categories are not lane ownership.
-- Do not use this skill for one-off subagent review or research unless it is part of a lane batch.
-- Prefer git worktrees for lane workspaces when the project is a Git repo, multiple lanes need filesystem isolation, branch-per-lane work is acceptable, and no project-declared lane mechanism conflicts.
-- Prefer direct subagent dispatch only when the user has approved a matching
-  Agent Model Profile and the named subagent surface is already available.
-- Fall back to handoff prompts when the user requests manual threads or the
-  approved subagent surface is not available.
-- Do not launch every possible lane. Send one safe batch, integrate it, then select and dispatch the next safe batch unless a true user decision is required.
-- Do not combine feature discussion, implementation, hard-gate evidence, and final integration in one lane unless the task is tiny.
-- Keep high-collision files, API contracts, migrations, shared components, and evidence packets single-owner per batch.
-- Do not ask the user to pick lanes, choose batch size, or relay handoffs when source context and lane boundaries are enough for the moderator to decide.
-
-## Batch Flow
+Each lane packet needs:
 
 ```text
-restore project context
-  -> build or refresh lane registry
-  -> identify candidate lanes
-  -> reject overlapping lanes
-  -> choose the first safe batch
-  -> create or verify lane workspaces and base commits
-  -> prepare lane packets
-  -> dispatch callable subagents, or output handoff prompts only as fallback
-  -> keep the main thread available for non-overlapping work
-  -> collect handoffs
-  -> route to integration-review
-  -> continue with the next safe batch only after review
+Goal
+Owned / excluded scope
+Allowed / forbidden files
+Coverage trace and task checkboxes owned by the lane
+Verification and evidence
+Stop/blocker conditions
+Handoff format
+What not to claim
 ```
 
-## Lane Packet
-
-For each lane, include:
-
-```text
-Lane id:
-Goal:
-Coverage IDs:
-Lane workspace:
-Branch:
-Base branch:
-Base commit:
-Selected participant/model:
-Authoritative docs to read:
-Owned scope:
-Excluded scope:
-Allowed files/surfaces:
-Forbidden files/surfaces:
-Dependencies:
-Implementation rules:
-Derived quality gates:
-Verification commands:
-Evidence expectations:
-Non-skippable requirements:
-Package-manager/artifact rules:
-Handoff format:
-Stop/blocker conditions:
-Documentation impact policy:
-What not to claim:
-```
-
-Read `references/lane-packets.md` for the full packet shape and worker return format. Read `references/operational-flow.md` before direct subagent dispatch or when lane registry state must persist.
-
-## Dispatch Policy
-
-When using subagents:
-
-- Do not auto-discover host subagent tools. Use the user-approved profile and
-  already visible tools; otherwise follow the Agent Model Profile gate or emit
-  manual prompts.
-- Use the Agent Model Profile for implementation/review model and identity
-  rules.
-- Spawn workers only for concrete, bounded, self-contained lanes.
-- Tell workers they are not alone in the codebase and must not revert others' edits.
-- Tell workers to edit only their assigned lane workspace and report exact changed files.
-- Keep reviewer or worker identities explicit if a follow-up round may be needed.
-- Do not wait repeatedly by reflex; while workers run, do non-overlapping moderator work.
-- Do not prod, interrupt, or close active workers only because they are slow. Long lane execution is normal; stop them only for cancellation, wrong-task execution, boundary or safety risk, host failure, or after their result is no longer needed.
-
-When outputting manual prompts:
-
-- Make prompts copy-ready.
-- Include all required reads and exclusions.
-- Require structured handoff output.
-- Preserve the same packet boundaries used for subagents.
+Read `references/lane-packets.md` only when preparing detailed packets.
 
 ## Output
 
-For a new batch:
+For dispatch:
 
 ```text
-Current state:
-Safe parallel lanes:
-Lanes intentionally delayed:
-Coverage assigned:
+Safe lanes:
+Delayed lanes:
 Collision risks:
-Dispatched agents or fallback handoff prompts:
-Integration checklist:
+Dispatched or handoff prompts:
+Integration check:
 ```
 
 For no safe batch:
 
 ```text
-Why parallelism is unsafe now:
-Required boundary or integration step:
+Why unsafe:
+Required boundary step:
 Next moderator action:
 ```
 
+Omit empty headings.
+
 ## Red Flags
 
-- Dispatching "all possible" lanes instead of the first safe batch.
-- Sharing high-collision files, migrations, contracts, or evidence packets across active lanes.
-- Asking the user to relay handoff prompts when a user-approved callable
-  subagent profile is available and authorized.
-- Treating a one-off research/review request as a lane batch.
-- Starting the next batch before returned lanes are reviewed.
+- Dispatching all possible work at once.
+- Sharing high-collision surfaces across active lanes.
+- Treating categories as lane ownership.
+- Asking the user to relay prompts when approved callable agents exist.
+- Starting next batch before returned lanes are reviewed.

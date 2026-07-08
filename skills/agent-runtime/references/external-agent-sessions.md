@@ -27,9 +27,7 @@ For parallel or adversarial reviewers, use one stable `agent_id` and one explici
 
 Never use shared "last session" semantics for multiple agents. In `opencode`, do not use `--continue` for parallel reviewers; use `--session "$SESSION_ID"`.
 
-Long-running external agents are normal. Do not prod, interrupt, kill, close, or replace a running external session just because it has not returned quickly. Preserve active sessions when rebuttal, recheck, or reviewer continuity may matter.
-
-Intervene only when the user cancels, the agent is clearly on the wrong task, the task crosses privacy/cost/account/safety authorization, the tool reports a real failure, or the session is complete and no longer needed.
+For long-running session handling, use the runtime worker lifecycle gate.
 
 ## Consent
 

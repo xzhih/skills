@@ -14,11 +14,12 @@ lane workspace:
 base branch:
 base commit:
 participant/model:
-coverage IDs:
+coverage trace:
   requirements:
   behaviors:
   evals:
   tasks:
+task checkbox status:
 touched files:
 claimed changes:
 non-covered scope:
@@ -70,8 +71,9 @@ Then check:
 - generated/package-manager artifacts follow project rules
 - verification commands match the changed surface
 - derived quality gates have matching evidence or are explicitly marked weak/missing
-- every claimed Eval/Task ID has evidence or an explicit blocker/deferral
-- no non-deferred Requirement/Behavior/Eval ID from the lane packet disappeared
+- every claimed check or task has evidence or an explicit blocker/deferral
+- completed checkboxes have evidence; blocked/deferred checkboxes have reasons
+- no non-deferred requirement/behavior/eval item from the lane packet disappeared
   from the handoff
 - evidence paths exist when cited
 - browser/UI/Admin evidence is fresh when required

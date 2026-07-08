@@ -82,12 +82,23 @@ npx skills add xzhih/skills --skill steady-coding codex-image-gen dev-flow discu
 对于持久化、高风险或多 agent 工作，生命周期保留覆盖链：
 
 ```text
-R-* 需求 -> B-* Spec 行为 -> E-* Eval 证据 -> T-* Plan 任务 -> evidence
+需求 -> Spec 行为 -> Eval 证据 -> Plan 任务 -> evidence
 ```
 
-这条链用于防止执行时漏需求：`agent-plan` 必须说明每个任务覆盖哪些
-Requirement/Behavior/Eval ID；`agent-lanes` 必须把这些 ID 放进 lane packet；
-`integration-review` 必须检查每个非延期 ID 是否有证据、blocker 或明确 deferral。
+这条链用于防止执行时漏需求：`agent-plan` 必须让任务覆盖可追溯到需求和证据；
+`agent-lanes` 必须把这条 trace 放进 lane packet；`integration-review` 必须检查每个
+非延期 trace item 是否有证据、blocker 或明确 deferral。
+
+可执行任务用 checkbox 管进度：
+
+```text
+- [ ] 未开始
+- [x] 已完成且有证据
+- [!] blocked 或需要修复
+- [-] 已延期且有原因
+```
+
+Checkbox 只表示任务状态；coverage trace 说明任务为什么存在，以及什么证据能关闭它。
 
 按任务规模控制流程重量：
 

@@ -23,20 +23,11 @@ Prefer direct callable subagents only when a matching user-approved Agent Model
 Profile names them and the tool is already visible. Manual prompts are a
 fallback for unavailable tools or explicit user preference.
 
-## Long-Running Agents
-
-Long-running subagents and external agents are normal. Do not prod, interrupt, or close an active agent merely because it is taking time.
-
-While agents run, the moderator should do non-overlapping work, prepare integration checks, inspect local sources, or wait with a reasonable timeout only when the next critical-path step truly needs that result.
-
-Interrupt or close an agent only when the user cancels, the task crosses an authorization or safety boundary, the agent is clearly executing the wrong task, the session is no longer needed after completion, or the host reports a real failure.
-
 ## Agent Model Profile
 
 When the workflow will use subagents, model-diverse review, external agents, or
-review-repair loops, follow the dispatch gate in
-[agent-model-profile.md](../../agent-runtime/references/agent-model-profile.md)
-before dispatch.
+review-repair loops, use [agent-runtime](../../agent-runtime/SKILL.md) for
+capability, authorization, and worker/session lifecycle before dispatch.
 
 Do not ask the user to pick routine lane order. Ask about model mix only when the
 choice affects confidence, privacy, cost, external-agent authorization, or the

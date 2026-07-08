@@ -5,230 +5,85 @@ description: "Use when the user explicitly invokes $discussion-workflows, or whe
 
 # Discussion Workflows
 
-## Overview
-
-这个技能用于让复杂讨论保持可决策、可延续、不跑偏。它可以作为用户显式调用的讨论治理入口，也可以由 `dev-flow` 或其他工作流在需要讨论收束时调用。它不是实现指南；它只负责把发散讨论收回到当前边界、责任归属、可借鉴参考、复杂度位置、confirmed/draft/open 状态，以及是否需要落盘。
-
-不要默认把所有动作都跑一遍。先找当前最阻塞的问题，再选择最小足够动作。
+Keep complex discussion decision-ready. This skill owns discussion state, not
+implementation, lane integration, or durable project truth.
 
 ## Iron Law
 
 ```text
-不要把未标记状态的讨论结论当成 confirmed。
+DO NOT TREAT UNMARKED DISCUSSION CONCLUSIONS AS CONFIRMED.
 ```
 
-讨论输出必须保持 `confirmed / draft / open` 的边界。没有用户确认、来源证据或当前轮明确收束的判断，只能作为草案、假设或开放问题，不能写成 canonical boundary，也不能交给实现流程当作已定规则。
+Separate `confirmed / draft / open`. User corrections replace stale phrasing and
+boundaries.
 
-## Boundary
+## Use For
 
-本技能负责 discussion convergence，不负责 project state recovery、goal formulation、lane review 或 implementation。
+- recap after long, corrected, or decision-heavy discussion
+- boundary, responsibility, complexity, or drift checks
+- comparing references without copying them as templates
+- deciding what is confirmed, draft, open, deferred, or stale
+- saving raw research/reference material before refinement
 
-常见区分：
+Use [agent-grilling](../agent-grilling/SKILL.md) when the goal itself is still
+unformed. Use [integration-review](../integration-review/SKILL.md) for returned
+lanes. Use [doc-driven-workflows](../doc-driven-workflows/SKILL.md) for durable
+source-backed project truth.
 
-- 用户说“先恢复上下文 / continue from handoff”：先用 [project-context](../project-context/SKILL.md) 找当前项目状态；只有恢复后需要复盘讨论结论时才进入本技能。
-- 用户说“先复盘 / 讨论到哪了”：用本技能 recap confirmed / draft / open，不新增实现方案。
-- 用户说“先问透 / 让 agent 帮我把问题问清楚”：用 [agent-grilling](../agent-grilling/SKILL.md)，因为目标还在 formulation 阶段。
-- 用户说“lane 回来了 / 哪些能合并”：用 [integration-review](../integration-review/SKILL.md)，本技能最多处理 lane 暴露出的新讨论边界。
+## Actions
 
-如果只是当前聊天里的复盘，不依赖持久化 handoff、discussion docs 或 source-of-truth docs，可以直接从本技能开始；只有需要核对项目文件状态时才先拉入 `project-context`。
-
-目标、问题、假设本身还没有成型时，用 `agent-grilling`。目标已经存在，但边界、责任、复杂度、参考对象或 confirmed/draft/open 状态需要收束时，用本技能。
-
-如果连续两轮在 `agent-grilling` 和本技能之间来回切换仍无法形成下一步，停止循环：把剩余内容标为 `open`，然后升级到 lane dispatch、multi-agent review-repair，或向用户提出一个真正不可代理决策。
-
-## Workflow Composition
-
-当本技能作为独立入口使用时，直接处理讨论治理问题；只有需要核对项目文件、handoff、coordination 或 source-of-truth 状态时才先拉入 [project-context](../project-context/SKILL.md)。
-
-当本技能作为组合工作流的一部分使用时，先通过 [dev-flow](../dev-flow/SKILL.md) 判断当前阶段，再用 [project-context](../project-context/SKILL.md) 恢复真实项目状态。
-
-本技能只负责讨论和边界沉淀：
-
-- 边界足够清楚、需要拆分并行实现时，交给 [agent-lanes](../agent-lanes/SKILL.md)。
-- 开发线程返回、需要 review 或下一批推荐时，交给 [integration-review](../integration-review/SKILL.md)。
-- 讨论结论会影响 source-of-truth docs 时，交给 [doc-driven-workflows](../doc-driven-workflows/SKILL.md) 判断是否同步或记录开放问题。
-- 需要多 agent 对抗 formulation 或 pressure testing 时，交给 [agent-grilling](../agent-grilling/SKILL.md)。
-- 需要 Spec/Eval 或反复 review-repair 时，升级到 [agent-self-driving](../agent-self-driving/SKILL.md)。
-
-不要在讨论技能里直接派工、合并、claim hard gate pass，或维护不属于讨论状态的文档源真相。
-
-## Reference Intake And Inbox
-
-`docs/discussion-workflows/inbox/` 是原始资料入口，不是项目真相入口。
-
-放进 inbox 的内容包括：
-
-- 外部 API 文档、SDK 说明、供应商文档、链接、摘录、截图
-- 调研材料、参考案例、旧方案片段、未整理想法
-- 在 requirements/spec/eval/plan 形成前收集到的证据和疑问
-
-Inbox 材料默认是 `raw` 或 `unprocessed`。不要直接把它当成
-confirmed behavior、实现依据或 doc-driven source of truth；也不要把外部文档
-整段复制进长期项目文档。
-
-晋升路径：
+Pick the smallest action that unblocks the discussion:
 
 ```text
-raw inbox material
-  -> discussion synthesis / references comparison
-  -> confirmed / draft / open state
-  -> stage artifact or doc-driven refinement
+recap current state
+clarify boundaries
+compare references
+check complexity
+check subtopic drift
+capture discussion state
 ```
 
-当材料需要进入 [doc-driven-workflows](../doc-driven-workflows/SKILL.md)
-管理的长期项目真相时，必须先精炼：抽取项目相关的约束、契约、操作流、
-调用路径、风险和证据；未确认内容留在 open-question ledger 或 discussion
-state 中。
+Do not run all actions by default.
 
-## Routing
-
-按当前任务选择一个主动作，必要时组合第二个动作：
+## Process
 
 ```text
-有参考对象、竞品、旧方案、同类案例、外部实践：
-  compare references
-
-边界、范围、分层、责任归属、复杂度归属不清：
-  clarify boundaries
-
-方案开始变重，中心承担太多责任，规则/流程/状态/调试面变大：
-  check complexity
-
-用户问“讨论到哪了”“先复盘”“下一步是什么”，或上下文开始变重：
-  recap current state
-
-局部主题越挖越深，开始遮住总目标：
-  check subtopic drift
-
-讨论很长、用户多次纠正、下一轮需要恢复上下文、用户要求记录：
-  capture discussion state
+frame the action
+  -> restore persisted discussion state only when needed
+  -> separate confirmed / draft / open
+  -> mark stale corrected claims
+  -> name the next decision or next owner
+  -> persist only when reuse, handoff, or memory loss risk warrants
 ```
 
-常见组合：
+Raw inbox material belongs in `docs/discussion-workflows/inbox/`; it is not
+implementation truth. Promote only refined, project-specific conclusions through
+the owning workflow.
+
+## Persistence Gate
+
+Short answers stay in chat. Consider persistence when the user asks to record,
+the discussion is long, corrections changed key boundaries, reusable judgments
+are accumulating, or a future thread must resume.
+
+## Output
+
+Default shape:
 
 ```text
-compare references -> clarify boundaries
-clarify boundaries -> check complexity
-clarify boundaries -> capture discussion state
-recap current state -> check subtopic drift
-capture discussion state -> handoff
-```
-
-如果多个动作同时命中，选择最能解除当前阻塞的动作。不要把短问题变成重流程。
-
-## Core Loop
-
-每轮按这个顺序推进：
-
-1. **Frame.** 说清本轮是在做参考对照、边界澄清、减重检查、复盘、漂移检查，还是状态记录。完成条件：目标、边界、执行、交付、后续计划没有混成一团。
-2. **Restore.** 如果项目已有 `docs/discussion-workflows/index.md` 或其他 source of truth，先读当前有效材料。完成条件：知道哪些是 confirmed、draft、open、历史参考。
-3. **Explore.** 执行选中的动作，只在真正阻塞时问最小澄清问题。完成条件：得到一个可拍板判断、明确草案，或明确开放问题。
-4. **Close.** 标记每个主题状态：现在够用、以后再说、有冲突再重开。完成条件：没有继续沿用被用户纠正过的旧名称、旧边界或旧判断。
-5. **Persist when needed.** 触发落盘条件时写入 `docs/discussion-workflows/` 并更新索引。完成条件：下一轮参与者能从项目文件恢复当前判断。
-
-## Decision Handoff
-
-关闭一个讨论点后，如果同一讨论目标里已经知道下一个待拍板问题，交接给那个问题。交接不是完整展开下一个主题；默认只递一个最相关的待拍板点。
-
-交接包含：
-
-```text
-下一个要拍板的问题
-建议答案或默认方向
-为什么这个问题会影响后续判断
-当前状态：可确认、草案，或需要用户选择
-```
-
-## Default Output
-
-```text
-Frame:
 Confirmed:
 Draft:
 Open:
 Next:
 ```
 
-只有在下一个问题会扩大范围、改变责任归属、把草案写成 canonical 判断，或缺少必要上下文时才停在问题本身。不要让用户只为看到下一个待拍板问题而输入“继续”或“下一个”。
-
-## Persistence Gate
-
-短问题可以只回答，不建文件。需要复用但还不重的判断，内部区分 `confirmed / draft / open`；只有这样能帮助用户判断时才显式标出。
-
-出现以下任一情况，判断是否需要落盘；只有判断会被复用、容易丢失或需要交接时才写入文件：
-
-- 用户明确要求记录
-- 讨论已经变长或可能被压缩
-- 用户纠正改变了关键边界、名称或判断
-- 连续形成约 5 条可复用判断
-- 正在定义长期工作流、复杂方案、协作流程或跨参与者流程
-- 用户问之前讨论出什么，或指出你开始遗忘
-- 子主题已经成型，下一步需要回到整体问题
-
-不要在用户还没确认时把草案写成 canonical boundary。草案先写 session 或 inbox；边界定义只保存当前确认后的有效判断。
-
-## Action Patterns
-
-顶层只保留触发和完成条件。需要具体输出格式时读 `references/action-patterns.md`。
-
-- `recap current state`: 只整理状态，不新增设计。完成条件：输出 confirmed、draft、open、drift check、next。
-- `check subtopic drift`: 判断局部主题是否已经够用。完成条件：指出 current value、risk、return point。
-- `compare references`: 参考对象只是镜子，不是模板。完成条件：说明借什么、不借什么、放回本地边界后的判断。
-- `clarify boundaries`: 先拆目标、边界、责任、执行路径和后续计划。完成条件：知道复杂度该归谁，以及哪些现在不必定。
-- `check complexity`: 先问复杂度是否放错地方，而不是能不能做。完成条件：指出变重信号、应移动/延后内容、当前以哪些文档为准。
-- `capture discussion state`: 让下一轮能恢复判断，不写聊天流水账。完成条件：记录变更、当前依据、confirmed、draft、open、deferred、不要无意识重开的内容。
-
-## Reference Routing
-
-按需要读取，不要预加载全部：
-
-- `references/action-patterns.md`: recap、drift、reference comparison、boundary clarification、complexity check、state capture 的输出形状和判断问题。
-- `references/state-lifecycle.md`: `docs/discussion-workflows/` 布局、文件命名、读取顺序、discussion lifecycle、落盘模板。
-- `references/boundary-prompts.md`: 用短句推进边界、责任、范围或复杂度讨论。
-- `references/discussion-checkpoints.md`: 长讨论阶段记录，尤其是用户纠正、上下文压缩、并行调研后。
-- `references/watchouts.md`: 跑偏、过早进入执行细节、中心方案变重时的警示词。
-- `references/audit-checklist.md`: 更细的减重检查清单。
-
-## Completion Gate
-
-结束一轮讨论前确认：
-
-- 对非短小判断，当前回答区分了 `confirmed / draft / open`，或至少没有把三者混在一起
-- 若用户纠正过旧判断，旧判断已标记过期，不再沿用
-- 若引用了参考对象，已说明本地约束和不能照搬的部分
-- 若方案变重，已说明复杂度应移动、延后或留在外部的位置
-- 若触发落盘，已更新 index 和相关 session/boundary/reference/complexity 文件
-- 若可能误解为应该落盘，回答里说明这是短小判断或暂不需要持久化
-
-## Common Mistakes
-
-```text
-把这个技能当成必须完整执行的流程
-只看参考，不先校准本地边界
-一上来就讨论接口字段、UI、格式或版本计划
-把“内容重要”误当成“必须放进中心”
-讨论还没拍板，就偷偷回写主文档
-只在聊天里说，不持续落盘
-用户要求复盘时继续新增设计
-子主题已经够用后还继续深入，忘了回到总问题
-index 只堆判断，不区分 confirmed / draft / open
-把下一个待拍板问题藏在“下一个”提示后，要求用户额外输入才给建议
-把模板当成每次必须完整执行的流程
-```
+Omit empty headings. Do not make the user type "continue" just to see the next
+decision candidate when it is already known.
 
 ## Red Flags
 
-```text
-用户问复盘时继续新增方案
-讨论还没拍板就进入实现、派工或合并
-把 draft/open 写成 confirmed
-没有说明本地边界就照搬参考对象
-用户纠正后还沿用旧名称、旧范围或旧判断
-长讨论触发落盘条件后仍只靠聊天记忆
-```
-
-## One Line
-
-```text
-先选对讨论动作，再把参考、边界、减重、复盘和状态记录组合成可拍板、可延续的判断。
-```
+- Recapping by adding new design.
+- Treating draft/open as confirmed.
+- Copying a reference without local constraints.
+- Letting a subtopic hide the main question.
+- Persisting chat transcript instead of decision state.

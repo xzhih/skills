@@ -5,7 +5,8 @@ description: "Use only when an active workflow routes here, for agent-mediated f
 
 # Agent Grilling
 
-Formulation pressure-test, not an interrogation ritual. Turn unclear goals into workable formulations by having agents answer, debate, and probe the questions that would otherwise interrupt the user. This skill is a focused formulation helper; it is not a full delivery workflow.
+Pressure-test an unclear goal before requirements, Spec, Plan, or lanes. This is
+formulation help, not review and not implementation.
 
 ## Iron Law
 
@@ -13,85 +14,59 @@ Formulation pressure-test, not an interrogation ritual. Turn unclear goals into 
 NO USER QUESTION UNTIL AGENT-ANSWERABLE QUESTIONS ARE EXHAUSTED.
 ```
 
-If the next question can be answered from source context, focused agents, runtime evidence, safe assumptions, or tradeoff analysis, answer it inside the workflow first. Escalate only true user decisions: taste, product direction, privacy/cost, destructive/public actions, account access, or user-owned priorities.
+Ask the user only for true decisions: product direction, taste, priority,
+privacy/cost, destructive/public action, account access, or unavailable facts.
 
-## Composition
+## Use For
 
-When used inside the development workflow, start from [dev-flow](../dev-flow/SKILL.md) and restore source state with [project-context](../project-context/SKILL.md).
+- fuzzy target, path, scope, boundary, or success criteria
+- likely human clarification questions agents can answer first
+- user feedback like "not usable", "hard to scan", or "feels wrong"
+- plausible architecture or lane-split branches
+- risky lane boundaries before dispatch
 
-Use this skill when:
+Use [discussion-workflows](../discussion-workflows/SKILL.md) after a decision
+state exists. Use [agent-lanes](../agent-lanes/SKILL.md) when boundaries are
+clear enough for parallel work.
 
-- a goal exists but the target, path, boundaries, or success criteria are fuzzy
-- the next natural step would be asking the user brainstorming-style clarification questions, but agents can first infer, research, or debate likely answers
-- the user gives experiential feedback such as "not usable", "doesn't feel like a real admin", "hard to scan", or "this feels wrong" and the workflow must translate it into professional standards and gates
-- several implementation or architecture branches seem plausible
-- a lane boundary feels risky but not ready for heavy Spec/Eval orchestration
-- the user asks agents to challenge, grill, debate, pressure-test, or dig into an idea
+When using agents for the pass, use
+[agent-runtime](../agent-runtime/SKILL.md) for capability, authorization, and
+session lifecycle.
 
-After grilling:
-
-- use [discussion-workflows](../discussion-workflows/SKILL.md) when the result is a decision/boundary recap
-- use [agent-lanes](../agent-lanes/SKILL.md) when boundaries are clear enough for worktree lanes
-- use [agent-self-driving](../agent-self-driving/SKILL.md) when the result needs full Spec/Eval, adversarial review-repair, external-agent policy, or repeated convergence
-
-Boundary with `discussion-workflows`: use this skill before a decision exists, when the goal, assumptions, options, or decomposition need agent-mediated formulation. Use `discussion-workflows` after enough formulation exists and the work is to recap, compare, clarify, or persist decisions.
-
-If two consecutive grilling -> discussion handoffs still cannot produce a next action, stop cycling. Preserve unresolved items as open questions, then route to lane dispatch, multi-agent review-repair, or one true user decision.
-
-If the next step is safe and inside the delegated goal, continue into it. Do not stop to ask the user to approve ordinary implementation order, lane splitting, or an evidence-backed default.
-
-## Rules
-
-- The main thread is the moderator. It owns the blackboard, synthesis, user escalation, and promoted decisions.
-- Use the smallest useful number of agents, but do not stop after one pass while high-impact agent-answerable questions remain.
-- Grilling creates inferred answers, proposals, tradeoffs, assumptions, decision candidates, and open questions. It does not create review findings unless a true blocker prevents a coherent next artifact.
-- Treat user-style clarification questions as an agent work queue first: purpose, constraints, non-goals, users, success criteria, approach choices, boundary placement, and decomposition.
-- Treat user feelings and business intent as valid requirements input. Translate them into domain vocabulary, task models, unacceptable shapes, quality bars, and verification gates instead of asking the user for expert parameters.
-- Preserve the grilling posture: for high-impact answers, ask follow-up "why", "what evidence", "what assumption", "what counterexample", "what boundary", and "what if this is wrong" questions before accepting them.
-- Resolve agent-answerable questions with source docs, code, runtime evidence, focused agents, or safe assumptions before asking the user.
-- Ask the user only for non-agent-decidable decisions such as product direction, brand/taste, privacy/cost, public/destructive actions, or user-defined preferences.
-- Do not dump raw agent disagreement on the user. Synthesize it into a small set of decisions and next actions.
-- Keep the user out of the moderator loop unless a true user decision remains.
-
-## Lightweight Flow
+## Method
 
 ```text
-restore source context
-  -> state the unclear target or decision
-  -> list the questions a human brainstorming session would ask
-  -> translate user feelings/business intent into domain standards and failure gates
-  -> route agent-answerable questions to source inspection or focused agents
-  -> get one default formulation
-  -> get one challenge or alternate formulation
-  -> probe high-impact answers for root causes, evidence, assumptions, counterexamples, and failure modes
-  -> resolve evidence-backed questions
-  -> repeat only while high-impact agent-answerable questions remain
-  -> synthesize decision candidates and safe assumptions
-  -> route to discussion, lane orchestration, or heavy multi-agent workflow
+restore source context if needed
+  -> name the unclear target
+  -> list agent-answerable questions
+  -> translate user feelings into standards and gates
+  -> get a default formulation and one challenge
+  -> probe evidence, assumptions, counterexamples, and boundaries
+  -> synthesize safe assumptions, decision candidates, and true user questions
 ```
+
+Do the smallest useful pass. Repeat only while high-impact agent-answerable
+questions remain.
 
 ## Output
 
-Return:
+Return only what helps the next owner:
 
 ```text
-Formulation snapshot:
-Agent-answered questions:
-Derived standards and gates:
+Formulation:
+Assumptions:
 Decision candidates:
-Safe assumptions:
-Open questions:
-True user decisions:
-Next workflow to continue:
-What not to claim yet:
+Open user decision:
+Next:
 ```
 
-Read `references/formulation-grilling.md` for role details, packet shape, and stop conditions when the uncertainty is large or multi-round.
+Omit empty headings. Read `references/formulation-grilling.md` only for large or
+multi-round uncertainty.
 
 ## Red Flags
 
-- Asking the user broad brainstorming questions before source or agent exploration.
-- Dispatching implementation lanes while the target, boundary, or success criteria are still fuzzy.
-- Treating agent disagreement as something to forward raw to the user.
-- Producing review findings when the task is still formulation.
-- Stopping after one convenient answer while high-impact agent-answerable questions remain.
+- Asking broad brainstorming questions before source or agent exploration.
+- Dispatching lanes before boundaries are clear.
+- Dumping raw disagreement on the user.
+- Producing review findings while still formulating.
+- Stopping after the first convenient answer.

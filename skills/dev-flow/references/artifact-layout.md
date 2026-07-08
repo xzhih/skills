@@ -180,14 +180,15 @@ instead.
 
 ## Coverage Chain
 
-For persisted, high-risk, or multi-agent work, artifacts should preserve stable
-IDs across the lifecycle:
+For persisted, high-risk, or multi-agent work, artifacts should preserve a
+stable coverage trace across the lifecycle. Use `coverage-trace.md` for the
+shared trace rules:
 
 ```text
-R-001 requirement
-  -> B-001 Spec behavior
-  -> E-001 Eval check or evidence path
-  -> T-001 Plan task
+requirement
+  -> Spec behavior
+  -> Eval check or evidence path
+  -> Plan task
   -> evidence link or blocker
 ```
 
@@ -200,8 +201,8 @@ Which task owns it?
 What evidence closed it?
 ```
 
-Do not mark a task, lane, or final result complete when a non-deferred ID has no
-owner, no evidence, or only a worker claim.
+Do not mark a task, lane, or final result complete when a non-deferred trace
+item has no owner, no evidence, or only a worker claim.
 
 ## Resume Order
 
