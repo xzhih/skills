@@ -1,6 +1,6 @@
 interface:
   display_name: "Integration Review"
   short_description: "Review returned lanes and evidence"
-  default_prompt: "Use $integration-review to normalize worker handoffs, verify diffs/evidence, check coverage closure, identify conflicts or blockers, update lane status, and continue to the next safe batch when possible."
+  default_prompt: "Within an active workflow already routed to $integration-review, normalize returned lane/worktree handoffs with owned surfaces, verify diffs/evidence, integrate each authorized ready lane, verify the combined target, record the merged transition, and return next-batch eligibility without dispatching it."
 policy:
   allow_implicit_invocation: false

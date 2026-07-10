@@ -60,9 +60,10 @@ Routing inputs:
 - reviewer findings
 - user-requested intensity
 
-After selecting the initial level, follow the Agent Model Profile dispatch gate
-when model-selectable subagents, model-diverse review, or external agents may be
-used. Then proceed with the approved participant profile.
+After selecting the initial level, classify each dispatched participant through
+`agent-runtime`. Native-default workers need lifecycle handling but no model
+profile; named/model-selectable participants and external/session surfaces use
+their applicable profile, capability, authorization, and session gates.
 
 ## Levels
 
@@ -232,15 +233,21 @@ Continue only when at least one evidence-backed reason exists:
 
 Ordinary next-step uncertainty should be resolved through source materials, runtime evidence, a focused agent pass, or a reversible assumption. It is not a pause reason.
 
-Stop when:
+Completion gate — stop as `complete` only when:
 
 - Spec, Eval, and goal contract verification pass
-- every required task is done, deferred as non-blocking, or recorded as blocked by a real pause condition
+- every required task is done; remaining required work must not be silently
+  converted into a pause or deferral
 - required artifacts and evidence are current
 - no accepted blocker or major finding remains unresolved
 - deferred findings are minor, out of scope, or explicitly moved to future work
 
 After these conditions pass, complete the run. Additional installation, publication, broader real-world validation, or hardening is blocking only when it is part of the goal contract, the user changes the target, or evidence shows the contract cannot satisfy the user's target.
+
+Pause gate — stop as `paused` when a true pause condition prevents safe
+progress. Keep the affected task and any accepted blocker/major finding open,
+record the exact resume condition, and do not claim completion until the
+completion gate passes after resumption.
 
 Pause when:
 

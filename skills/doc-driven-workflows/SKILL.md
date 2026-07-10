@@ -1,6 +1,6 @@
 ---
 name: doc-driven-workflows
-description: "Use when the user explicitly invokes $doc-driven-workflows, asks for doc-driven/code-docs sync, architecture/tech-stack/operation-flow/call-path docs, alignment review, or open-question ledgers; or when active workflow/project guidance requires maintaining declared source-of-truth docs. Do not use merely because docs exist."
+description: "Use only when the user explicitly invokes $doc-driven-workflows, or an active workflow/project instruction routes here, for doc-driven code/docs sync, architecture/tech-stack/operation-flow/call-path docs, alignment review, open-question ledgers, or required source-of-truth maintenance. Do not use merely because docs exist."
 ---
 
 # Doc-Driven Workflows
@@ -31,12 +31,12 @@ implementation.
 
 ## Gates
 
-1. Invocation allowed: user asked, project guidance requires it, or declared
-   source-of-truth docs may drift.
+1. Entry valid: explicit `$doc-driven-workflows`, an active workflow route, or a
+   project instruction that explicitly requires this maintenance.
 2. Mode resolved from `references/modes-and-gates.md`: bootstrap, maintenance,
    or no-op.
-3. Evidence current: source, config, tests, runtime evidence, project guidance,
-   or official external docs.
+3. Maintenance eligible: declared source-of-truth docs may actually drift;
+   evidence is current from source, config, tests, runtime, or guidance.
 4. Fact has one home. Link instead of duplicating.
 5. Uncertainty goes to the open-question ledger, not confirmed docs.
 
@@ -59,9 +59,13 @@ If no, stay quiet.
 
 Read only what the mode needs:
 
-- `references/modes-and-gates.md`: invocation, mode, paths, action strength.
-- `references/document-patterns.md`: doc set and writing rules.
-- `references/project-shapes.md`: shape detection and scale adaptation.
+- Always read [modes-and-gates.md](references/modes-and-gates.md) after this
+  skill is invoked to resolve bootstrap, maintenance, or no-op.
+- Read [document-patterns.md](references/document-patterns.md) only when creating
+  or materially changing a doc-driven documentation set.
+- Read [project-shapes.md](references/project-shapes.md) for bootstrap, or when
+  maintenance changes project shape, workspace layout, or an
+  architecture-shaping dependency.
 
 ## Language
 

@@ -35,9 +35,9 @@ Use these rules across the development workflow skills.
 
 - After the user delegates a goal, keep progressing through the workflow until completion, a true blocker, or an explicit user redirect.
 - Do not make the user a message bus for prompts, worker summaries, routine next-batch choices, or ordinary agent disagreements.
-- Prefer direct callable subagents only when named in a matching user-approved
-  Agent Model Profile and already visible; use manual prompts as fallback or by
-  user request.
+- Route dispatched workers through `agent-runtime`: native-default host workers
+  need lifecycle handling but no model profile; named/model-selectable or
+  external/session participants need their applicable profile/authorization gates.
 - Resolve uncertainty with source evidence, focused agents, or reversible assumptions before escalating.
 - Continue non-overlapping work when one lane blocks.
 

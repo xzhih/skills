@@ -37,21 +37,50 @@ Use lifecycle owner skills such as `dev-flow`, `agent-review`, `agent-debate`,
 this skill to decide whether the chosen agents/models/tools are approved,
 runnable, and recordable.
 
+## Dispatch Classes
+
+Classify the selected step before loading gates. Apply the first matching class
+in this order; classes are exclusive. A stronger boundary always wins over a
+lighter participant-selection match:
+
+```text
+1. external/session:
+   external, paid, account-bound, editor/protocol, data-leaving, or continuity
+   for one of those surfaces -> profile + capability/authorization +
+   lifecycle/session gates
+
+2. profile-governed:
+   otherwise named/model-selectable participant, requested model/provider
+   diversity, or a claim dependent on participant/model assignment
+   -> Agent Model Profile
+
+3. native-default:
+   otherwise fresh or resumed host-exposed worker with no participant/model
+   choice or external boundary -> worker lifecycle only; no Agent Model Profile
+```
+
+Never classify an external, paid, account-bound, editor/protocol, or data-leaving
+participant as `profile-governed` merely because it is also named or
+model-selectable. Resuming a host-native worker does not by itself make that
+worker `external/session`.
+
+`callable` alone is not a profile trigger. Separate fresh native-default
+sessions may support an independent-session claim, but never an unverified
+model/provider-diversity claim.
+
 ## Required References
 
-- Read [worker-lifecycle.md](../dev-flow/references/worker-lifecycle.md) before
+- Read [worker-lifecycle.md](references/worker-lifecycle.md) before
   dispatching, waiting on, resuming, closing, or re-dispatching any worker or
   external/session agent.
-- Read [agent-model-profile.md](references/agent-model-profile.md) before any
-  multi-agent operation, named participant assignment, model-diverse review,
-  external-agent use, review-repair loop, or claim of independent agent
-  coverage.
+- Read [agent-model-profile.md](references/agent-model-profile.md) for a
+  profile-governed or external/session dispatch, not for native-default alone.
 - Read [capability-cache.md](references/capability-cache.md) when checking
   selected participants, candidate sets, capability state, authorization, or
   runnability.
 - Read [external-agent-sessions.md](references/external-agent-sessions.md) when
   assigning external, shell, editor, or protocol agents across rounds, or when
-  session continuity matters.
+  continuity for one of those session types matters.
 - Read [opencode.md](references/opencode.md) before declaring OpenCode
   unavailable, checking an approved OpenCode provider/model, running
   `opencode`, or resuming an OpenCode session.

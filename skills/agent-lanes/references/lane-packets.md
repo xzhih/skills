@@ -20,6 +20,7 @@ Lane workspace:
 Branch:
 Base branch:
 Base commit:
+Worker class: native-default | profile-governed | external/session
 Selected participant/model:
 
 Before starting, read:
@@ -55,6 +56,7 @@ Stop and report blocked if:
 Handoff must include:
 - lane status: review | blocked
 - lane workspace and branch
+- worker class; agent/session id only when the runtime exposes it to the worker
 - participant/model actually used when known
 - touched files
 - implementation summary
@@ -85,4 +87,6 @@ Handoff must include:
 
 ## Handoff Prompt Fallback
 
-When callable subagent tools are unavailable, or the user requests manual threads, output one fenced prompt per lane. Keep each prompt self-contained and copy-ready. Do not rely on the user to remember rules from another prompt.
+When no permitted runnable dispatch surface exists, or the user requests manual
+threads, output one fenced prompt per lane. Keep each prompt self-contained and
+copy-ready. Do not rely on the user to remember rules from another prompt.

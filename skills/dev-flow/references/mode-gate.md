@@ -21,10 +21,33 @@ Durable
   under the declared owner, update the index, and keep a stable coverage trace.
 
 Multi-agent / Lane
-  Work dispatched to subagents, worktrees, external agents, reviewers, or
-  parallel lanes. Stable trace labels, owned surfaces, collision checks, evidence
-  expectations, and handoff formats are required.
+  Parallel/disjoint workers, coordinated reviewer rounds, external/session
+  agents, or work needing durable coordination. Stable ownership, collision,
+  evidence, and handoff controls are required. One focused native-default
+  reviewer does not promote the whole lifecycle to this mode by itself.
 ```
+
+## Review Weight
+
+Mode controls review ceremony, not whether an owner-mandated gate exists:
+
+```text
+Lightweight: required review is inline; one fresh native-default reviewer by default
+Standard: focused whole-artifact review; add reviewers only for evidence/risk
+Durable: persist review/findings state when continuity or auditability needs it
+Multi-agent / Lane: blind whole-artifact first round; normalize and converge
+  when high-impact findings, disagreement, or repeated repair triggers it
+```
+
+An owner-mandated review uses a reviewer independent of artifact drafting. If no
+independent reviewer is available, keep the gate paused unless the user records
+an artifact-scoped waiver. Independence does not require multiple models.
+
+An accepted blocker/major closes only when fixed and rechecked, or rejected with
+evidence. A true user decision or unavailable required dependency pauses the
+gate. Ordinary deferral never closes it. To move work out of scope, first update
+the owning requirement/Spec/Eval/Plan with proper authority and trace; only then
+may the resulting minor/out-of-scope/future item be deferred with owner/risk.
 
 ## Trace Rule
 

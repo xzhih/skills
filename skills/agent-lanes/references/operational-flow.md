@@ -1,17 +1,18 @@
 # Operational Flow
 
-Use this reference when dispatching workers directly, persisting lane state, or computing the next batch.
+Use this reference when dispatching workers directly, persisting lane state, or
+dispatching a next batch approved by `integration-review`.
 
 ## Contents
 
 - Moderator Loop
 - Direct Dispatch Procedure
-- Autonomous Batch Continuation
+- After Returned Work
 - Lane Registry Shape
 - Lane States
 - Transitions
 - Lane Workspace Contract
-- Next Batch Algorithm
+- Approved Next-Batch Dispatch
 
 ## Moderator Loop
 
@@ -21,22 +22,24 @@ restore context
   -> preclaim coordination ownership
   -> create or verify lane workspaces
   -> record base branch and base commit
-  -> dispatch callable subagents when selected by the user profile and visible
+  -> classify each worker through agent-runtime and dispatch when its gates pass
   -> record agent/session ids
   -> collect structured handoffs
-  -> inspect diffs and evidence
-  -> update lane registry
-  -> merge, repair, block, conflict, or abandon
-  -> recompute next safe batch
-  -> dispatch next safe batch or report true pause condition
+  -> route handoffs to integration-review for diff/evidence verdicts
+  -> let its main-thread moderator integrate ready lanes and record
+     post-integration evidence
+  -> receive the resulting registry state and approved next safe set, if any
+  -> revalidate dispatch assumptions and dispatch or report a true pause
 ```
 
-Manual prompt output is the fallback, not the default, when callable subagent tools exist.
+Manual prompt output is the fallback, not the default, when a permitted runnable
+dispatch surface exists.
 
 ## Direct Dispatch Procedure
 
-1. Confirm the user-approved host subagent surface is visible; do not scan for
-   unapproved agent surfaces.
+1. Read `agent-runtime`; native-default host workers need lifecycle handling but
+   no profile, while named/model-selectable/external/session workers use their
+   applicable gates. Do not scan for unrequested external surfaces.
 2. Create one worker per lane only after owned and forbidden surfaces are clear.
 3. Give each worker a complete lane packet.
 4. Record dispatch metadata:
@@ -44,6 +47,8 @@ Manual prompt output is the fallback, not the default, when callable subagent to
 ```text
 lane_id:
 agent_id/session_id:
+worker class:
+participant/model when governed or known:
 lane_workspace:
 branch:
 base_branch:
@@ -58,17 +63,21 @@ expected handoff:
 6. Collect structured handoffs from workers.
 7. Route returned lanes to `integration-review`.
 
-If no user-approved callable subagent surface is visible, emit manual prompts
-and mark dispatch mode as `manual`.
+If no permitted runnable dispatch surface exists, emit manual prompts and mark
+dispatch mode as `manual`.
 
-## Autonomous Batch Continuation
+## After Returned Work
 
-After integration review, the moderator chooses the next safe action. Do not ask the user to pick the next batch when ownership, dependencies, and evidence can decide it.
+`integration-review` owns returned-lane classification, the moderator-side
+`ready_to_merge -> merged` transition, post-integration evidence, and next-batch
+eligibility. This skill consumes its resulting registry state and dispatches
+the approved safe set. Do not independently recompute eligibility from worker
+summaries or mark a lane merged from worker-local evidence.
 
 Continue by:
 
-- dispatching the next maximal safe set of independent lanes
-- assigning repair lanes for valuable but incomplete work
+- dispatching the next safe set approved by the integration verdict
+- dispatching repair lanes named by the integration verdict
 - doing non-overlapping moderator cleanup or verification while lanes run
 - recording blocked lanes honestly and moving around them when possible
 
@@ -82,6 +91,8 @@ The moderator-owned registry should track:
 lane_id:
 status:
 agent/session:
+worker class:
+participant/model when governed or known:
 lane_workspace:
 branch:
 base_branch:
@@ -111,6 +122,22 @@ abandoned
 ```
 
 Workers may report only `review` or `blocked`. The moderator sets all other states after inspecting diffs and evidence.
+
+Integration verdict mapping:
+
+```text
+ready-to-merge -> ready_to_merge
+repair-in-lane -> repair_in_lane
+blocked -> blocked
+conflict -> conflict
+rejected -> abandoned (reason: rejected)
+abandoned -> abandoned
+merged -> merged only after actual integration
+```
+
+The `ready_to_merge -> merged` transition requires the integration action,
+resulting target state/diff, fresh post-integration verification, coverage
+updates, and moderator registry evidence defined by `integration-review`.
 
 ## Transitions
 
@@ -157,17 +184,14 @@ Before dispatch:
 
 If base freshness is uncertain, delay dispatch or assign a repair/rebase lane explicitly.
 
-## Next Batch Algorithm
+## Approved Next-Batch Dispatch
 
-Before continuing with another batch:
+Before dispatching a safe set returned by `integration-review`:
 
-1. Classify every returned lane.
-2. Merge, park, repair, block, or abandon current review lanes.
-3. Recompute changed surfaces from actual diffs.
-4. Invalidate queued lanes whose assumptions, base commit, or owned surfaces changed.
-5. Delay lanes depending on unmerged review work.
-6. Choose the maximal safe set with disjoint owned surfaces and verification paths.
-7. Keep high-collision docs, contracts, migrations, and evidence packets single-owner.
-8. Dispatch the next safe set when callable subagents are selected by the
-   user-approved profile and visible, or emit fallback prompts when direct
-   dispatch is unavailable or requested.
+1. Confirm the verdict names the resolved returned lanes and approved safe set.
+2. Check that no new source, base, ownership, or collision change invalidated it.
+3. Recheck each approved lane's workspace, base commit, owned/forbidden surfaces,
+   verification, and packet.
+4. Keep high-collision docs, contracts, migrations, and evidence single-owner.
+5. Classify workers through `agent-runtime`, dispatch the still-safe set, or
+   return stale assumptions to `integration-review` for recomputation.

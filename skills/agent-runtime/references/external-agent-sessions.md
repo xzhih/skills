@@ -43,8 +43,11 @@ Which phases are allowed?
 Any privacy, cost, or context limits?
 ```
 
-Use only the approved external agent(s), model(s), and phases. If the user
-declines, continue with host-native subagents or main-agent review.
+Use only the approved external agent(s), model(s), and phases. If external
+coverage is optional and the user declines, continue with host-native subagents
+or main-agent review and record the lower coverage. If a locked Eval or explicit
+request requires external/model-specific coverage, record it unmet and pause or
+ask whether that requirement should change; never silently substitute.
 
 For review/rebuttal/recheck, tell the external agent not to edit files. For implementation, include write boundaries and delegate only when the main agent can inspect and verify the result.
 
@@ -70,8 +73,10 @@ Store raw or summarized round outputs only when needed for auditability, handoff
 1. Round 1: blind source-first or artifact-focused review.
 2. Moderator normalizes claims, evidence, findings, conflicts, questions, sign-offs.
 3. Round 2+: send blackboard snapshot for targeted rebuttal, recheck, or sign-off.
-4. Stop only when blocker/major findings are fixed, rejected with evidence,
-   deferred as non-blocking, or escalated by a real pause condition.
+4. Stop only when accepted blocker/major findings are fixed and rechecked,
+   rejected with evidence, or held open by a true pause condition.
+5. Defer only minor, out-of-scope, or future items after the owning artifact and
+   trace record the scope change, reason, owner, and remaining risk.
 ```
 
 The moderator owns shared state. External agents do not write shared blackboards by default.

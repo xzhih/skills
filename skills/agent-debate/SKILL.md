@@ -29,8 +29,9 @@ Use [agent-review](../agent-review/SKILL.md) for one concrete artifact. Use
 ## Preflight
 
 - restore only the source context needed for the debate
-- use [agent-runtime](../agent-runtime/SKILL.md) before model-selectable,
-  callable, session, or external participants
+- route every dispatched participant through
+  [agent-runtime](../agent-runtime/SKILL.md) for worker lifecycle and the
+  applicable native-default, profile-governed, or external/session gates
 - get authorization before sending content to external, paid, account-bound, or
   data-leaving agents
 
@@ -42,8 +43,10 @@ Use [agent-review](../agent-review/SKILL.md) for one concrete artifact. Use
 - Round 2+: send the same conflict summary back for rebuttal when needed.
 - Promote only evidence-backed findings, assumptions, tradeoffs, and decisions.
 
-Stop when no accepted blocker/major disagreement remains, remaining issues are
-deferred, or a true user decision remains.
+Stop with a decision only when no accepted blocker/major disagreement remains.
+Defer only minor, out-of-scope, or future issues with reason, owner, and risk.
+If a true user decision remains, pause and return the exact decision instead of
+claiming convergence.
 
 ## Output
 

@@ -33,14 +33,19 @@ lane status, conflicts, and next batches.
 Before sending review work:
 
 - identify artifact, goal, boundary, and evidence standard
-- use [agent-runtime](../agent-runtime/SKILL.md) before model-selectable,
-  callable, session, or external reviewers
+- route every reviewer dispatched as a worker through
+  [agent-runtime](../agent-runtime/SKILL.md); it classifies native-default,
+  profile-governed, and external/session gates
 - get authorization before sending content to external, paid, account-bound, or
   data-leaving reviewers
 
 ## Review Rules
 
-- First round is blind, independent, and source-first when risk matters.
+- Use [mode-gate.md](../dev-flow/references/mode-gate.md) **Review Weight** for
+  ceremony/intensity; do not make a mandatory owner gate optional or turn one
+  focused review into multi-agent ceremony without another trigger.
+- First round uses a reviewer independent of artifact drafting and is
+  source-first. Keep it blind to other conclusions when risk matters.
 - Reviewer agreement is not proof.
 - Accept findings only with artifact/source evidence.
 - Treat **hollowness as a defect**: vague goals, missing concrete detail,
@@ -48,8 +53,9 @@ Before sending review work:
   decisions are at least **major** (blocker if the next gate would rely on
   them). Prefer detailed-and-concrete over short-and-vague; reject long-and-empty
   the same way. See mode-gate Substance Rule.
-- Use [review-convergence.md](../agent-self-driving/references/review-convergence.md)
-  for blocker/major findings, rebuttal, or recheck.
+- Use [review-convergence.md](references/review-convergence.md)
+  for accepted blocker/major findings, evidence disputes, rebuttal, or their
+  required fresh recheck—not for a minor-only focused recheck.
 - Use [output-normalization.md](../agent-self-driving/references/output-normalization.md)
   before promoting agent output into findings or repair tasks.
 

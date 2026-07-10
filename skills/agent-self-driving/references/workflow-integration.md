@@ -63,7 +63,6 @@ final handoff
 This skill owns orchestration-internal state:
 
 ```text
-user-approved agent profile
 task packets
 raw agent outputs
 blackboard round state
@@ -74,6 +73,10 @@ execution queue overlay when the parent workflow does not own one
 status checkpoints
 evidence collected for orchestration
 ```
+
+Participant/model profiles, capability checks, authorization, and session
+ledgers belong to `agent-runtime` under `docs/dev-flow/capabilities/`. Keep only
+links to those records in the orchestration source map.
 
 If no parent workflow owns task-level state, first prefer routing to `dev-flow`
 or the relevant focused owner. This skill may own task-level artifacts under
@@ -87,6 +90,7 @@ When a parent workflow exists, keep a compact source map in `docs/agent-self-dri
 
 ```text
 active_parent_workflow:
+parent_requirements:
 parent_spec:
 parent_eval:
 parent_roadmap:
@@ -94,14 +98,20 @@ parent_plan:
 parent_task_queue:
 parent_goal:
 parent_status:
+active_requirements:
 active_spec:
 active_eval:
+active_plan:
 orchestration_goal:
 active_blackboard:
 active_task_queue:
 active_findings_ledger:
+active_agent_outputs:
 latest_status_checkpoint:
 latest_evidence:
+runtime_agent_profile:
+runtime_capabilities:
+runtime_sessions:
 last_promoted_update:
 ```
 
@@ -116,7 +126,7 @@ Keep orchestration details local to this skill so external systems are not pollu
 - reviewer scratch notes
 - rejected hypotheses
 - intermediate task packets
-- user-approved agent/model profile evidence
+- links to runtime-owned participant/model approval evidence
 - detailed findings status and recheck tracking
 - internal status checkpoints
 

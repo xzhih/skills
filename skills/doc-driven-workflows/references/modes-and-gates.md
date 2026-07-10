@@ -25,11 +25,12 @@ Separate two decisions:
 
 A doc-driven docs folder existing in a repository makes maintenance possible, not mandatory.
 
-Use the skill only when:
+This reference runs only after one of these entry authorities selected the
+skill; it does not broaden activation from natural-language topic matching:
 
-- the user explicitly asks for doc-driven docs, doc sync, architecture docs, tech-stack docs, workspace or multi-repo docs, full-chain docs, source-linked docs, operation flows, call paths, code/docs alignment review, or an open-question ledger for doc-driven uncertainty
+- the user explicitly invokes `$doc-driven-workflows`
+- an already-loaded workflow explicitly routes here
 - project guidance explicitly requires doc-driven maintenance for relevant code changes or review
-- the user asks to review whether code and docs are aligned
 
 Do not use the skill when:
 
@@ -37,25 +38,27 @@ Do not use the skill when:
 - a repository merely lacks docs
 - a code task could theoretically affect docs, but no user request or project guidance requires doc-driven maintenance
 
-Maintenance runs at natural boundaries: after a requested code change, during review summary, before commit checks, or when the user asks about doc sync. It does not run after every file read or during every small edit.
+After valid entry, maintenance runs at natural boundaries such as review or
+closeout. It does not run after every file read or small edit.
 
 ## Bootstrap Gate
 
-Bootstrap requires explicit user intent.
+Bootstrap requires explicit `$doc-driven-workflows` intent.
 
 Allowed examples:
 
 ```text
-Create doc-driven docs for this project.
-Build architecture and operation-flow docs that stay synchronized with code.
-Build source-backed docs for this workspace or multi-repo project.
-Document the architecture and tech stack for agent handoff.
-Set up docs/doc-driven-workflows for this repo.
-Make this codebase documentation-driven.
-Create a doc-driven open-question ledger for this repo.
+Use `$doc-driven-workflows` to create docs for this project.
+Use `$doc-driven-workflows` to build architecture and operation-flow docs.
+Use `$doc-driven-workflows` for source-backed workspace/multi-repo docs.
+Use `$doc-driven-workflows` to document architecture/tech stack for handoff.
+Use `$doc-driven-workflows` to set up its doc root for this repo.
+Use `$doc-driven-workflows` to make this codebase documentation-driven.
+Use `$doc-driven-workflows` to create its open-question ledger.
 ```
 
-If the user explicitly asks only for a doc-driven open-question ledger and no doc-driven docs exist yet, treat it as a minimal bootstrap for the ledger and index needed to locate it.
+If explicit invocation asks only for an open-question ledger and no doc-driven
+docs exist, use a minimal bootstrap for the ledger and index.
 
 Not enough for bootstrap:
 

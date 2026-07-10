@@ -26,7 +26,6 @@ Runtime artifacts belong to the target project:
 docs/agent-self-driving/
   index.md
   blackboards/
-  capabilities/
   discussions/
   agent-outputs/
   reviews/
@@ -50,15 +49,12 @@ If the target project is unclear, first resolve it from the current working dire
 ```text
 index.md
   Current task index, source map, links to active parent workflow, Spec, Eval,
-  goal, plan, task queue, blackboard, review, capability, and evidence files.
+  goal, plan, task queue, blackboard, review, runtime-owned capability, and
+  evidence files.
 
 blackboards/
   Moderator-owned round state for multi-agent judgment: topic, artifact under
   review, claims, evidence, conflicts, open questions, decisions, and sign-offs.
-
-capabilities/
-  User-approved agent/model profile, selected participant checks, and external
-  session mappings for this target project.
 
 discussions/
   Execution preflight, imported formulation snapshots from `agent-grilling`,
@@ -66,14 +62,17 @@ discussions/
   active adversarial round state when it needs persistence.
 
 agent-outputs/
-  Raw or summarized agent round outputs, external-agent session mappings, and
-  per-agent handoff notes when auditability, rebuttal, or resume needs them.
+  Raw or summarized agent round outputs and per-agent handoff notes when
+  auditability, rebuttal, or resume needs them.
 
 reviews/
   Review contracts, findings ledgers, normalized reviewer findings, repair tracking, and recheck evidence.
 
 evidence/
-  Commands, screenshots, logs, deployment URLs, test results, source citations, and final proof.
+  Orchestration-specific provenance and evidence links. When a parent workflow
+  owns lifecycle evidence or final proof, link it here instead of copying it.
+  Store commands, screenshots, logs, URLs, or test results here only when no
+  parent owner exists or the evidence proves orchestration behavior itself.
 
 archive/
   Completed, superseded, abandoned, or wrong-assumption orchestration state
@@ -87,10 +86,10 @@ When resuming a long task, restore state from artifacts before continuing:
 ```text
 1. docs/agent-self-driving/index.md
 2. active parent workflow source map, if present
-3. `docs/dev-flow/index.md` and its active Requirements, Spec, Eval, Plan,
-   evidence, and handoff links when present
-4. focused owner artifacts from agent-requirements-analysis, agent-spec,
-   agent-eval, agent-plan, agent-lanes, or integration-review when active
+3. when parent/lifecycle state is uncertain, route through dev-flow ->
+   project-context and consume its compact source-backed context packet
+4. only the active parent/owner artifacts linked by that source map or returned
+   context packet for the current phase
 5. orchestration-owned Spec/Eval/goal/plan/task overlays only when this skill
    truly owns them
 6. active task queue or lane coordination state when broad execution has started
@@ -98,7 +97,7 @@ When resuming a long task, restore state from artifacts before continuing:
 8. findings ledger and review contract under reviews/
 9. relevant raw agent output under agent-outputs/ when needed for rebuttal or handoff
 10. latest evidence under evidence/
-11. user-approved agent profile and external session ledger when assigning agents
+11. linked runtime-owned profile/capability/session records when assigning agents
 ```
 
 Do not read `archive/` during normal resume. Read it only when the active index
@@ -148,6 +147,9 @@ active_findings_ledger:
 active_agent_outputs:
 latest_status_checkpoint:
 latest_evidence:
+runtime_agent_profile:
+runtime_capabilities:
+runtime_sessions:
 last_promoted_update:
 ```
 
@@ -178,10 +180,10 @@ after blackboard rounds:
   transcripts unless auditability requires it.
 
 after external-agent rounds:
-  Record or refresh the external session ledger before using resume/continue
-  flags again. Store raw outputs under `agent-outputs/` only when needed for
-  auditability, rebuttal, handoff, or recovery; promote only normalized items
-  into blackboards, reviews, plans, tasks, or evidence.
+  Have `agent-runtime` record or refresh its session ledger before using
+  resume/continue flags again. Store raw outputs under `agent-outputs/` only when
+  needed for auditability, rebuttal, handoff, or recovery; promote only
+  normalized items into blackboards, reviews, plans, tasks, or evidence.
 
 after Spec, Eval, goal, scope, roadmap, plan, parent workflow, or boundary changes:
   Update the owning artifact and the `index.md` source map in the same bounded
@@ -201,8 +203,8 @@ after finding status changes:
   blocker or major findings as closed.
 
 after selected participant or authorization changes:
-  Update the user-approved agent profile before assigning packets that depend on
-  the new participant state.
+  Have `agent-runtime` update its canonical profile/capability record; refresh
+  only this index's link before assigning dependent packets.
 
 before pause, complete, or handoff:
   Verify `index.md` points to the current parent workflow, Spec/Eval sources,
@@ -218,7 +220,7 @@ traceable:
 - completed self-driving runs
 - abandoned or superseded blackboards
 - raw agent outputs for a replaced review round
-- old capability snapshots or external-agent ledgers
+- stale links to superseded runtime capability/session records
 - evidence packages that no longer close the current Eval
 - wrong-assumption task overlays
 

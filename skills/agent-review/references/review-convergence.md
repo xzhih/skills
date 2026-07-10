@@ -1,6 +1,8 @@
 # Review And Convergence
 
-Use this reference for Level 2+ audits, Level 3 bounded review-repair convergence, final verification review, review contracts, findings ledgers, and stop/pause decisions.
+Use this reference for accepted blocker/major findings, evidence disputes,
+rebuttal, fresh recheck, Level 2+ audits, bounded review-repair convergence,
+review contracts, findings ledgers, and stop/pause decisions.
 
 ## Contents
 
@@ -38,11 +40,23 @@ Escalate to Level 3 when:
 
 ## Review Contract
 
-Every review round needs an explicit review contract. For Level 1 it can be inline. For Level 2+ persist it when review state must survive:
+Every review round needs an explicit review contract. For Level 1 it can be
+inline. Persist it only when review state must survive. Storage follows the
+active owner:
 
 ```text
-docs/agent-self-driving/reviews/<YYYY-MM-DD>-<slug>-review-contract.md
+active agent-self-driving controller:
+  docs/agent-self-driving/reviews/<YYYY-MM-DD>-<slug>-review-contract.md
+
+active parent or artifact owner:
+  that owner's declared review/evidence location
+
+no durable owner or continuity need:
+  keep the contract inline
 ```
+
+Never create `docs/agent-self-driving/` merely because a standalone review,
+Spec gate, or Plan gate found a blocker/major issue.
 
 Use only fields that help:
 
@@ -223,17 +237,21 @@ Findings without clear evidence are hypotheses. They can trigger investigation, 
 
 ## Findings Ledger
 
-Use standalone ledgers under:
+Persist a standalone ledger only when continuity, auditability, handoff, or
+multiple rounds require it. Its location follows the active owner:
 
 ```text
-docs/agent-self-driving/reviews/
+active agent-self-driving controller:
+  docs/agent-self-driving/reviews/<YYYY-MM-DD>-<slug>-findings.md
+
+active parent or artifact owner:
+  that owner's declared review/evidence location
+
+no durable owner or continuity need:
+  keep findings inline
 ```
 
-Suggested file:
-
-```text
-docs/agent-self-driving/reviews/<YYYY-MM-DD>-<slug>-findings.md
-```
+Do not create self-driving state when that controller is not active.
 
 Track enough to preserve convergence:
 
@@ -258,11 +276,20 @@ Status transitions:
 ```text
 open -> accepted -> fixed -> rechecked
 open -> rejected
-open -> deferred
+open minor/out-of-scope -> deferred (reason, owner, remaining risk)
 question -> answered -> accepted/rejected/deferred
 ```
 
-Accepted blocker and major findings stay visible until fixed and rechecked. Rejected findings need a reason tied to the goal, boundary, or evidence. Deferred findings must be minor, out of scope, blocked on a human decision, or explicitly moved to future work.
+Accepted blocker and major findings stay visible until fixed and rechecked.
+Rejected findings need a reason tied to the goal, boundary, or evidence. Deferred
+findings must be minor, out of scope, or explicitly moved to future work, with
+reason, owner, and remaining risk. Any scope/future move first updates the owning
+requirement/Spec/Eval/Plan and its trace.
+
+Accepted blocker/major findings cannot become ordinary `deferred`. If new
+evidence changes severity or scope, record that change first. A required human
+decision leaves the finding and gate `paused`; it is not a completion-safe
+deferral.
 
 ## Sign-Off
 
@@ -291,8 +318,11 @@ Stop when:
 - no accepted blocker or major finding remains open
 - accepted blocker and major findings are fixed and rechecked when repair was required
 - rejected findings include clear reasons tied to the goal contract or boundary
-- open questions are answered, converted to safe assumptions, deferred as non-blocking, or escalated to the user
-- deferred findings are minor, out of scope, or waiting on a human decision
+- open questions are answered, converted to safe assumptions, or reclassified
+  as minor/out-of-scope/future before deferral; otherwise they leave the run
+  paused on a required user decision
+- deferred findings are minor, out of scope, or explicitly moved to future work
+  with reason, owner, remaining risk, and any owning-artifact update recorded
 - required artifacts are updated
 - final evidence closure proves the outcome and records remaining risks or deferred items
 

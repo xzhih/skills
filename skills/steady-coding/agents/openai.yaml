@@ -1,0 +1,7 @@
+interface:
+  display_name: "Steady Coding"
+  short_description: "Grounded, reviewable software engineering methodology"
+  default_prompt: "Use $steady-coding to handle this software engineering task with material assumptions when present, verification, and adversarial review."
+
+policy:
+  allow_implicit_invocation: true

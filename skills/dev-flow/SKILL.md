@@ -1,113 +1,94 @@
 ---
 name: dev-flow
-description: "Use only when the user explicitly invokes $dev-flow, or when an active workflow routes here, to choose and sequence the development lifecycle: Requirements, Spec, Eval, Plan, execution, review/test, repair, handoff, docs, lanes, or heavier agent workflows. Do not use when one leaf skill can finish the request."
+description: "Use when the user explicitly invokes $dev-flow, or an already-loaded controller needs development lifecycle routing across multiple gates, resume/handoff state, or unclear ownership. Do not use for ordinary implementation or a single known leaf task."
 ---
 
 # Dev Flow
 
-Route complex development work to the owner skill. Do not implement, review,
-dispatch, or edit docs from this router alone.
-
-## Iron Law
+Route lifecycle to one loaded owner and continue. Own phase selection and
+closeout, not leaf work.
 
 ```text
-ROUTE TO THE OWNER; DO NOT IMPERSONATE THE OWNER.
+SELECT -> LOAD -> CONTINUE.
 ```
 
-## Shared Rules
+## Route
 
-Before shaping lifecycle artifacts, apply:
+Use for explicit `$dev-flow` or uncertain ownership across gates, recovery,
+lanes, integration, or closeout. Route an explicit single-leaf request straight
+to its leaf.
 
-- `references/mode-gate.md`
-- `references/coverage-trace.md`
-- `references/task-checkboxes.md`
-- `references/critical-overrides.md`
+| Need or state | Owner |
+|---|---|
+| Restore uncertain persisted state | [project-context](../project-context/SKILL.md) |
+| Shape requirements | [agent-requirements-analysis](../agent-requirements-analysis/SKILL.md) |
+| Lock behavior | [agent-spec](../agent-spec/SKILL.md) |
+| Define acceptance evidence | [agent-eval](../agent-eval/SKILL.md) |
+| Build tasks or lane candidates | [agent-plan](../agent-plan/SKILL.md) |
+| Implement, verify, repair, recheck | [steady-coding](../steady-coding/SKILL.md) |
+| Review one artifact or result | [agent-review](../agent-review/SKILL.md) |
+| Resolve same-topic disagreement | [agent-debate](../agent-debate/SKILL.md) |
+| Dispatch independent lanes | [agent-lanes](../agent-lanes/SKILL.md) |
+| Classify returned lanes / next batch | [integration-review](../integration-review/SKILL.md) |
+| Govern a decision discussion | [discussion-workflows](../discussion-workflows/SKILL.md) |
+| Maintain durable technical truth | [doc-driven-workflows](../doc-driven-workflows/SKILL.md) |
+| Enter explicit long-task automation | [agent-self-driving](../agent-self-driving/SKILL.md) |
+| Check capability, authorization, sessions | [agent-runtime](../agent-runtime/SKILL.md) |
+| Close, pause, or hand off after evidence | `dev-flow` |
 
-Read `references/artifact-layout.md` only when artifacts must persist.
+## Transition Contract
 
-## Owners
+1. When continuation, handoff, persisted artifacts, or returned work makes
+   lifecycle state uncertain, first read and run `project-context`.
+2. From source, choose the lightest mode, first missing gate, and one owner.
+3. Read that child's `SKILL.md` completely, then its conditionally required refs.
+4. Act unless a true user decision blocks; return here only for the next gate,
+   state update, or evidence-backed close/handoff.
 
-```text
-requirements -> agent-requirements-analysis
-Spec -> agent-spec
-Eval -> agent-eval
-Plan / lane candidates -> agent-plan
-parallel batches -> agent-lanes
-returned lanes -> integration-review
-durable architecture / operation / call-path docs -> doc-driven-workflows
-long-task orchestration -> agent-self-driving
-agent capability / session lifecycle -> agent-runtime
-```
+An owner label is not a transition. Report unavailable children; never make the
+user dispatch internal workflows.
 
-Use one owner for each fact. Do not create competing docs.
+## Active Controller
 
-## Use This Router
+With active `agent-self-driving`, use `leaf-route-only`: retain the controller,
+load a leaf, and return evidence. Never restart, nest, or route back into it.
+Enter only after explicit `$agent-self-driving` invocation when none is active.
 
-Use when the next owner or sequence is unclear, or when work crosses context
-recovery, lifecycle gates, docs, lanes, integration, or heavier review.
-
-Do not use when one leaf skill can finish:
-
-- ordinary coding/debugging -> implementation workflow
-- clear discussion recap -> `discussion-workflows`
-- clear doc sync -> `doc-driven-workflows`
-- clear lane dispatch -> `agent-lanes`
-- same-topic debate -> `agent-debate`
-- same-artifact review -> `agent-review`
-
-## Lifecycle
+## Gates and Weight
 
 ```text
 requirements -> Spec -> Eval -> Plan -> execute -> review/test -> repair/recheck -> close
-```
-
-Start at the first missing gate. Skip what is already obvious for the task size.
-Small work may keep compact artifacts in chat. Persist only when recovery,
-handoff, risk, or multi-agent work needs it.
-
-Coverage trace:
-
-```text
 requirement -> behavior -> check -> task -> evidence
 ```
 
-Never claim completion while a non-deferred trace item lacks a task, evidence,
-blocker, or deferral.
+Start at the first source-evident missing gate. `Lightweight` uses compact chat
+trace and direct execution; `Standard` separates confusable gates; `Durable`
+persists recovery state; `Lane` adds ownership, collision, and integration.
 
-## Scale
+Child contracts own gates: Spec and Plan retain mandatory whole-artifact review;
+Lightweight makes it compact, not optional. Implementation verification and
+repair belong to `steady-coding`.
 
-```text
-small: one-line requirement -> compact Spec/Eval -> checkbox task -> verify
-medium: separate gates in concise notes; review risky gates only
-large: persisted lifecycle artifacts; review important gates
-high-risk: review, repair, and recheck until blocker/major issues close
-```
+Apply [mode-gate.md](references/mode-gate.md) before shaping artifacts. Read
+[coverage-trace.md](references/coverage-trace.md) for confusable trace items,
+persistence, lanes, handoff, or close; read
+[task-checkboxes.md](references/task-checkboxes.md) when Plan/lane/handoff state
+tracks execution. Read [critical-overrides.md](references/critical-overrides.md)
+before persisted writes, parallel dispatch/integration, completion claims, or
+authorization/user-decision boundaries. Read
+[artifact-layout.md](references/artifact-layout.md) only when artifacts must
+persist for risk, handoff, multi-agent continuity, or recovery.
 
-## Progression
+## Complete, Pause, or Hand Off
 
-When the user delegates a goal, continue to the next source-evident owner
-instead of stopping at routing advice. Ask the user only for true user
-decisions: product direction, taste, priority, privacy/cost, destructive/public
-action, external-agent authorization, or unavailable information.
+Mark `complete` only from source-matched status, current checks, rechecked
+repairs, no unresolved accepted blocker/major, and every required trace item
+completed or validly deferred after its owning artifact was updated.
 
-## Output
+Use `paused` when a true user decision, unavailable required dependency,
+authorization boundary, missing access, or unavailable verification prevents a
+safe next action. Record the raw blocker evidence, owner, effect, and exact
+resume condition; never present paused work as complete.
 
-Return the smallest routing answer that lets work continue:
-
-```text
-Owner:
-Why:
-Next action:
-Do not do yet:
-```
-
-Omit empty headings. If the next action needs no user input, continue into the
-focused skill.
-
-## Red Flags
-
-- Loading this router because words like "plan", "review", or "docs" appear.
-- Turning a small task into lifecycle ceremony.
-- Writing durable docs when chat trace is enough.
-- Routing to self-driving only because work feels large.
-- Treating a routing recommendation as completed work.
+Persist a handoff only when recovery or another thread/owner needs it. Otherwise
+load the next owner and continue.

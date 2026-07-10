@@ -167,8 +167,8 @@ check.
 
 ```text
 1. Determine likely intensity and which roles need agents.
-2. Follow the Agent Model Profile dispatch gate for recommendation, approval,
-   reuse, external boundaries, and fallback policy.
+2. Classify dispatch through `agent-runtime`; follow the Agent Model Profile only
+   for profile-governed or external/session work.
 3. Record only the user-approved participants and boundaries.
 4. Run minimal checks only for the selected participants before dispatch.
 5. If a selected participant is unavailable, ask the user for a replacement unless an approved fallback is already recorded.
@@ -178,7 +178,10 @@ check.
 
 Allowed without extra confirmation:
 
-- host-native subagents exposed by the current runtime
+- `native-default` host workers exposed by the current runtime; this waives
+  external-content consent only, not named/model-selection gates
+- profile-governed host-native participants after their selection/profile gate;
+  they need no separate external-content consent
 - safe, local, non-task-bearing checks for user-selected participants, such as
   command existence or local version/help output when they do not contact remote
   services or mutate auth state

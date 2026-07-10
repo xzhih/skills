@@ -1,10 +1,10 @@
 interface:
   display_name: "Agent Self-Driving"
-  short_description: "Run long-task automation"
+  short_description: "Run evidence-backed long tasks"
   default_prompt: >-
-    Use $agent-self-driving as an explicit long-task controller that keeps
-    dev-flow, agent workflows, external-agent policy, review-repair, evidence,
-    and closure moving until completion or a true user decision; route ordinary
-    debate, review, lanes, and returned-lane work to their focused skills.
+    Use $agent-self-driving as the sole opt-in controller: delegate lifecycle and
+    leaf work to their owners, use agent-runtime for worker lifecycle and the
+    applicable participant/model/authorization/session gates, verify returned
+    evidence, and continue until completion or a true user decision.
 policy:
   allow_implicit_invocation: false

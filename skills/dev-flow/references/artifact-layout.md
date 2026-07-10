@@ -26,6 +26,7 @@ docs/dev-flow/
   specs/
   evals/
   plans/
+  capabilities/
   evidence/
   handoffs/
   archive/
@@ -58,6 +59,11 @@ plans/
   Implementation plans, task decomposition, verification commands, lane
   candidates, stop conditions, and docs impact from agent-plan.
 
+capabilities/
+  Agent-runtime-owned model profiles, selected participants, capability
+  snapshots, authorization boundaries, and external/session ledgers. Lifecycle
+  indexes link these records; they do not copy them.
+
 evidence/
   Verification commands, logs, screenshots, manual checks, review summaries,
   and final proof that close Eval criteria.
@@ -79,6 +85,10 @@ requirements/<YYYY-MM-DD>-<slug>-requirements.md
 specs/<YYYY-MM-DD>-<slug>-spec.md
 evals/<YYYY-MM-DD>-<slug>-eval.md
 plans/<YYYY-MM-DD>-<slug>-plan.md
+capabilities/agent-model-profile.md
+capabilities/selected-participants.md
+capabilities/snapshots/<YYYY-MM-DD>-<slug>.md
+capabilities/external-agent-sessions.md
 evidence/<YYYY-MM-DD>-<slug>-evidence.md
 handoffs/<YYYY-MM-DD>-<slug>-handoff.md
 ```
@@ -101,6 +111,9 @@ Active requirement:
 Active Spec:
 Active Eval:
 Active Plan:
+Runtime agent profile:
+Runtime capabilities:
+Runtime sessions:
 Latest evidence:
 Latest handoff:
 Active lanes / task queue:
@@ -206,19 +219,19 @@ item has no owner, no evidence, or only a worker claim.
 
 ## Resume Order
 
-When continuing a development goal:
+When continuing a durable development goal, route recovery through
+`project-context` and read index-first:
 
 ```text
 1. docs/dev-flow/index.md
-2. active Requirements artifact
-3. active Spec artifact
-4. active Eval artifact
-5. active Plan artifact
-6. latest evidence
-7. latest handoff
-8. active lane/task state if any
-9. docs/agent-self-driving/index.md when self-driving is active
-10. docs/doc-driven-workflows/README.md when durable docs may drift
+2. latest active handoff/status pointer when needed to resolve current phase
+3. only active Requirements/Spec/Eval/Plan artifacts needed by the current
+   phase or candidate next owner
+4. current evidence and lane/task state only when that phase is active
+5. linked runtime profile/capability/session records only when participant
+   selection, authorization, resume, wait, or closure affects the next action
+6. docs/agent-self-driving/index.md only for the existing active controller
+7. doc-driven state only after confirmed drift or an explicit owner route
 ```
 
 Do not read `archive/` during normal resume. Read archived artifacts only when

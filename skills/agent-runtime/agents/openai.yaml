@@ -1,6 +1,6 @@
 interface:
   display_name: "Agent Runtime"
   short_description: "Agent profiles, capability checks, and sessions"
-  default_prompt: "Use $agent-runtime to configure approved agents, model profiles, capability checks, and external sessions."
+  default_prompt: "Within an active workflow already routed to $agent-runtime, classify native-default, profile-governed, and external/session dispatch, then apply only the required worker, participant, authorization, capability, and session gates."
 policy:
   allow_implicit_invocation: false

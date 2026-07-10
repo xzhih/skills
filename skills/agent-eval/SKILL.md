@@ -43,7 +43,8 @@ Eval proves the Spec with **concrete checks and oracles**—detailed enough to
 catch wrong implementations, not a short restatement of the goal and not empty
 test theater. Apply mode-gate **Substance Rule**.
 
-Minimum content (scale wording, not skip the slots):
+Minimum applicable obligations (omit irrelevant slots; never invent `N/A`
+content merely to fill the shape):
 
 ```text
 Per important Spec behavior:
@@ -97,7 +98,8 @@ Move to Plan only when:
 - every check/evidence path traces to the behavior it proves
 - failure conditions are explicit enough to catch wrong implementations
 - verification commands or evidence surfaces are known, or flagged open
-- blocker/major review findings are resolved or explicitly deferred
+- blocker/major review findings are fixed/rechecked or rejected with evidence;
+  a true decision/dependency blocker keeps Eval paused
 
 If persistence is needed, use the active workflow location; default:
 `docs/dev-flow/evals/<YYYY-MM-DD>-<slug>-eval.md`.

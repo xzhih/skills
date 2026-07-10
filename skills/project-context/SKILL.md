@@ -54,12 +54,16 @@ state affects restore.
 
 ## Routing After Context
 
+Return the context packet and candidate next owner to the workflow that called
+this skill. Never start or switch controllers from context recovery; the active
+controller loads the next owner.
+
 - discussion boundary/state -> [discussion-workflows](../discussion-workflows/SKILL.md)
 - doc truth or drift -> [doc-driven-workflows](../doc-driven-workflows/SKILL.md)
-- lane batching -> [agent-lanes](../agent-lanes/SKILL.md)
+- initial/approved lane dispatch -> [agent-lanes](../agent-lanes/SKILL.md)
 - returned lanes -> [integration-review](../integration-review/SKILL.md)
 - unclear goal/path -> [agent-grilling](../agent-grilling/SKILL.md)
-- heavy multi-agent lifecycle -> [agent-self-driving](../agent-self-driving/SKILL.md)
+- active self-driving run -> return to the same [agent-self-driving](../agent-self-driving/SKILL.md) controller
 
 ## Freshness
 

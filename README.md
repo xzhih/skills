@@ -47,7 +47,8 @@ Internal flow skills:
 - `project-context`: restores authoritative project instructions, handoff docs, coordination state, decisions, verification conventions, and collision risks.
 - `agent-runtime`: internal agent/model runtime rules; records live in `docs/dev-flow/capabilities/`.
 - `agent-grilling`: pressure-tests unclear goals, assumptions, and decomposition before planning or dispatch.
-- `integration-review`: reviews returned lanes, normalizes claims, checks evidence, classifies blockers, and continues to the next safe batch.
+- `integration-review`: reviews returned lanes, normalizes claims, checks evidence,
+  classifies integration state, and returns next-batch eligibility to `agent-lanes`.
 
 `agent-self-driving` may call internal flow skills, but is a direct entry
 when explicitly invoked for long-task automation.
@@ -125,7 +126,7 @@ Each phase has an exit gate:
 | Lock Plan | Execution order, touched files/modules, risks, verification commands, lane candidates, and stop or rollback conditions are known; a mandatory `agent-review` of the whole Plan has closed (or the user waived it) before execution or lanes. |
 | Execute Plan | Changes stay within the plan boundary and produce evidence for what changed and what was not changed. |
 | Review + Test | Implementation is checked against Spec and Eval with inspectable test or manual-verification evidence. |
-| Repair + Recheck | Accepted blocker/major findings are fixed and rechecked, rejected with evidence, deferred as non-blocking, or escalated as blocked. |
+| Repair + Recheck | Accepted blocker/major findings are fixed and rechecked, rejected with evidence, or kept paused on a true user decision or unavailable required dependency. Only minor/out-of-scope/future items may be deferred after the owning artifact and trace are updated. |
 | Close / Handoff | Final state, evidence, residual risks, docs impact, and next owner are clear. |
 
 For persisted, high-risk, or multi-agent work, preserve the coverage chain:
@@ -155,13 +156,15 @@ Scale the ceremony to the task:
 
 ```text
 Small task:
-  one-line requirement -> combined Spec/Eval -> short plan -> implement -> verify
+  one-line requirement -> compact behavior/evidence contract -> implement -> verify
 
 Medium task:
-  separate requirements, Spec, Eval, and Plan in reasoning or compact notes; review only risky gates
+  separate requirements, Spec, Eval, and Plan in reasoning or compact notes;
+  keep mandatory whole-Spec and whole-Plan reviews compact
 
 Large task:
-  explicit requirements analysis, Spec, Eval, and Plan artifacts; consider agent-review for each gate
+  explicit requirements analysis, Spec, Eval, and Plan artifacts; complete mandatory
+  whole-Spec and whole-Plan reviews, then add other reviews only when risk warrants
 
 High-risk task:
   review requirements, Spec, Eval, Plan, implementation, and final result; use repair -> recheck
@@ -203,14 +206,16 @@ docs/dev-flow/
   specs/
   evals/
   plans/
+  capabilities/
   evidence/
   handoffs/
   archive/
 ```
 
 Use `docs/dev-flow/index.md` as the resume map. It links the active
-Requirements, Spec, Eval, Plan, evidence, handoff, current phase, status, and
-next owner. Do not duplicate full artifact content in the index.
+Requirements, Spec, Eval, Plan, runtime profile/capability/session records when
+applicable, evidence, handoff, current phase, status, and next owner. Do not
+duplicate full artifact content in the index.
 
 Default artifact names:
 
@@ -268,19 +273,6 @@ Archive files are not active truth. They must record `Archived`, `Status`,
 `Reason`, `Replaced by`, and why they should not be used as current truth.
 Normal resume skips archives unless an active artifact links them or history is
 needed.
-
-## Skill Maintenance
-
-Read [docs/skill-evals/README.md](docs/skill-evals/README.md) before changing
-skill routing. A `description` is a trigger surface, not feature documentation;
-update positive, negative, or forbidden routing cases before editing it. For
-ordinary failures, prefer a small gotcha or red flag over making `SKILL.md`
-longer.
-
-When using these workflow ideas to improve the workflow skills themselves, keep
-that meta-process in
-[docs/skill-evals/workflow-skill-maintenance.md](docs/skill-evals/workflow-skill-maintenance.md).
-Do not copy repository-maintenance rules into runtime skills.
 
 ## Layout
 

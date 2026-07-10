@@ -45,7 +45,8 @@ A Plan is a **concrete work order**: detailed enough for a fresh worker, not a
 short restatement of the Spec and not a padded task list. Apply mode-gate
 **Substance Rule**.
 
-Minimum content (scale wording, not skip the slots):
+Minimum applicable obligations (omit irrelevant slots; never invent `N/A`
+content merely to fill the shape):
 
 ```text
 Ordered checkbox tasks, each with:
@@ -87,7 +88,7 @@ read locked Spec and Eval
   -> expand until anti-thin bar passes
   -> draft Plan ready for review
   -> mandatory agent-review of the whole Plan
-  -> repair Plan from accepted blocker/major findings (or reject/defer with evidence)
+  -> repair and recheck accepted blocker/major findings (or reject with evidence)
   -> hand off to execution or lanes only when the review gate is closed
 ```
 
@@ -102,33 +103,22 @@ Do not move to execution or lanes, claim Plan locked, or treat the Plan as
 dispatch-ready until one [agent-review](../agent-review/SKILL.md) pass has
 completed on the **whole** Plan artifact.
 
-Review shape:
-
-```text
-Required: agent-review of the full Plan (not section-sharded Round 1).
-Preferred when available and authorized:
-  multi-agent / model-diverse reviewers on the same Plan.
-Otherwise:
-  one focused independent reviewer (or an independent review pass that is not
-  the same drafting monologue without a distinct review step).
-```
-
-This gate is **not** automatically “many models.” `agent-review` supports one
-focused reviewer **or** multiple agents; multi-model is preferred when distinct
-approved models/participants are available, not a hard requirement when only
-one reviewer path exists.
+Apply mode-gate **Review Weight**. The required pass covers the full Plan and is
+independent of drafting. Lightweight defaults to one fresh inline reviewer;
+additional/model-diverse reviewers require a risk, evidence, workflow, or user
+condition rather than this gate alone.
 
 Moderator owns the Plan draft through review. Close the gate only when:
 
 - the review packet named the Plan as the artifact
-- accepted blocker/major findings are fixed in the Plan, rejected with evidence,
-  or explicitly deferred with owner/risk
-- no accepted blocker/major remains open without disposition
+- accepted blocker/major findings are fixed and rechecked, or rejected with evidence
+- a true decision/dependency blocker keeps the gate paused, not deferred closed
 - sign-off or equivalent “ready for execution” outcome is recorded (inline is
   fine in Lightweight mode)
 
 Skip only if the user explicitly waives Plan review for this artifact and the
-waiver is recorded. Do not self-waive.
+waiver is recorded. The waiver does not dismiss already accepted findings or
+the Execution Readiness Gate. Do not self-waive.
 
 ## Execution Readiness Gate
 
@@ -144,7 +134,7 @@ Move to execution only when:
 - file/module/interface ownership is specific enough for a fresh worker
 - no placeholder tasks remain
 - lane candidates have disjoint owned surfaces or are delayed
-- blocker/major Plan review findings are resolved, rejected with evidence, or deferred
+- blocker/major Plan review findings are fixed/rechecked or rejected with evidence
 
 If persistence is needed, use the active workflow location; default:
 `docs/dev-flow/plans/<YYYY-MM-DD>-<slug>-plan.md`.

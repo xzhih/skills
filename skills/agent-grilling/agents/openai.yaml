@@ -1,6 +1,6 @@
 interface:
   display_name: "Agent Grilling"
   short_description: "Pressure-test unclear goals with agents"
-  default_prompt: "Use $agent-grilling to run agent-mediated brainstorming, answer user-style clarification questions when possible, compare paths, and return decision candidates before planning."
+  default_prompt: "Within an active workflow already routed to $agent-grilling, pressure-test unclear goals with agents, resolve agent-answerable questions, and return decision candidates to the calling controller."
 policy:
   allow_implicit_invocation: false

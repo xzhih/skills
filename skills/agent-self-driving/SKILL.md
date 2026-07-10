@@ -1,113 +1,85 @@
 ---
 name: agent-self-driving
-description: "Use only when the user explicitly invokes $agent-self-driving, or an active self-driving workflow already owns the task, for long-task automation that should continue through dev-flow, agents, review/repair, lanes, external-agent policy, evidence, and closure until completion or a true user decision. Do not use for routine lanes."
+description: "Use only when the user explicitly invokes $agent-self-driving, or an active self-driving controller already owns the task, for long-task automation that must keep lifecycle owners, agents, review/repair, evidence, and closure moving until completion or a true user decision. Do not use merely because work is large or for routine debate, review, lanes, or integration."
 ---
 
 # Agent Self-Driving
 
-Opt-in controller for long-task automation. The main thread stays moderator: it
-owns permissions, integration, evidence, and final claims.
-
-## Iron Law
+Opt-in automation controller. The main thread remains moderator and owns final
+claims.
 
 ```text
-MULTI-AGENT OUTPUT IS EVIDENCE INPUT, NOT A CONCLUSION.
+CONTROL -> DELEGATE -> VERIFY -> CONTINUE.
 ```
 
-Agreement is a signal. Verified evidence is the gate.
+## Boundary
 
-## Use Only For
+Activate only by explicit `$agent-self-driving`; otherwise this skill must
+already be the active controller. Size alone never activates it.
 
-- explicit `$agent-self-driving`
-- broad delivery goals where the user expects continued progress to completion
-- repeated review -> repair -> recheck loops
-- model-diverse or adversarial review/repair
-- external, paid, account-bound, editor, protocol, or data-leaving agents
-- durable multi-agent state and evidence-backed closure
+The active instance is the sole controller. For software delivery, read and use
+[dev-flow](../dev-flow/SKILL.md) as the parent lifecycle router. When it selects
+a leaf, read that leaf `SKILL.md`, let it own the action, and return evidence to
+this same controller. Never restart, nest, or route back into self-driving.
 
-Use focused skills instead for routine debate, review, lanes, returned-lane
-integration, or unclear formulation.
+Self-driving owns only its orchestration overlay: controller status, bounded
+next action, private blackboards, task packets/raw outputs, convergence/findings
+state, and evidence pointers. Parent/leaf workflows own Requirements, Spec,
+Eval, Plan, implementation, review, lanes, integration, docs truth, and
+lifecycle handoff. `agent-runtime` owns participant/model profiles, capability,
+authorization, and worker/external session truth; link those records, never copy
+them into controller state.
 
-## First Move
+Read [workflow-integration.md](references/workflow-integration.md) when another
+workflow owns task state. Read [artifact-layout.md](references/artifact-layout.md)
+only when continuity, risk, auditability, agents, or handoff requires persistence.
 
-```text
-restore context
-  -> use dev-flow as parent lifecycle when delivering software
-  -> choose lowest sufficient intensity
-  -> route focused work to debate/review/lanes/integration when possible
-  -> dispatch agents only after capability and authorization gates
-  -> continue until complete, blocked, or a true user decision remains
-```
-
-## Intensity
+## Intensity and Shape
 
 ```text
 0 main agent only
-1 one focused review or research pass
-2 multi-agent audit of one artifact/result
-3 bounded review-repair convergence
+1 one focused pass
+2 multi-agent audit
+3 bounded review -> repair -> recheck
 4 full delivery lifecycle
 ```
 
-Read `references/lifecycle-intensity.md` only when intensity is not obvious or
-the work is Level 3-4.
+Start at the lowest sufficient level. Read
+[lifecycle-intensity.md](references/lifecycle-intensity.md) when intensity is
+unclear or Level 3-4 applies.
 
-## Agent Shape Gate
+| Work shape | Owner |
+|---|---|
+| Same material / same question | [agent-debate](../agent-debate/SKILL.md) |
+| One artifact or result | [agent-review](../agent-review/SKILL.md) |
+| Disjoint owned surfaces | [agent-lanes](../agent-lanes/SKILL.md) |
+| Returned lane handoffs | [integration-review](../integration-review/SKILL.md) |
 
-- Same topic, same material, same question -> [agent-debate](../agent-debate/SKILL.md)
-- One concrete artifact/result -> [agent-review](../agent-review/SKILL.md)
-- Disjoint owned surfaces -> [agent-lanes](../agent-lanes/SKILL.md)
-- Returned lane handoffs -> [integration-review](../integration-review/SKILL.md)
+## Runtime Gate
 
-Do not split a debate by section. Sections are prompts every reviewer inspects,
-not ownership boundaries.
+A host-native worker already exposed by the current runtime, with no participant
+or model choice and no external boundary, uses `agent-runtime` for worker
+lifecycle—including resume—but does not require a new model profile.
 
-## Dispatch Gate
+Before named/model-selectable participants, capability or authorization checks,
+external/paid/account/data-leaving use, or worker/session continuity, read and
+run [agent-runtime](../agent-runtime/SKILL.md). Runtime—not this controller—owns
+consent and session decisions. For direct delegation outside `agent-review` or
+`agent-lanes`, read [task-packets.md](references/task-packets.md).
 
-Before task-bearing dispatch, confirm:
+## Converge and Continue
 
-```text
-present -> runnable -> authenticated -> authorized_for_task -> suitable
-```
+Start from source, treat agent output as claims, and normalize by scope,
+evidence, severity, and action. Read
+[output-normalization.md](references/output-normalization.md) for heterogeneous
+outputs or conflicting findings; read
+[review-convergence.md](../agent-review/references/review-convergence.md) for repeated review,
+repair, rebuttal, or recheck.
 
-For model-selectable, callable, session, or external agents, use
-[agent-runtime](../agent-runtime/SKILL.md).
-Ask before sending task content to external, paid, account-bound, editor,
-protocol, networked, or data-leaving agents unless that exact use is already
-authorized.
-
-For direct task-bearing delegation that does not go through `agent-review` or
-`agent-lanes`, read `references/task-packets.md` first.
-
-## Convergence
-
-- Start from source material, not the moderator's preferred answer.
-- Normalize agent outputs by scope, evidence, severity, and next action.
-- Fix or reject accepted blocker/major findings with evidence.
-- Recheck until no accepted blocker/major remains, or a true pause condition
-  exists.
-- Do not create private orchestration docs unless continuity, auditability,
-  external side effects, or Level 3-4 work requires it.
-
-## Pause Conditions
-
-Pause only for true user decisions: product direction, taste, priority,
-privacy/cost, account access, destructive/public action, deployment target,
-external-agent approval, missing credentials, or unavailable verification with
-no safe substitute.
-
-## Output
-
-Keep status compact:
-
-```text
-Goal:
-Intensity:
-Current owner:
-Evidence:
-Open blocker or user decision:
-Next action:
-```
-
-If status is `in_progress`, continue to the next bounded action instead of
-stopping at a recommendation.
+Accepted blocker/major findings close only through evidence-backed repair or
+rejection. A true pause condition keeps the finding and run open; it is not a
+completion path. Persist only when the selected intensity needs recovery. If
+status is `in_progress`, perform the next bounded action.
+Pause only for a true user decision, unauthorized boundary, missing access, or
+unavailable verification with no safe substitute. Claim `complete` only from
+current owner evidence.

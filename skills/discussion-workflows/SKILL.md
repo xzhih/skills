@@ -45,6 +45,11 @@ capture discussion state
 
 Do not run all actions by default.
 
+Read [action-patterns.md](references/action-patterns.md) only when the selected
+action needs more guidance than the list above. Before reading or writing
+persisted discussion state, resuming it, or handing it off, read
+[state-lifecycle.md](references/state-lifecycle.md) and restore index-first.
+
 ## Process
 
 ```text

@@ -4,7 +4,9 @@ Use this reference when normalizing returned lane work.
 
 ## Claim Normalization
 
-Convert each worker response into:
+Join each worker response to the moderator-owned lane registry by `lane_id`, then
+normalize it. Registry identity is canonical; never ask a worker to guess a
+runtime id.
 
 ```text
 lane:
@@ -13,6 +15,8 @@ branch:
 lane workspace:
 base branch:
 base commit:
+worker class (registry; worker echo when known):
+agent/session id (registry; worker echo when known):
 participant/model:
 coverage trace:
   requirements:
@@ -48,9 +52,32 @@ moderator verdict:
 - `repair-in-lane`: work is valuable but needs correction before merge.
 - `blocked`: external condition or unresolved dependency prevents completion.
 - `conflict`: changed surfaces collide with another lane or current mainline.
-- `reject`: lane violates boundary enough that integration would be unsafe.
+- `rejected`: lane violates boundary enough that integration would be unsafe.
+- `abandoned`: lane will not continue; record the reason.
 
 Workers should not claim `merged`. `merged` is a moderator state after an actual integration action.
+
+## Actual Integration Evidence
+
+The main-thread moderator running `integration-review` owns the
+`ready-to-merge -> merged` transition. Before recording `merged`:
+
+```text
+integration target:
+integration action / command:
+source lane and revision:
+resulting revision or workspace state:
+combined touched files:
+post-integration verification:
+coverage / checkbox updates:
+registry transition:
+```
+
+Inspect the resulting combined diff and run verification on the integration
+target. Worker-local evidence proves the lane result, not the integrated state.
+If the integration mechanism is unsafe or unresolved, keep `ready-to-merge`,
+return a bounded integration action to the active controller, and do not release
+dependent lanes.
 
 ## Diff And Evidence Checklist
 
@@ -87,7 +114,8 @@ If the moderator cannot inspect the lane workspace or reproduce enough evidence,
 Before continuing with more work:
 
 - Classify every returned lane.
-- Merge, park, repair, block, conflict, or abandon current review lanes.
+- Integrate ready lanes with the actual-integration evidence contract above, or
+  repair, block, conflict, mark rejected, or abandon them.
 - Identify files and docs changed from actual diffs, not worker summaries.
 - Recompute collision risks from the new state.
 - Recompute coverage closure from accepted evidence, not worker summaries.
@@ -95,4 +123,5 @@ Before continuing with more work:
 - Delay lanes that depend on unmerged review work.
 - Separate implementation lanes from hard-gate/evidence lanes when they would collide.
 - Choose the next maximal safe set only after accepted lanes have a moderator verdict.
-- Dispatch the safe set when callable subagents are available and no true user decision remains. Emit fallback prompts only when direct dispatch is unavailable or the user requested manual threads.
+- Return the approved safe set to `agent-lanes` for runtime-classified dispatch;
+  this review owns eligibility, not worker dispatch.
