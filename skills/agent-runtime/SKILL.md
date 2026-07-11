@@ -92,3 +92,9 @@ decomposition, review findings, or implementation changes. Agent outputs remain
 claims until the owning workflow normalizes and verifies them.
 
 Short polling timeouts are runtime state, not failure evidence.
+
+There is no default wall-clock cutoff for a worker. A wait/poll timeout controls
+how long the moderator waits for the next update; it does not limit worker
+execution. Repeated silent polls do not accumulate into an execution timeout.
+Keep the worker running and follow `worker-lifecycle.md` unless a documented
+interruption condition occurs.

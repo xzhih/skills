@@ -1,33 +1,38 @@
 ---
 name: agent-grilling
-description: "Use only when an active workflow routes here, for agent-mediated formulation before Requirements, Spec, Plan, or lane dispatch: hidden gaps, assumptions, options, risks, boundary pressure, and questions agents can answer before asking the user. Do not use for review or returned-lane integration."
+description: "Use only when an active workflow routes here and a goal, requirement, design direction, plan boundary, or lane split may hide omitted actors, flows, edge cases, assumptions, dependencies, contradictions, risks, or second-order effects before downstream work. Do not use for review or returned-lane integration."
 ---
 
 # Agent Grilling
 
-Pressure-test an unclear goal before requirements, Spec, Plan, or lanes. This is
-formulation help, not review and not implementation.
+Discover what the current formulation has not noticed. Expand the problem model,
+trace high-impact gaps to their consequences, and return formulation or
+requirement deltas. Grilling and challenge are core probes in this deep
+investigation; the outcome is discovery, not a stress-test verdict or artifact
+review.
 
 ## Iron Law
 
 ```text
-NO USER QUESTION UNTIL AGENT-ANSWERABLE QUESTIONS ARE EXHAUSTED.
+NO HANDOFF WHILE A HIGH-IMPACT BLIND SPOT REMAINS UNSEARCHED OR UNDISPOSITIONED.
 ```
 
-Ask the user only for true decisions: product direction, taste, priority,
-privacy/cost, destructive/public action, account access, or unavailable facts.
+Resolve source- and agent-answerable gaps before asking the user. Escalate only
+true decisions such as product direction, taste, priority, privacy/cost,
+destructive/public action, account access, or unavailable user-owned facts.
 
 ## Use For
 
-- fuzzy target, path, scope, boundary, or success criteria
-- likely human clarification questions agents can answer first
+- clear-looking or fuzzy formulations with unexamined behavior or consequences
+- requirements that need enrichment before Spec
+- likely omitted actors, flows, states, permissions, data rules, or failure paths
 - user feedback like "not usable", "hard to scan", or "feels wrong"
-- plausible architecture or lane-split branches
-- risky lane boundaries before dispatch
+- cross-cutting changes, migrations, integrations, or risky lane boundaries
 
-Use [discussion-workflows](../discussion-workflows/SKILL.md) after a decision
-state exists. Use [agent-lanes](../agent-lanes/SKILL.md) when boundaries are
-clear enough for parallel work.
+Use [agent-debate](../agent-debate/SKILL.md) to compare contested alternatives.
+Use [agent-review](../agent-review/SKILL.md) to judge an existing artifact. Use
+[agent-lanes](../agent-lanes/SKILL.md) only after boundaries are discoverably
+clear.
 
 When using agents for the pass, use
 [agent-runtime](../agent-runtime/SKILL.md) for capability, authorization, and
@@ -36,37 +41,78 @@ session lifecycle.
 ## Method
 
 ```text
-restore source context if needed
-  -> name the unclear target
-  -> list agent-answerable questions
-  -> translate user feelings into standards and gates
-  -> get a default formulation and one challenge
-  -> probe evidence, assumptions, counterexamples, and boundaries
-  -> synthesize safe assumptions, decision candidates, and true user questions
+model the stated intent and current assumptions
+  -> inspect source context that can constrain it
+  -> sweep the affected dimensions for what is missing
+  -> turn omissions into explicit gap questions
+  -> grill high-impact gaps and proposed answers to causes and consequences
+  -> resolve them from source, focused agents, or safe assumptions
+  -> write the formulation and requirement deltas
+  -> repeat for newly exposed high-impact gaps
+  -> return candidate additions and changes to the active Requirements owner
 ```
 
-Do the smallest useful pass. Repeat only while high-impact agent-answerable
-questions remain.
+Sweep only affected dimensions, not a ceremonial checklist:
+
+```text
+actors and permissions | end-to-end flow and state transitions
+data ownership and lifecycle | edge, failure, recovery, and abuse paths
+compatibility and migration | dependencies and operations
+success evidence | boundaries and non-goals
+```
+
+Treat the first plausible answer as the start of grilling, not the result. For
+every high-impact candidate, establish:
+
+```text
+gap -> proposed answer -> why -> evidence -> underlying assumption or cause
+    -> counterexample -> boundary -> failure or second-order effect
+    -> resolver -> disposition -> requirement or decision delta
+```
+
+Allowed dispositions are `resolved from source`, `safe assumption`, `draft
+requirement`, `constraint/risk/non-goal`, `true user decision`, or `deferred`
+with reason and impact. Do not stop at a question list.
+
+Example: “invite teammates” hides whether existing private notes become visible.
+Tracing ownership and migration exposes a privacy failure; the requirement delta
+is that migration must not broaden visibility and sharing needs an explicit move
+or product decision.
 
 ## Output
 
-Return only what helps the next owner:
+Return the discovery delta, not a polished restatement:
 
 ```text
-Formulation:
-Assumptions:
-Decision candidates:
-Open user decision:
-Next:
+Discovery snapshot handle / same-scope target:
+Enriched formulation:
+Discovered gaps and dispositions:
+New or changed requirements / decisions:
+Candidate additions / changes:
+Remaining true user decisions:
+Next: active workflow owner
 ```
 
-Omit empty headings. Read `references/formulation-grilling.md` only for large or
+The active Requirements owner, not this worker, assembles and versions the
+complete Candidate Requirement Set and marks the snapshot consumed after the
+returned deltas and candidate handles are integrated.
+
+If no material gap survives, name the dimensions and evidence inspected and say
+that no delta was found; do not invent issues to prove value. Omit empty
+headings. Read `references/formulation-grilling.md` for large, multi-surface, or
 multi-round uncertainty.
 
 ## Red Flags
 
-- Asking broad brainstorming questions before source or agent exploration.
-- Dispatching lanes before boundaries are clear.
-- Dumping raw disagreement on the user.
-- Producing review findings while still formulating.
-- Stopping after the first convenient answer.
+- Using grilling only to attack a proposal or produce a pass/fail verdict.
+- Restating the input without identifying what changed.
+- Listing generic risks without tying them to this formulation and its effects.
+- Avoiding hard follow-up questions because the first answer sounds plausible.
+- Stopping at a first-order consequence when it exposes another important gap.
+- Returning questions without a resolver, disposition, and requirement impact.
+- Asking the user before source- and agent-answerable gaps are exhausted.
+- Inventing speculative gaps without a causal link or evidence need.
+- Pruning a plausible branch before it is formulated enough for convergence.
+- Publishing an authoritative Candidate Requirement Set instead of returning
+  additions and changes to its Requirements owner.
+- Calling discovered candidates the final Requirements Baseline.

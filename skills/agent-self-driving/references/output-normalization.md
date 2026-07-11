@@ -31,7 +31,14 @@ Raw external-agent output is useful for auditability and rebuttal, but it is not
 
 When closing a task, stage, or run, use the evidence closure shape from `artifact-layout.md`: claim, criteria closed, evidence, verification run, reviewer/recheck status, remaining risks, and pass/fail/paused decision.
 
-For output imported from `agent-grilling`, normalize the accepted snapshot as scoped assumptions, decision candidates, open questions, and downstream implications. Do not run goal/path pressure testing from this skill.
+For output imported from `agent-grilling`, normalize the accepted snapshot as discovered gaps, requirement deltas, scoped assumptions, decision candidates, open questions, and downstream implications. Do not run formulation blind-spot discovery from this skill.
+
+For Requirements convergence imported from `agent-debate`, normalize each
+candidate to `keep`, `modify`, `cut`, `defer`, or `user-decision`. Promote only
+the normalized outcomes and compact ledger rows to the active Requirements
+owner. That owner alone decides what enters the Requirements Baseline. Do not
+write owner artifacts or promote raw debate and duplicated arguments from the
+self-driving overlay.
 
 ## Normalized Item Types
 
@@ -65,6 +72,10 @@ decision_candidate:
 
 implication:
   A consequence for Spec, Eval, Plan, task queue, verification, boundary, cost, privacy, or delivery risk.
+
+pruning_decision:
+  One candidate handle with a governed keep, modify, cut, defer, or
+  user-decision outcome, evidence, and retained memory when applicable.
 ```
 
 ## Promotion Rules

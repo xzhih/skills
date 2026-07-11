@@ -21,7 +21,10 @@ Use this reference when the user has a real goal but the requirements, design tr
 
 ## Purpose
 
-Agent grilling moves brainstorming burden from the user into bounded agent exploration first, while preserving a root-cause probing posture.
+Agent grilling searches for important questions the current formulation has not
+asked, then traces their causes and consequences. Persistent questioning and
+challenge are core discovery probes. The goal is deeper formulation, not a
+pass/fail stress-test verdict.
 
 Use it to discover:
 
@@ -29,6 +32,7 @@ Use it to discover:
 - explicit requirements versus inferred assumptions
 - professional standards implied by user feelings, business intent, or domain goals
 - hidden boundaries, non-goals, dependencies, and product decisions
+- contradictions, missing states, failure paths, and second-order effects
 - design branches and their consequences
 - unknowns that source, repo, runtime, research, or focused agents can resolve
 - the smallest set of true user decisions
@@ -194,6 +198,7 @@ Round 1 should usually produce:
 - domain translation from user feedback to concrete quality standards
 - 2-3 viable approaches or a reason only one real path exists
 - challenge questions and missing evidence
+- discovered gaps with dispositions and requirement implications
 - classification of questions by resolver
 
 Round 2 is required when Round 1 leaves any high-impact `source_answerable` or `agent_answerable` question unresolved that affects:
@@ -276,6 +281,7 @@ assumption:
 decision_candidate:
 open_question:
 implication:
+requirement_delta:
 ```
 
 Use `blocker` only when a formulation issue prevents a coherent next artifact.
@@ -301,6 +307,8 @@ The moderator-owned snapshot should contain:
 goal:
 real problem:
 known requirements:
+discovered gaps and dispositions:
+requirement deltas:
 non-goals and boundaries:
 option branches:
 agent-answered questions:
@@ -319,6 +327,8 @@ Promote only evidence-backed decisions, scoped assumptions, and real user questi
 
 Stop formulation when:
 
+- affected dimensions have been searched rather than assumed complete
+- every high-impact gap has a resolver, disposition, and downstream implication
 - the real problem, boundaries, and non-goals are clear enough for the current phase
 - blocker dependencies have an answer, safe assumption, or user escalation
 - remaining questions are minor, deferred, or captured as downstream risks

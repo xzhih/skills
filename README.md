@@ -34,11 +34,11 @@ User-entry skills:
 - `discussion-workflows`: explicit discussion governance for long, corrected, or decision-heavy conversations that need recap, boundaries, complexity checks, drift control, or durable state.
 - `doc-driven-workflows`: explicit project documentation governance for source-backed architecture, operation-flow, call-path, code/docs synchronization, and open-question ledgers.
 - `agent-self-driving`: explicit long-task automation controller for new projects, new requirements, model-diverse review/repair, external agents, and multi-agent delivery that should continue until completion or a true user decision.
-- `agent-requirements-analysis`: explicitly invoked requirements analysis for project directions, new requirements, updates, or bug intents before Spec.
+- `agent-requirements-analysis`: explicitly invoked requirements analysis that anchors the Core Problem, expands a traversable candidate tree, adversarially converges and prunes scope, then publishes a Mermaid-backed Requirements Baseline before Spec.
 - `agent-spec`: explicitly invoked Spec production from governed requirements.
 - `agent-eval`: explicitly invoked Eval and acceptance evidence production from a locked Spec.
 - `agent-plan`: explicitly invoked implementation planning from locked Spec and Eval, including task decomposition and lane candidates.
-- `agent-debate`: explicitly invoked same-topic multi-agent debate for requirements, product friction, simplicity, necessity, usability, user flow, and decision clarity.
+- `agent-debate`: explicitly invoked same-topic multi-agent debate for requirements, product friction, simplicity, necessity, usability, user flow, and compact branch-level convergence or scope pruning.
 - `agent-review`: explicitly invoked one-reviewer or multi-agent review of one artifact, such as a Spec, Eval, plan, design, PR, diff, implementation, evidence package, or final result.
 - `agent-lanes`: explicit parallel lane execution for safe batches of subagent/worktree work.
 
@@ -46,7 +46,7 @@ Internal flow skills:
 
 - `project-context`: restores authoritative project instructions, handoff docs, coordination state, decisions, verification conventions, and collision risks.
 - `agent-runtime`: internal agent/model runtime rules; records live in `docs/dev-flow/capabilities/`.
-- `agent-grilling`: pressure-tests unclear goals, assumptions, and decomposition before planning or dispatch.
+- `agent-grilling`: uses persistent questioning and challenge to discover unexamined requirements, assumptions, edge cases, boundaries, and downstream consequences before Requirements, Spec, planning, or dispatch; grilling is the method, not a stress-test gate.
 - `integration-review`: reviews returned lanes, normalizes claims, checks evidence,
   classifies integration state, and returns next-batch eligibility to `agent-lanes`.
 
@@ -93,10 +93,19 @@ Plan, PR, module diff, implementation slice, or final package. It is not
 batch status). Spec and Plan each require an `agent-review` pass before Eval or
 execution/lanes unless the user explicitly waives it.
 
-**Exploration vs delivery (product):** dry inspiration may use
-`agent-grilling` → `agent-debate` → human read; a known direction may use
-`agent-requirements-analysis` then a human pass. Neither is mandatory before
-every Spec. **Self-driving** may start at any reached phase (for example from a
+**Discovery, convergence, and baseline are composable (product):**
+`agent-grilling` returns candidate additions and changes; `agent-requirements-analysis`
+assembles and versions the complete Candidate Requirement Set; `agent-debate`
+challenges that same set and assigns each branch `keep`, `modify`, `cut`,
+`defer`, or `user-decision`. `agent-requirements-analysis` owns the compact
+pruning ledger and surviving Requirements Baseline. Non-trivial analysis records
+passed gate evidence and consumes current same-scope discovery and convergence
+snapshots when required instead of repeating them. Mermaid gives the concise analysis, convergence, and surviving-flow views;
+Markdown owns detailed requirements, evidence, reasons, constraints, and reopen
+triggers. The final behavior tree and packets contain the Core Version, while
+pruned ideas remain once in the tradeoff map and compact ledger. Blocking
+decisions pause the handoff.
+**Self-driving** may start at any reached phase (for example from a
 locked Spec) and only run the remaining delivery work—it should not rewind
 product work without cause.
 
@@ -120,7 +129,7 @@ Each phase has an exit gate:
 
 | Phase | Exit gate |
 | --- | --- |
-| Analyze Requirements | `agent-requirements-analysis` has separated confirmed, draft, and open points; agent-answerable questions have been resolved through context or debate; goal, non-goals, product friction, and constraints are not mixed. |
+| Analyze Requirements | The Core Problem is explicit; current same-scope `agent-grilling` discovery and `agent-debate` convergence gates are satisfied; every material candidate has a keep/modify/cut/defer/user-decision outcome; pruning memory is compact; the Mermaid tree has no high-impact answerable frontier or blocking decision; only implementation-eligible confirmed surviving flows map to packets; the artifact is a Requirements Baseline. |
 | Lock Spec | Goal, scope, non-goals, user-visible behavior, constraints, and affected surfaces are clear; a mandatory `agent-review` of the whole Spec has closed (or the user waived it) before Eval. |
 | Lock Eval | Acceptance checks, test points, manual checks, failure conditions, and evidence expectations define how to prove correctness. |
 | Lock Plan | Execution order, touched files/modules, risks, verification commands, lane candidates, and stop or rollback conditions are known; a mandatory `agent-review` of the whole Plan has closed (or the user waived it) before execution or lanes. |

@@ -21,7 +21,7 @@ to its leaf.
 | Need or state | Owner |
 |---|---|
 | Restore uncertain persisted state | [project-context](../project-context/SKILL.md) |
-| Shape requirements | [agent-requirements-analysis](../agent-requirements-analysis/SKILL.md) |
+| Discover, converge, and baseline requirements | [agent-requirements-analysis](../agent-requirements-analysis/SKILL.md) |
 | Lock behavior | [agent-spec](../agent-spec/SKILL.md) |
 | Define acceptance evidence | [agent-eval](../agent-eval/SKILL.md) |
 | Build tasks or lane candidates | [agent-plan](../agent-plan/SKILL.md) |
@@ -57,7 +57,7 @@ Enter only after explicit `$agent-self-driving` invocation when none is active.
 ## Gates and Weight
 
 ```text
-requirements -> Spec -> Eval -> Plan -> execute -> review/test -> repair/recheck -> close
+discovery -> convergence -> Requirements Baseline -> Spec -> Eval -> Plan -> execute -> review/test -> repair/recheck -> close
 requirement -> behavior -> check -> task -> evidence
 ```
 

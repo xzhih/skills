@@ -1,6 +1,6 @@
 interface:
   display_name: "Agent Requirements Analysis"
-  short_description: "Shape requirements with agents"
-  default_prompt: "Use $agent-requirements-analysis to turn a direction into governed requirements with a question backlog, resolver matrix, confirmed/draft/open state, coverage trace, agent-resolved questions, and true user decisions before Spec."
+  short_description: "Converge requirements into a baseline"
+  default_prompt: "Use $agent-requirements-analysis to identify the Core Problem, discover and prune candidate branches, show analysis and tradeoffs in concise Mermaid, and preserve detailed requirements and reasons in Markdown."
 policy:
   allow_implicit_invocation: false

@@ -47,7 +47,8 @@ index.md
   evidence, handoff, current phase, status, and next owner.
 
 requirements/
-  Requirements Analysis artifacts from agent-requirements-analysis.
+  Requirements candidates, compact pruning ledgers, and active Requirements
+  Baselines from agent-requirements-analysis.
 
 specs/
   Locked or draft Spec artifacts from agent-spec.

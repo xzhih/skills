@@ -39,6 +39,10 @@ Use [agent-eval](../agent-eval/SKILL.md) when acceptance evidence is missing.
 Use [agent-lanes](../agent-lanes/SKILL.md) only after the plan is accepted, the
 Plan Review Gate is closed, and the next action is parallel execution.
 
+Plan only implementation-eligible confirmed behavior and its Eval checks.
+Draft/open candidates remain upstream governance references and cannot become
+tasks, lane packets, or execution scope.
+
 ## Depth (detailed, not empty)
 
 A Plan is a **concrete work order**: detailed enough for a fresh worker, not a
@@ -128,6 +132,7 @@ Move to execution only when:
 - Depth (anti-thin) bar is met—not only "has a task list"
 - tasks are independently understandable and testable
 - every non-deferred requirement/behavior/eval trace item is covered
+- no draft/open candidate appears in tasks, lane candidates, or execution scope
 - setup/dependency tasks explain why they lack direct coverage
 - dependencies and shared surfaces are explicit
 - verification and evidence requirements trace back to Eval

@@ -29,7 +29,7 @@ or new requirement, the default parent workflow is `dev-flow` and its focused
 owner skills:
 
 ```text
-requirements -> agent-requirements-analysis
+Requirements discovery, convergence, and baseline -> agent-requirements-analysis
 Spec -> agent-spec
 Eval -> agent-eval
 Plan -> agent-plan

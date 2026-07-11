@@ -37,6 +37,10 @@ brevity with hollow checks.
 Use [agent-spec](../agent-spec/SKILL.md) when behavior is still unclear. Use
 [agent-plan](../agent-plan/SKILL.md) when checks and evidence are ready.
 
+Accept only implementation-eligible confirmed Spec behavior. If a draft/open
+candidate appears as behavior, route it back to Spec/Requirements; do not create
+an Eval check that could promote it into implementation scope.
+
 ## Depth (detailed, not empty)
 
 Eval proves the Spec with **concrete checks and oracles**—detailed enough to
@@ -95,6 +99,7 @@ Move to Plan only when:
 
 - Depth (anti-thin) bar is met—not only "has a checks section"
 - every important behavior has an acceptance check or manual evidence path
+- no draft/open candidate appears as Eval behavior or implementation evidence
 - every check/evidence path traces to the behavior it proves
 - failure conditions are explicit enough to catch wrong implementations
 - verification commands or evidence surfaces are known, or flagged open

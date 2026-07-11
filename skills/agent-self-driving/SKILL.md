@@ -83,3 +83,8 @@ status is `in_progress`, perform the next bounded action.
 Pause only for a true user decision, unauthorized boundary, missing access, or
 unavailable verification with no safe substitute. Claim `complete` only from
 current owner evidence.
+
+`Bounded` describes scope, ownership, and evidence—not elapsed time. Long-running
+workers remain `in_progress` across short polling timeouts. Apply
+`agent-runtime` worker lifecycle; do not invent a wall-clock cutoff or interrupt
+merely to make the controller advance.
