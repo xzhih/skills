@@ -46,6 +46,21 @@ Contract:
 7. Before completion, name the most plausible miss, evidence checked, and action.
 8. Report observed outcome and residual risk, then stop.
 
+## Accepted Plans
+
+For a persisted or handed-off Plan:
+
+1. Before editing, compare the current revision and in-scope staged, unstaged,
+   and untracked content with the Plan snapshot.
+2. If a difference affects behavior, scope, compatibility, or verification,
+   return the Plan for update and re-review. Unrelated out-of-scope changes do
+   not block. Never rewrite the snapshot to make a mismatch pass.
+3. Enforce Plan scope: update task status from evidence and document only
+   implementation deviations that keep accepted behavior, ownership,
+   compatibility, and verification valid. Otherwise return the Plan for update
+   and re-review.
+4. Run task and Eval checks, then inspect the final diff against the Plan.
+
 ## Conditional References
 
 Read only applicable references:

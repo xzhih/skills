@@ -43,8 +43,9 @@ Core Problem Contract
   -> agent-grilling discovery
   -> Requirements owner assembles/version Candidate Requirement Set
   -> agent-debate convergence
-  -> keep | modify | cut | defer | user-decision
-  -> Core Version + Scope Pruning Ledger
+  -> keep/modify -> Core Version
+     cut/defer -> Scope Pruning Ledger
+     user-decision -> pause if blocking
   -> baseline_ready -> Spec
 ```
 

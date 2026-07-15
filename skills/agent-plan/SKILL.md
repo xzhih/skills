@@ -57,13 +57,28 @@ Ordered checkbox tasks, each with:
   concrete deliverable (not "implement feature")
   owned files/modules/interfaces (or explicit discovery task with stop)
   trace to Spec behavior and/or Eval check
-  verify: command, test, or evidence path
+  verify: command, test, or evidence path -> expected result
   stop/blocker condition
 Dependencies and shared/high-collision surfaces
 What not to change
 Lane candidates only when surfaces are disjoint (or delayed with reason)
 Risks that change order, batching, or verification
 ```
+
+After the whole-Plan review is accepted, and before a persisted or handed-off
+Plan moves to execution, append:
+
+```text
+Source revision: required commit or equivalent immutable ID
+Planned at: optional timestamp
+In-scope snapshot: clean, or staged/unstaged/untracked content hashes by path
+Before execution: compare the current source revision and content with this snapshot;
+  update and re-review the Plan if a difference affects behavior, scope,
+  compatibility, or verification
+```
+
+Capture this after acceptance. Snapshot the implementation scope, not the Plan
+file itself. Unrelated out-of-scope changes do not block.
 
 Thin Plan red flags (block execution readiness):
 
@@ -93,14 +108,21 @@ read locked Spec and Eval
   -> draft Plan ready for review
   -> mandatory agent-review of the whole Plan
   -> repair and recheck accepted blocker/major findings (or reject with evidence)
+  -> capture the accepted Plan's current source snapshot when persistence or handoff needs it
   -> hand off to execution or lanes only when the review gate is closed
 ```
 
 Task shape:
 
 ```text
-- [ ] <deliverable> - trace: <need/check>; verify: <command/evidence>; stop: <condition>
+- [ ] <deliverable> - trace: <need/check>; verify: <command/evidence> -> <expected>; stop: <condition>
 ```
+
+Execution may update task checkboxes with evidence. It must not rewrite the
+accepted scope, tasks, or source snapshot. A source change that invalidates
+behavior, scope, compatibility, or verification returns the Plan for update and
+re-review.
+
 ## Plan Review Gate (mandatory)
 
 Do not move to execution or lanes, claim Plan locked, or treat the Plan as
@@ -140,6 +162,7 @@ Move to execution only when:
 - no placeholder tasks remain
 - lane candidates have disjoint owned surfaces or are delayed
 - blocker/major Plan review findings are fixed/rechecked or rejected with evidence
+- a persisted or handed-off Plan has its post-acceptance source snapshot
 
 If persistence is needed, use the active workflow location; default:
 `docs/dev-flow/plans/<YYYY-MM-DD>-<slug>-plan.md`.

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agent Improve"
+  short_description: "Find and rank codebase improvements"
+  default_prompt: "Use $agent-improve to inspect this codebase or branch, check the evidence, rank what is worth improving, and stop before planning or implementation."
+policy:
+  allow_implicit_invocation: true

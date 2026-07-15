@@ -59,6 +59,17 @@ Before sending review work:
 - Use [output-normalization.md](../agent-self-driving/references/output-normalization.md)
   before promoting agent output into findings or repair tasks.
 
+## Implementation Against Plan
+
+When reviewing implementation against an accepted Plan:
+
+- read the Plan, full diff, changed files, and current verification
+- map each meaningful change to a Plan task or a documented within-scope
+  implementation deviation; reject changes that invalidate accepted behavior,
+  ownership, compatibility, or verification
+- independently check affected Plan/Eval checks and new test assertions
+- return the normal sign-off, repair, or recheck; do not repair in the review role
+
 ## Packet Minimum
 
 ```text

@@ -6,4 +6,5 @@ docs/*
 docs/skill-evals/*
 !docs/skill-evals/2026-07-11-agent-requirements-visual-eval.md
 !docs/skill-evals/2026-07-11-requirements-convergence-eval.md
+!docs/skill-evals/2026-07-15-agent-improve-routing-eval.md
 .worktrees/

@@ -48,6 +48,12 @@ to its leaf.
 An owner label is not a transition. Report unavailable children; never make the
 user dispatch internal workflows.
 
+## Improvement Intake
+
+A selected `agent-improve` finding does not pass a lifecycle gate. Recheck its
+evidence, choose the first missing gate and one owner, and continue. Do not
+repeat the broad audit.
+
 ## Active Controller
 
 With active `agent-self-driving`, use `leaf-route-only`: retain the controller,
@@ -67,7 +73,9 @@ persists recovery state; `Lane` adds ownership, collision, and integration.
 
 Child contracts own gates: Spec and Plan retain mandatory whole-artifact review;
 Lightweight makes it compact, not optional. Implementation verification and
-repair belong to `steady-coding`.
+repair belong to `steady-coding`. When execution follows an accepted Plan,
+`agent-review` checks the result against that Plan before close unless the user
+explicitly waives it.
 
 Apply [mode-gate.md](references/mode-gate.md) before shaping artifacts. Read
 [coverage-trace.md](references/coverage-trace.md) for confusable trace items,

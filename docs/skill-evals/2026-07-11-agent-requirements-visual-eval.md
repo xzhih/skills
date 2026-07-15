@@ -29,9 +29,10 @@ Pass when:
 
 - a tree or overview-plus-subtrees covers all leaf states
 - agent/source-answerable frontier nodes are resolved or owned
-- blocking user decisions make Spec readiness `not_ready`
-- a flow inventory distinguishes pause request, paused access/billing, and resume
-- every inventory row maps to a readable Mermaid packet
+- blocking user decisions keep the artifact a Candidate with Spec readiness
+  `not_ready` and no Baseline-only flow inventory or packets
+- once `baseline_ready`, a flow inventory distinguishes pause request, paused
+  access/billing, and resume, and every row maps to a readable Mermaid packet
 
 ### V2 — Function-flow coverage
 
@@ -47,9 +48,10 @@ as ready merely because agent search stopped.
 
 ### V4 — Lightweight single feature
 
-Pass when the artifact keeps one smallest-meaningful tree, a compact disposition
-ledger, one flow inventory row per real flow, and usually one Mermaid packet.
-Fail when it expands to a target depth/node count or repeats every obvious leaf.
+Pass when a Candidate keeps one smallest-meaningful tree, a compact disposition
+ledger, and no Baseline-only flows. Once `baseline_ready`, add one inventory row
+per real flow and usually one Mermaid packet. Fail when it expands to a target
+depth/node count or repeats every obvious leaf.
 
 ### V5 — Product boundary
 
@@ -74,10 +76,10 @@ non-blocking `deferred` node.
   Mermaid packets; a Lightweight agent produced one tree and one packet.
 - REFACTOR findings: add explicit flow inventory, keep blocking user decisions
   non-terminal, remove target node counts, and keep diagrams at product level.
-- V1–V5 rerun: the Standard subscription case produced one search tree, nine
-  inventoried flows mapped across four product-level packets, and kept three
-  business decisions blocking with Spec `not_ready`. The Lightweight reset case
-  kept one compact tree, a consequential-only ledger, and one packet.
+- Historical V1–V5 run: the Standard subscription case produced nine flows and
+  four packets while three decisions still blocked Spec. The later
+  Candidate/Baseline split reclassifies that combination as RED; V1/V4 now omit
+  Baseline-only flows until `baseline_ready`.
 - V6 RED: the first Lightweight rerun called uninspected reset-state and resend
   behavior terminal, then assigned the inspection to Spec and reported ready.
 - V6 GREEN: after the source-answerable and whole-artifact consistency rules,
@@ -87,3 +89,7 @@ non-blocking `deferred` node.
   timing as a non-blocking `deferred` item.
 - Reference Mermaid examples parsed with the current `mermaid` package under a
   temporary jsdom environment: 2/2 passed.
+- V1/V4 contract recheck GREEN: an independent pass confirmed that blocked
+  Candidates stay `not_ready` without Baseline-only flows, while
+  `baseline_ready` artifacts require the inventory and packets. The historical
+  blocking-plus-flows result remains explicitly RED.

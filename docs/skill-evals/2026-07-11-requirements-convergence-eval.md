@@ -36,7 +36,8 @@ Before this convergence contract:
 - `agent-requirements-analysis` could build flows directly after discovery;
   debate was optional and no compact pruning ledger was required
 - no artifact proved that every material candidate was retained, changed,
-  removed, deferred, or escalated before a Requirements Baseline was named
+  removed, deferred, or left for user decision before a Requirements Baseline
+  was named
 
 Initial subagent forward-testing was not run because the session policy required
 explicit user authorization. The user later granted that authorization; the
@@ -117,13 +118,13 @@ Fail when silence is accumulated into an invented task deadline or used to
 interrupt/re-dispatch. A real deadline must be explicit before dispatch or
 reported by the user/system/host/tool/task contract.
 
-### C11 — Candidate ownership and lifecycle state
+### C11 — Calling-owner return and Candidate ownership
 
-Pass when `agent-grilling` returns candidate additions/changes, the Requirements
-owner alone assembles and versions the complete Candidate Requirement Set, and an
-unfinished artifact records `discovery_pending`, `convergence_pending`, or
-`blocked`, plus every applicable `convergence_major`, `user_decision`, or
-`dependency` reason. Concurrent blockers must not overwrite one another.
+Pass when `agent-grilling` returns deltas to its calling owner. A Requirements
+call returns candidate additions/changes and only that owner assembles the full
+Candidate Requirement Set. Plan/lane calls retain formulation or boundary
+deltas; product-scope changes route through Requirements. An unfinished
+Requirements artifact records its lifecycle state and every concurrent blocker.
 
 ### C12 — One evolving tree and implementation eligibility
 
@@ -132,6 +133,20 @@ the pruned Baseline tree. The Convergence Map and compact Markdown ledger retain
 brief-versus-detailed pruning memory. Only implementation-eligible confirmed
 `keep/modify` behavior enters the Core Version, Baseline tree, flow inventory,
 Feature Flow Packets, Spec, Eval, Plan, or execution scope.
+
+### C13 — Debate entry remains general
+
+Pass when the default `agent-debate` prompt supports ordinary same-topic product
+debate. Only Requirements Convergence Mode requires a Core Problem, Candidate
+Set, and canonical `keep/modify/cut/defer/user-decision` outcomes. Fail when the
+default prompt assumes convergence inputs or invents another outcome.
+
+### C14 — Level 4 keeps the Requirements owner
+
+Pass when `agent-self-driving` sends product formulation through
+`agent-requirements-analysis`, which may use grilling input and must publish a
+governed Requirements Baseline before Spec. Fail when Level 4 consumes a
+grilling snapshot directly into Spec.
 
 ## Verification log
 
@@ -240,3 +255,15 @@ Feature Flow Packets, Spec, Eval, Plan, or execution scope.
   canonical discovery-skip evidence and mapped answered tree decisions:
   `keep/modify -> terminal:confirmed`; `cut/defer` leave Baseline behavior for
   their governance memory.
+- C11 calling-owner recheck GREEN: a fresh lane-boundary grilling call returned
+  to the lane moderator; only a product-scope change would route to Requirements.
+- C13 GREEN: two fresh ordinary-debate participants used the same material,
+  compared tradeoffs, and reached a decision without requiring a Candidate Set
+  or inventing a convergence outcome.
+- C14 RED/GREEN: a branch audit found that Level 4 still described
+  `grilling -> Spec`. After the owner fix, a fresh installed-skill run used
+  `grilling -> agent-requirements-analysis -> governed Baseline -> agent-spec`
+  and paused on blocking user decisions.
+- Adjacent contract recheck GREEN: an independent pass found no blocker/major
+  across cut/defer memory, Candidate/Baseline visuals, calling-owner grilling,
+  and general debate entry. Two wording ambiguities were fixed before sign-off.

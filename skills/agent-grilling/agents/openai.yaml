@@ -1,6 +1,6 @@
 interface:
   display_name: "Agent Grilling"
   short_description: "Grill assumptions to discover hidden gaps"
-  default_prompt: "Use $agent-grilling within the active workflow to uncover unexamined gaps, deepen feature details through evidence and counterexamples, then return candidate additions and changes to the Requirements owner."
+  default_prompt: "Use $agent-grilling within the active workflow to uncover hidden gaps through evidence and counterexamples, then return formulation or requirement deltas to the calling owner."
 policy:
   allow_implicit_invocation: false

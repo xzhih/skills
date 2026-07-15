@@ -8,7 +8,7 @@ evidence, blockers, and Requirements Baseline qualification.
 | Concept | Governed term | Meaning |
 | --- | --- | --- |
 | What actually needs solving | `Core Problem` / `Core Need` | Actor, causal problem, evidence, desired outcome, and boundary |
-| Remove branches that do not earn their scope | `Requirement Convergence` / `Scope Pruning` | Adversarially keep, modify, cut, defer, or escalate candidates |
+| Remove branches that do not earn their scope | `Requirement Convergence` / `Scope Pruning` | Adversarially keep, modify, cut, defer, or leave candidates for user decision |
 | Surviving behavior | `Core Version` | Behavior subset inside the governed Requirements Baseline: implementation-eligible confirmed `keep/modify` |
 | Governed artifact | `Requirements Baseline` | Core Version plus evidence, decisions, pruning memory, visuals, and trace ready for Spec |
 
@@ -96,9 +96,9 @@ Assign exactly one outcome to every material candidate:
 | --- | --- | --- |
 | `keep` | Candidate earns its scope unchanged | Requirements Baseline |
 | `modify` | A smaller/safer formulation earns its scope | Modified baseline requirement plus pruning row |
-| `cut` | Not needed for the Core Problem or does not earn current cost/risk | Scope Pruning Ledger only |
-| `defer` | Potentially useful later, but explicitly non-blocking/future/out-of-scope | Pruning ledger with owner and reopen trigger |
-| `user-decision` | Authority, taste, priority, cost/privacy, or business direction must choose | Decision ledger; pause if blocking |
+| `cut` | Not needed for the Core Problem or does not earn current cost/risk | Scope Pruning Ledger and Convergence Map; never Core Version |
+| `defer` | Potentially useful later, but explicitly non-blocking/future/out-of-scope | Pruning ledger with owner/reopen trigger, plus Convergence Map |
+| `user-decision` | Authority, taste, priority, cost/privacy, or business direction must choose | Decision ledger and Convergence Map; pause if blocking |
 
 Do not use `defer` as a softer spelling of unresolved. Source- or
 agent-answerable questions remain open work, and blocking user decisions prevent
@@ -114,14 +114,13 @@ passing the gate.
 | Layer | Owns |
 | --- | --- |
 | Mermaid Requirement Search Tree | What was analyzed, how branches split, and which frontier/state remains |
-| Mermaid Requirements Convergence Map | Which candidate branches were kept, modified, cut, deferred, or escalated into the Core Version |
+| Mermaid Requirements Convergence Map | Which candidates were kept, modified, cut, deferred, or left for user decision; only keep/modify form the Core Version |
 | Mermaid Feature Flow Packets | How surviving functions behave at product level |
 | Markdown | Core Problem evidence, detailed requirement rules, constraints, reasons, sources, pruning memory, decisions, and reopen triggers |
 
 Use identical candidate handles across Mermaid and Markdown. Keep every
 `modify/cut/defer/user-decision` visible; group routine `keep` when needed. Split
-large maps. Cut/deferred nodes may appear in the governance map, never Baseline
-behavior views.
+large maps. Cut/deferred nodes never enter Baseline behavior views.
 
 ## Scope Pruning Ledger
 
@@ -201,7 +200,8 @@ Call an artifact `Requirements Baseline` only when:
 - the Convergence Gate has `gate_result: passed` through normal
   `completed / consumed` evidence or the eligible trivial-change skip
 - every material candidate has an outcome
-- cut branches are absent from baseline behavior, flow inventory, and diagrams
+- cut branches are absent from the Core Version, Baseline behavior tree, flow
+  inventory, and Feature Flow Packets
 - modified branches and retained implications are reconciled everywhere
 - Core Version behavior, the Baseline tree, flow inventory, and Feature Flow
   Packets contain only implementation-eligible confirmed requirements

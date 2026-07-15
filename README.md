@@ -21,7 +21,7 @@ npx skills add xzhih/skills --all
 Install the recommended workflow set, including entry skills and required internal dependencies:
 
 ```sh
-npx skills add xzhih/skills --skill steady-coding codex-image-gen dev-flow discussion-workflows doc-driven-workflows agent-self-driving agent-runtime agent-requirements-analysis agent-spec agent-eval agent-plan agent-debate agent-review agent-lanes agent-grilling integration-review project-context
+npx skills add xzhih/skills --skill steady-coding codex-image-gen dev-flow agent-improve discussion-workflows doc-driven-workflows agent-self-driving agent-runtime agent-requirements-analysis agent-spec agent-eval agent-plan agent-debate agent-review agent-lanes agent-grilling integration-review project-context
 ```
 
 ## Skills
@@ -31,6 +31,7 @@ User-entry skills:
 - `steady-coding`: stable, grounded implementation, debugging, refactoring, verification, and reviewable code changes.
 - `codex-image-gen`: generate or edit images via the Responses API `image_generation` tool, auto-detecting auth (API key / codex custom provider / ChatGPT login).
 - `dev-flow`: explicit development lifecycle router for requirements, Spec, Eval, Plan, execution, review/test, repair/recheck, context recovery, docs, lanes, and heavier multi-agent workflows.
+- `agent-improve`: optional, read-only codebase or branch audits that check evidence and rank improvements.
 - `discussion-workflows`: explicit discussion governance for long, corrected, or decision-heavy conversations that need recap, boundaries, complexity checks, drift control, or durable state.
 - `doc-driven-workflows`: explicit project documentation governance for source-backed architecture, operation-flow, call-path, code/docs synchronization, and open-question ledgers.
 - `agent-self-driving`: explicit long-task automation controller for new projects, new requirements, model-diverse review/repair, external agents, and multi-agent delivery that should continue until completion or a true user decision.
@@ -109,6 +110,11 @@ decisions pause the handoff.
 locked Spec) and only run the remaining delivery work—it should not rewind
 product work without cause.
 
+**`agent-improve`** is an optional read-only advisor. It returns ranked findings
+and stops. A selected finding can enter `dev-flow` at the first missing gate;
+existing owners still handle Requirements, Spec, Eval, Plan, implementation,
+and review.
+
 ## Development Lifecycle
 
 For non-trivial development work, `dev-flow` uses this lifecycle as the default
@@ -134,7 +140,7 @@ Each phase has an exit gate:
 | Lock Eval | Acceptance checks, test points, manual checks, failure conditions, and evidence expectations define how to prove correctness. |
 | Lock Plan | Execution order, touched files/modules, risks, verification commands, lane candidates, and stop or rollback conditions are known; a mandatory `agent-review` of the whole Plan has closed (or the user waived it) before execution or lanes. |
 | Execute Plan | Changes stay within the plan boundary and produce evidence for what changed and what was not changed. |
-| Review + Test | Implementation is checked against Spec and Eval with inspectable test or manual-verification evidence. |
+| Review + Test | Implementation is checked against any accepted Plan, Spec, and Eval, with inspectable test or manual-verification evidence. |
 | Repair + Recheck | Accepted blocker/major findings are fixed and rechecked, rejected with evidence, or kept paused on a true user decision or unavailable required dependency. Only minor/out-of-scope/future items may be deferred after the owning artifact and trace are updated. |
 | Close / Handoff | Final state, evidence, residual risks, docs impact, and next owner are clear. |
 
@@ -182,7 +188,9 @@ High-risk task:
 Review is not only a final step. `agent-spec` and `agent-plan` require
 `agent-review` on the whole artifact before Eval or execution. Also use
 `agent-review` for Eval, implementation modules, diffs, or final results when
-risk warrants or when you want an independent pass.
+risk warrants or when you want an independent pass. Implementation produced
+from an accepted Plan is reviewed against that Plan before close unless the
+user explicitly waives it.
 
 Documentation governance is also a lifecycle gate: use `doc-driven-workflows`
 when a locked Spec, accepted implementation, or review finding would make
@@ -291,6 +299,7 @@ skills/
   project-context/
   codex-image-gen/
   dev-flow/
+  agent-improve/
   discussion-workflows/
   doc-driven-workflows/
   agent-requirements-analysis/

@@ -1,13 +1,15 @@
 # Lifecycle And Intensity
 
-Use this reference when the task needs intensity routing or Level 3-4 lifecycle structure. For formulation before execution, use `agent-grilling` and consume its snapshot here.
+Use this reference when the task needs intensity routing or Level 3-4 lifecycle
+structure. For product formulation, route through `agent-requirements-analysis`;
+it may use `agent-grilling` and owns what reaches the Requirements Baseline.
 
 ## Contents
 
 - Core Boundary
 - Intensity Router
 - Levels
-- Spec/Eval Delivery Spine
+- Requirements/Spec/Eval Delivery Spine
 - Long-Task Continuity
 - Goal Mode Integration
 - Plan Execution Contract
@@ -38,7 +40,11 @@ durable project source-of-truth docs: doc-driven-workflows
 This skill coordinates and persists orchestration state only where continuity,
 review convergence, external-agent sessions, or evidence tracking require it.
 
-Goal mode is an execution contract, not an open-ended discussion container. If execution reveals a major missing product, scope, architecture, deployment, or verification decision, pause and route to `agent-grilling` or the user as appropriate.
+Goal mode is an execution contract, not an open-ended discussion container. If
+execution reveals a major missing product, scope, architecture, deployment, or
+verification decision, pause and let `dev-flow` return to the owning
+Requirements, Spec, Eval, or Plan gate. Ask the user only when that owner cannot
+decide safely.
 
 Execution preflight is a short target check before durable writes or external side effects. It should restate the goal, scope, default assumptions, clear requirements, likely ambiguities, and execution plan. It is not a confirmation checkpoint unless a real pause condition appears.
 
@@ -85,27 +91,26 @@ Level 3: bounded review-repair convergence
   fresh review -> continue only while evidence requires.
 
 Level 4: full delivery lifecycle
-  Broad outcome-to-delivery goals. May consume an `agent-grilling` snapshot,
-  then includes Spec, Eval, roadmap,
-  plan, goal contract, implementation or production, review,
-  deployment/publication, evidence, and handoff.
+  Broad outcome-to-delivery goals. Includes a governed Requirements Baseline,
+  Spec, Eval, roadmap, Plan, goal contract, implementation or production,
+  review, deployment/publication, evidence, and handoff.
 ```
 
 Level 4 is not a verbosity mandate. Use compact owner artifacts when the
 deliverable is small, as long as formulation, execution, review, external side
 effects, and evidence remain traceable.
 
-## Spec/Eval Delivery Spine
+## Requirements/Spec/Eval Delivery Spine
 
 Use the focused owner skills as the main control surfaces:
 
 ```text
 Requirements:
-  Goal, users, flow, scope, non-goals, constraints, risks, confirmed/draft/open,
-  and true user decisions.
+  Governed Baseline for goal, users, flows, scope, non-goals, constraints,
+  risks, confirmed/draft/open state, and true user decisions.
 
 Spec:
-  Target, boundaries, users, constraints, non-goals, and user-decided tradeoffs.
+  Implementation behavior traced to that Baseline.
 
 Eval:
   Completion checks plus quality checks that prove the result is good enough.
@@ -133,7 +138,8 @@ paused:
   Stop because a pause condition blocks safe progress.
 
 complete:
-  Stop because Spec, Eval, and the goal contract are satisfied by evidence.
+  Stop because every applicable owner artifact and the goal contract are
+  satisfied by evidence.
 ```
 
 Every status checkpoint should preserve:
@@ -160,10 +166,12 @@ Use a host-native goal, task, or workflow mode when the current agent runtime pr
 
 If the host exposes an explicit goal interface, such as a create/update goal capability, start or update that goal after the execution contract is clear and permitted. Do not substitute a chat summary or status note for host goal mode when the capability is available and authorized.
 
-Use host goal mode for execution continuity, not for open-ended formulation. Resolve open-ended formulation with `agent-grilling` before creating a goal contract. The sequence is:
+Use host goal mode for execution continuity, not for open-ended formulation.
+Resolve product formulation through `agent-requirements-analysis`, which may use
+`agent-grilling`, before creating a goal contract. The sequence is:
 
 ```text
-lock Spec/Eval/Plan -> create goal contract -> start or update host goal mode when permitted -> execute bounded actions -> checkpoint status
+lock the missing applicable gates (Requirements Baseline -> Spec -> Eval -> Plan) -> create goal contract -> start or update host goal mode when permitted -> execute bounded actions -> checkpoint status
 ```
 
 If the host has no goal mode, or the host goal mode is unavailable in the
@@ -229,13 +237,14 @@ Continue only when at least one evidence-backed reason exists:
 - an accepted blocker or major finding remains open
 - structural degradation shows the plan should be split, simplified, or corrected before more patches
 - a repair changed enough scope to require fresh review
-- evidence shows the Spec, Eval, goal contract, plan, or boundary is wrong and must route to `agent-grilling` or be revised before execution continues
+- evidence shows Requirements, Spec, Eval, goal contract, Plan, or a boundary is
+  wrong and its owner must revise it before execution continues
 
 Ordinary next-step uncertainty should be resolved through source materials, runtime evidence, a focused agent pass, or a reversible assumption. It is not a pause reason.
 
 Completion gate — stop as `complete` only when:
 
-- Spec, Eval, and goal contract verification pass
+- all applicable Requirements, Spec, Eval, and goal contract checks pass
 - every required task is done; remaining required work must not be silently
   converted into a pause or deferral
 - required artifacts and evidence are current
@@ -264,13 +273,14 @@ Use Level 4 for broad outcome-to-delivery work across domains, not only software
 Keep the phases domain-neutral:
 
 ```text
-formulation snapshot:
-  Consume `agent-grilling` output when target, constraints, users, risks,
-  success criteria, or default assumptions were unclear.
+requirements:
+  Use `agent-grilling` when target, constraints, users, risks, success criteria,
+  or defaults are unclear. The Requirements owner converges the result into a
+  governed Baseline before Spec.
 
 spec:
-  Lock the target, boundaries, non-goals, and user-decided tradeoffs, or pause
-  for the user when those choices are not agent-decidable.
+  Convert the governed Baseline into implementation behavior, or pause for the
+  user when a required choice is not agent-decidable.
 
 eval:
   Define completion and quality criteria before broad implementation planning.
@@ -286,8 +296,8 @@ execution or production:
   Implement, create, research, synthesize, or deploy through the task queue.
 
 completion:
-  Prove the result satisfies Spec and Eval with verification, review, evidence,
-  and handoff.
+  Prove the result satisfies the accepted Plan when present, plus Spec and Eval,
+  with verification, review, evidence, and handoff.
 ```
 
 Do not ask the user for implementation mechanics, review strategy, or ordinary tradeoffs that agents can resolve. Ask only when the choice is non-agent-decidable or affects authorization, cost, privacy, destructive/public action, or a critical product/business decision.
@@ -315,8 +325,8 @@ Formulation Gate:
 
 ```text
 Proves the target is right.
-Outputs execution preflight, Spec contract, open user decisions if any, roadmap
-shape, and review strategy.
+Outputs execution preflight, governed Requirements Baseline, Spec contract, open
+user decisions if any, roadmap shape, and review strategy.
 Escalates only non-agent-decidable decisions to the user.
 ```
 
@@ -331,7 +341,7 @@ defect severity meanings, pass/fail decision rule, and final review strategy.
 Completion Gate:
 
 ```text
-Proves the result satisfies Spec and Eval.
+Proves the result satisfies the accepted Plan when present, plus Spec and Eval.
 Outputs evidence closure: criteria closed, verification, review or recheck
 status, deployment/publication evidence when relevant, quality judgment, and
 final handoff.

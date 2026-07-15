@@ -49,7 +49,7 @@ model the stated intent and current assumptions
   -> resolve them from source, focused agents, or safe assumptions
   -> write the formulation and requirement deltas
   -> repeat for newly exposed high-impact gaps
-  -> return candidate additions and changes to the active Requirements owner
+  -> return deltas to the active calling owner
 ```
 
 Sweep only affected dimensions, not a ceremonial checklist:
@@ -93,9 +93,9 @@ Remaining true user decisions:
 Next: active workflow owner
 ```
 
-The active Requirements owner, not this worker, assembles and versions the
-complete Candidate Requirement Set and marks the snapshot consumed after the
-returned deltas and candidate handles are integrated.
+Return to the calling owner. For a Requirements call, that owner alone assembles
+the Candidate Requirement Set. For a Plan or lane call, return formulation or
+boundary deltas there; flag product-scope changes for Requirements routing.
 
 If no material gap survives, name the dimensions and evidence inspected and say
 that no delta was found; do not invent issues to prove value. Omit empty
@@ -114,5 +114,5 @@ multi-round uncertainty.
 - Inventing speculative gaps without a causal link or evidence need.
 - Pruning a plausible branch before it is formulated enough for convergence.
 - Publishing an authoritative Candidate Requirement Set instead of returning
-  additions and changes to its Requirements owner.
+  deltas to the calling owner.
 - Calling discovered candidates the final Requirements Baseline.
