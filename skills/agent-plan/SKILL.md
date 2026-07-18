@@ -17,45 +17,24 @@ PLAN TASKS AROUND TESTABLE DELIVERABLES.
 Each task needs a deliverable, owned surface, coverage trace, verification path,
 expected evidence, and stop condition. Do not split merely by document section.
 
-## Shared Rules
+## Contract
 
-Apply:
-
-- [mode-gate.md](../dev-flow/references/mode-gate.md)
-- [coverage-trace.md](../dev-flow/references/coverage-trace.md)
-- [task-checkboxes.md](../dev-flow/references/task-checkboxes.md)
-
-Return only what execution, review, or lane dispatch needs. Do not print empty
-headings. Do not confuse a short plan with a plan a worker can execute.
-
-## Use For
-
-- task decomposition and dependency ordering
-- file/module/interface ownership
-- verification commands and evidence expectations
-- safe lane candidates and delayed lanes
-
-Use [agent-eval](../agent-eval/SKILL.md) when acceptance evidence is missing.
-Use [agent-lanes](../agent-lanes/SKILL.md) only after the plan is accepted, the
-Plan Review Gate is closed, and the next action is parallel execution.
+Apply [mode-gate.md](../dev-flow/references/mode-gate.md),
+[coverage-trace.md](../dev-flow/references/coverage-trace.md), and
+[task-checkboxes.md](../dev-flow/references/task-checkboxes.md). Produce a
+complete, concrete work order at the selected weight; omit fields that do not
+change execution, review, or lane dispatch.
 
 Plan only implementation-eligible confirmed behavior and its Eval checks.
 Draft/open candidates remain upstream governance references and cannot become
 tasks, lane packets, or execution scope.
 
-## Depth (detailed, not empty)
-
-A Plan is a **concrete work order**: detailed enough for a fresh worker, not a
-short restatement of the Spec and not a padded task list. Apply mode-gate
-**Substance Rule**.
-
-Minimum applicable obligations (omit irrelevant slots; never invent `N/A`
-content merely to fill the shape):
+Include every applicable obligation:
 
 ```text
 Ordered checkbox tasks, each with:
-  concrete deliverable (not "implement feature")
-  owned files/modules/interfaces (or explicit discovery task with stop)
+  concrete deliverable
+  owned files/modules/interfaces, or a bounded discovery task
   trace to Spec behavior and/or Eval check
   verify: command, test, or evidence path -> expected result
   stop/blocker condition
@@ -80,37 +59,36 @@ Before execution: compare the current source revision and content with this snap
 Capture this after acceptance. Snapshot the implementation scope, not the Plan
 file itself. Unrelated out-of-scope changes do not block.
 
-Thin Plan red flags (block execution readiness):
+Block review or execution when the Plan contains:
 
 ```text
-- tasks that only rename Spec sections ("do auth", "do UI")
-- missing file/module ownership on implementation tasks
-- verify: "test later" / "manual" with no named command or steps
-- no coverage for an important Eval check without deferral
-- one mega-task for multi-surface work that should be split
-- placeholders: "handle edge cases", "add validation", "wire up"
-- whole Plan is a handful of bullets for multi-behavior delivery
+tasks that only rename Spec sections, such as "do auth" or "do UI"
+missing owned surfaces
+"test later" or "manual" without a command, steps, and expected result
+no task for an important Eval check without explicit deferral
+one multi-surface mega-task where ownership or verification should split
+placeholders such as "handle edge cases", "add validation", or "wire up"
 ```
 
-Self-check: **Could a fresh worker finish a task from the Plan line alone and
-know when to stop?** If no, deepen.
+Before review, ask whether a fresh worker can execute each task and know when
+to stop. Add only the missing ownership, trace, verification, or boundary.
 
 ## Process
 
-```text
-read locked Spec and Eval
-  -> restore project structure and verification context
-  -> map files, modules, interfaces, and collision risks
-  -> write checkbox tasks around testable deliverables
-  -> attach coverage trace, verification, evidence, and stop condition
-  -> mark safe lane candidates and intentionally delayed work
-  -> expand until anti-thin bar passes
-  -> draft Plan ready for review
-  -> mandatory agent-review of the whole Plan
-  -> repair and recheck accepted blocker/major findings (or reject with evidence)
-  -> capture the accepted Plan's current source snapshot when persistence or handoff needs it
-  -> hand off to execution or lanes only when the review gate is closed
-```
+1. Read the locked Spec and Eval. Use
+   [project-context](../project-context/SKILL.md) to restore project structure,
+   verification commands, and collision risks.
+2. Write checkbox tasks around testable deliverables and attach owned surfaces,
+   trace, verification, evidence, dependencies, and stop conditions.
+3. Route missing acceptance evidence to [agent-eval](../agent-eval/SKILL.md).
+   Keep draft/open candidates upstream.
+4. Mark only disjoint work as a safe lane candidate; delay shared surfaces.
+5. Send the whole reviewable Plan to an independent
+   [agent-review](../agent-review/SKILL.md), repair and recheck accepted
+   blocker/major findings, then capture the accepted source snapshot when
+   persistence or handoff requires it.
+6. Hand accepted serial work to execution, or approved parallel work to
+   [agent-lanes](../agent-lanes/SKILL.md).
 
 Task shape:
 
@@ -123,35 +101,23 @@ accepted scope, tasks, or source snapshot. A source change that invalidates
 behavior, scope, compatibility, or verification returns the Plan for update and
 re-review.
 
-## Plan Review Gate (mandatory)
+## Review And Execution Gate
 
-Do not move to execution or lanes, claim Plan locked, or treat the Plan as
-dispatch-ready until one [agent-review](../agent-review/SKILL.md) pass has
-completed on the **whole** Plan artifact.
-
-Apply mode-gate **Review Weight**. The required pass covers the full Plan and is
-independent of drafting. Lightweight defaults to one fresh inline reviewer;
-additional/model-diverse reviewers require a risk, evidence, workflow, or user
-condition rather than this gate alone.
-
-Moderator owns the Plan draft through review. Close the gate only when:
+Require one independent whole-Plan review before claiming the Plan locked or
+moving to execution/lanes. In Lightweight mode, one fresh inline reviewer is
+sufficient; add reviewers only when risk, evidence, workflow, or the user
+requires them. The moderator owns the draft through review. Close the gate when:
 
 - the review packet named the Plan as the artifact
 - accepted blocker/major findings are fixed and rechecked, or rejected with evidence
 - a true decision/dependency blocker keeps the gate paused, not deferred closed
-- sign-off or equivalent “ready for execution” outcome is recorded (inline is
-  fine in Lightweight mode)
+- sign-off or an equivalent ready-for-execution outcome is recorded
 
-Skip only if the user explicitly waives Plan review for this artifact and the
-waiver is recorded. The waiver does not dismiss already accepted findings or
-the Execution Readiness Gate. Do not self-waive.
+Only the user may waive review for this artifact; record the waiver, and retain
+accepted findings and the readiness requirements below. Move to execution only
+when:
 
-## Execution Readiness Gate
-
-Move to execution only when:
-
-- the Plan Review Gate is closed (or explicitly user-waived)
-- Depth (anti-thin) bar is met—not only "has a task list"
+- the review gate is closed or explicitly waived
 - tasks are independently understandable and testable
 - every non-deferred requirement/behavior/eval trace item is covered
 - no draft/open candidate appears in tasks, lane candidates, or execution scope
@@ -161,7 +127,7 @@ Move to execution only when:
 - file/module/interface ownership is specific enough for a fresh worker
 - no placeholder tasks remain
 - lane candidates have disjoint owned surfaces or are delayed
-- blocker/major Plan review findings are fixed/rechecked or rejected with evidence
+- accepted blocker/major findings are fixed and rechecked, or rejected with evidence
 - a persisted or handed-off Plan has its post-acceptance source snapshot
 
 If persistence is needed, use the active workflow location; default:

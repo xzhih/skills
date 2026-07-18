@@ -77,7 +77,8 @@ becomes a delivery controller.
 
 ## Output
 
-Keep the output short:
+Lead with the ranked findings and evidence. Preserve scope limits, rejected
+concerns, and the recommended selection; omit repetition and generic advice:
 
 ```text
 Scope, exclusions, and verification results

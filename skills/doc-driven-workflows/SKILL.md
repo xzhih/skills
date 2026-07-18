@@ -74,7 +74,8 @@ maintenance unless the user asks otherwise.
 
 ## Output
 
-Keep summaries short:
+Lead with changed documentation and source evidence. Preserve material open
+questions and intentional skips; omit repeated background:
 
 ```text
 Docs updated:

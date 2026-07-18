@@ -61,7 +61,8 @@ it does not redefine that protocol or publish the Requirements Baseline.
 
 ## Output
 
-For ordinary debate, keep synthesis short:
+For ordinary debate, lead with the decision. Preserve material tradeoffs,
+blockers, and the next action; omit repeated arguments:
 
 ```text
 Decision:

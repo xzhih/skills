@@ -85,7 +85,8 @@ Stop condition
 
 ## Output
 
-Keep synthesis short:
+Lead with review status. Preserve evidence, unresolved blocker/major findings,
+and required repair or recheck; omit repeated reviewer narration:
 
 ```text
 Accepted blocker/major:

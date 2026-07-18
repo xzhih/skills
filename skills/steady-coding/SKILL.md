@@ -35,9 +35,12 @@ Contract:
 1. Define success without reframing away explicit constraints.
 2. Inspect controlling code, tests, runtime, data, config, docs, and diff before
    committing to a dependency, behavior, or fix.
-3. Surface uncertainty only when it can change direction, correctness,
-   verification, or risk. Ask on material/irreversible choices; state local
-   reversible choices as working assumptions.
+3. Treat the request as the action boundary. For answer, review, diagnose, or
+   plan work, inspect and report without implementing. For change, build, or
+   fix work, make in-scope local changes and run relevant non-destructive
+   checks. Confirm external writes, destructive or costly actions, and material
+   scope expansion. State reversible assumptions; ask only when an unresolved
+   choice changes correctness, risk, or user-owned direction.
 4. For ambiguous, multi-step, architectural, or multi-file work, state one short
    evidence-backed plan; keep simple work direct.
 5. Make the smallest correct change without speculative requirements, adjacent

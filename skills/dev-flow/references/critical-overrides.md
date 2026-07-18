@@ -31,15 +31,23 @@ Use these rules across the development workflow skills.
 - Keep high-collision files, shared contracts, migrations, and evidence packets single-owner per batch.
 - The main thread owns batching, normalized state, integration, and final claims.
 
-## Autonomy
+## Action Authority
 
-- After the user delegates a goal, keep progressing through the workflow until completion, a true blocker, or an explicit user redirect.
-- Do not make the user a message bus for prompts, worker summaries, routine next-batch choices, or ordinary agent disagreements.
+- For requests to answer, explain, review, diagnose, or plan, inspect the
+  relevant material and report the result. Do not implement unless requested.
+- For requests to change, build, or fix, make the requested in-scope local
+  changes and run relevant non-destructive validation without asking first.
+- Confirm external writes, destructive actions, purchases or other costly
+  execution, unauthorized data-leaving agent use, and material scope expansion.
+- After a goal is delegated, continue until completion, a true blocker, or an
+  explicit redirect. Resolve uncertainty from source, focused agents, or
+  reversible assumptions before escalating.
+- Do not make the user relay prompts, worker summaries, routine batch choices,
+  or ordinary agent disagreements. Continue non-overlapping work when one lane
+  blocks.
 - Route dispatched workers through `agent-runtime`: native-default host workers
   need lifecycle handling but no model profile; named/model-selectable or
   external/session participants need their applicable profile/authorization gates.
-- Resolve uncertainty with source evidence, focused agents, or reversible assumptions before escalating.
-- Continue non-overlapping work when one lane blocks.
 
 ## Evidence
 
@@ -47,7 +55,3 @@ Use these rules across the development workflow skills.
 - UI/Admin hard gates need fresh browser or DOM evidence when project rules require it.
 - A blocked external condition is a real status, not a pass.
 - Do not claim a gate passed without the command, evidence path, or blocker record that supports it.
-
-## User Escalation
-
-Ask the user only for decisions that agents and source evidence cannot safely resolve: product direction, privacy/cost authorization, destructive/public actions, external-agent use, or meaningful scope tradeoffs.
