@@ -1,6 +1,6 @@
 ---
 name: agent-eval
-description: "Use only when the user explicitly invokes $agent-eval, or when an active workflow routes here, to convert locked Spec behavior into acceptance evidence, automated/manual checks, failure conditions, fixtures, risk coverage, and implementation evidence requirements before Plan."
+description: "Use only for explicit $agent-eval or workflow-routed conversion of locked Spec behavior into acceptance checks, failure conditions, fixtures, risk coverage, and evidence before Plan."
 ---
 
 # Agent Eval

@@ -1,12 +1,11 @@
 ---
 name: dev-flow
-description: "Use when the user explicitly invokes $dev-flow, or an already-loaded controller needs development lifecycle routing across multiple gates, resume/handoff state, or unclear ownership. Do not use for ordinary implementation or a single known leaf task."
+description: "Use for explicit $dev-flow or when a loaded controller needs lifecycle routing across gates, recovery/handoff state, or unclear ownership. Not for a known leaf task."
 ---
 
 # Dev Flow
 
-Route lifecycle to one loaded owner and continue. Own phase selection and
-closeout, not leaf work.
+Own phase selection and closeout; the selected leaf owns its work.
 
 ```text
 SELECT -> LOAD -> CONTINUE.
@@ -15,8 +14,7 @@ SELECT -> LOAD -> CONTINUE.
 ## Route
 
 Use for explicit `$dev-flow` or uncertain ownership across gates, recovery,
-lanes, integration, or closeout. Route an explicit single-leaf request straight
-to its leaf.
+lanes, integration, or closeout. Route a known single-leaf request directly.
 
 | Need or state | Owner |
 |---|---|
@@ -38,65 +36,59 @@ to its leaf.
 
 ## Transition Contract
 
-1. When continuation, handoff, persisted artifacts, or returned work makes
-   lifecycle state uncertain, first read and run `project-context`.
-2. From source, choose the lightest mode, first missing gate, and one owner.
-3. Read that child's `SKILL.md` completely, then its conditionally required refs.
-4. Act unless a true user decision blocks; return here only for the next gate,
-   state update, or evidence-backed close/handoff.
-
-An owner label is not a transition. Report unavailable children; never make the
-user dispatch internal workflows.
-
-## Improvement Intake
-
-A selected `agent-improve` finding does not pass a lifecycle gate. Recheck its
-evidence, choose the first missing gate and one owner, and continue. Do not
-repeat the broad audit.
-
-## Active Controller
-
-With active `agent-self-driving`, use `leaf-route-only`: retain the controller,
-load a leaf, and return evidence. Never restart, nest, or route back into it.
-Enter only after explicit `$agent-self-driving` invocation when none is active.
-
-## Gates and Weight
-
 ```text
-discovery -> convergence -> Requirements Baseline -> Spec -> Eval -> Plan -> execute -> review/test -> repair/recheck -> close
+discovery -> convergence -> Requirements -> Spec -> Eval -> Plan
+-> execute -> review/test -> repair/recheck -> close
 requirement -> behavior -> check -> task -> evidence
 ```
 
-Start at the first source-evident missing gate. `Lightweight` uses compact chat
-trace and direct execution; `Standard` separates confusable gates; `Durable`
-persists recovery state; `Lane` adds ownership, collision, and integration.
+1. If persisted, returned, or handoff state is uncertain, run `project-context`.
+2. From source, choose the lightest mode, first missing gate, and one owner.
+3. Read that owner's complete `SKILL.md` and only its applicable references.
+4. Act; return here only for the next gate or evidence-backed close/handoff.
 
-Child contracts own gates: Spec and Plan retain mandatory whole-artifact review;
-Lightweight makes it compact, not optional. Implementation verification and
-repair belong to `steady-coding`. When execution follows an accepted Plan,
-`agent-review` checks the result against that Plan before close unless the user
-explicitly waives it.
+An owner label is not a transition. Report unavailable children; never make the
+user dispatch internal workflows. Ask only when a true user decision blocks.
 
-Apply [mode-gate.md](references/mode-gate.md) before shaping artifacts. Read
-[coverage-trace.md](references/coverage-trace.md) for confusable trace items,
-persistence, lanes, handoff, or close; read
-[task-checkboxes.md](references/task-checkboxes.md) when Plan/lane/handoff state
-tracks execution. Read [critical-overrides.md](references/critical-overrides.md)
-before persisted writes, parallel dispatch/integration, completion claims, or
-authorization/user-decision boundaries. Read
-[artifact-layout.md](references/artifact-layout.md) only when artifacts must
-persist for risk, handoff, multi-agent continuity, or recovery.
+## Improvement Intake
+
+A selected `agent-improve` finding is evidence, not a passed gate. Recheck it,
+route the first missing gate, and do not repeat the broad audit.
+
+## Active Controller
+
+With active `agent-self-driving`, retain it, load one leaf, and return evidence
+(`leaf-route-only`). Never restart, nest, or route back into it. Enter it only
+through explicit invocation when no controller is active.
+
+## Weight and References
+
+Start at the first source-evident missing gate. Apply
+[mode-gate.md](references/mode-gate.md) before shaping artifacts. Child skills
+own their gates; Lightweight compacts mandatory Spec/Plan review but does not
+remove it. `steady-coding` owns implementation verification/repair. After an
+accepted Plan, `agent-review` checks the result before close unless waived.
+
+Load references only when their condition applies:
+
+- [coverage-trace.md](references/coverage-trace.md): confusable trace,
+  persistence, lanes, handoff, or close.
+- [task-checkboxes.md](references/task-checkboxes.md): execution state in a
+  Plan, lane registry, or handoff.
+- [critical-overrides.md](references/critical-overrides.md): persisted writes,
+  parallel dispatch/integration, completion claims, or authority boundaries.
+- [artifact-layout.md](references/artifact-layout.md): persistence required for
+  risk, handoff, multi-agent continuity, or recovery.
 
 ## Complete, Pause, or Hand Off
 
-Mark `complete` only from source-matched status, current checks, rechecked
-repairs, no unresolved accepted blocker/major, and every required trace item
-completed or validly deferred after its owning artifact was updated.
+Mark `complete` only when source status and current checks match, repairs were
+rechecked, no accepted blocker/major remains, and required trace is complete or
+validly deferred in its owning artifact.
 
-Use `paused` when a true user decision, unavailable required dependency,
-authorization boundary, missing access, or unavailable verification prevents a
-safe next action. Record the raw blocker evidence, owner, effect, and exact
-resume condition; never present paused work as complete.
+Use `paused` only for a true user decision, required unavailable dependency,
+authorization/access boundary, or unavailable verification. Record evidence,
+owner, effect, and exact resume condition; never present it as complete.
 
 Persist a handoff only when recovery or another thread/owner needs it. Otherwise
 load the next owner and continue.

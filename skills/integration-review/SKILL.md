@@ -1,6 +1,6 @@
 ---
 name: integration-review
-description: "Use only when an active workflow routes here, to review returned lane/worktree handoffs with owned surfaces and lane evidence: scope, diffs, coverage, conflicts, lane status, integration verdicts, and next-batch eligibility. Do not use for ordinary PR/code review, debate/review agents finishing, or non-lane worker results."
+description: "Internal only: use when a workflow routes returned lane or worktree handoffs here for diff/evidence verdicts, conflicts, integration state, and next-batch eligibility. Not for ordinary review."
 ---
 
 # Integration Review

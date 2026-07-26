@@ -1,6 +1,6 @@
 ---
 name: agent-review
-description: "Use only when the user explicitly invokes $agent-review, or when a loaded workflow routes here, for one focused reviewer or multiple agents to review the same artifact: Spec, Eval, plan, design, PR, diff, implementation, evidence package, or final result. Do not use for debate, lanes, or returned-lane integration."
+description: "Use only for explicit $agent-review or workflow-routed review of one concrete artifact or result by one or more reviewers. Not for debate, lane dispatch, or returned-lane integration."
 ---
 
 # Agent Review
@@ -53,11 +53,18 @@ Before sending review work:
   decisions are at least **major** (blocker if the next gate would rely on
   them). Prefer detailed-and-concrete over short-and-vague; reject long-and-empty
   the same way. See mode-gate Substance Rule.
+- Review omission **and surplus**. In Plans, untraced or invented execution
+  scope/surfaces (`behavior/Eval | in-scope gap | required dependency`) are at
+  least major; remove, merge, or return the unknown upstream. Never prune
+  required correctness, security, accessibility, compatibility, migration,
+  data-safety, or operational evidence.
 - Use [review-convergence.md](references/review-convergence.md)
   for accepted blocker/major findings, evidence disputes, rebuttal, or their
   required fresh recheck—not for a minor-only focused recheck.
 - Use [output-normalization.md](../agent-self-driving/references/output-normalization.md)
-  before promoting agent output into findings or repair tasks.
+  before comparing/promoting multi-agent, heterogeneous, resumed, or
+  shape-inconsistent output. A single focused source-first review may use this
+  skill's native Output contract directly.
 
 ## Implementation Against Plan
 
@@ -105,4 +112,5 @@ Omit empty headings.
 - Treating agreement as proof.
 - Accepting findings without evidence.
 - Asking reviewers to invent the plan they should verify.
+- Reviewing only for omissions, or promoting conditional/proposed/future work.
 - Claiming sign-off while accepted blocker/major findings remain.

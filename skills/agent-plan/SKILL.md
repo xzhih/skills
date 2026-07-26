@@ -1,6 +1,6 @@
 ---
 name: agent-plan
-description: "Use only when the user explicitly invokes $agent-plan, or when an active workflow routes here, to convert locked Spec and Eval into implementation tasks, coverage matrix, dependencies, files/interfaces, verification commands, evidence expectations, risks, stop conditions, and lane candidates before execution."
+description: "Use only for explicit $agent-plan or workflow-routed conversion of locked Spec and Eval into traced implementation tasks, dependencies, verification, evidence, risks, and lane candidates before execution."
 ---
 
 # Agent Plan
@@ -22,71 +22,74 @@ expected evidence, and stop condition. Do not split merely by document section.
 Apply [mode-gate.md](../dev-flow/references/mode-gate.md),
 [coverage-trace.md](../dev-flow/references/coverage-trace.md), and
 [task-checkboxes.md](../dev-flow/references/task-checkboxes.md). Produce a
-complete, concrete work order at the selected weight; omit fields that do not
-change execution, review, or lane dispatch.
+necessary-and-sufficient, concrete work order for the selected scope envelope;
+omit fields that do not change execution, review, or lane dispatch.
 
 Plan only implementation-eligible confirmed behavior and its Eval checks.
 Draft/open candidates remain upstream governance references and cannot become
 tasks, lane packets, or execution scope.
 
-Include every applicable obligation:
+Apply this admission contract before review:
 
 ```text
-Ordered checkbox tasks, each with:
-  concrete deliverable
-  owned files/modules/interfaces, or a bounded discovery task
-  trace to Spec behavior and/or Eval check
-  verify: command, test, or evidence path -> expected result
-  stop/blocker condition
-Dependencies and shared/high-collision surfaces
-What not to change
-Lane candidates only when surfaces are disjoint (or delayed with reason)
-Risks that change order, batching, or verification
+rebase(old/pending): inspect controlling source -> still required | satisfied |
+  obsolete | conditional | proposed
+activate(conditional): current only when its condition is true; otherwise record
+  boundary/owner, never task/check/lane/blocker
+forward trace: confirmed need -> behavior -> Eval -> task -> evidence
+reverse trace: task/lane/artifact/harness -> confirmed behavior/Eval |
+  in-scope source gap | required delivery dependency
+surface: source/locked artifact -> owned file/module/interface
+no invented surface: a plausible filename/API/service is still invented; unknown ->
+  bounded discovery or startability blocker; dependent work stays unstartable
+verification: attach to its deliverable or final gate; standalone only when the
+  evidence artifact is itself a confirmed deliverable
+lane: disjoint ownership AND critical-path gain > coordination/integration cost
+prune: remove/merge anything without reverse trace; protect required correctness,
+  security, accessibility, compatibility, migration, data-safety, and ops evidence
 ```
 
-After the whole-Plan review is accepted, and before a persisted or handed-off
-Plan moves to execution, append:
+The source snapshot detects drift after acceptance; it never replaces
+planning-time rebase. Each admitted checkbox task must name a deliverable,
+owned surface (or bounded discovery), trace, `verify -> expected`, and stop
+condition. Also record dependencies/collisions, exclusions, earned lanes, and
+risks that change order, batching, or verification.
+
+After accepted review, append this to a persisted or handed-off Plan:
 
 ```text
 Source revision: required commit or equivalent immutable ID
 Planned at: optional timestamp
 In-scope snapshot: clean, or staged/unstaged/untracked content hashes by path
-Before execution: compare the current source revision and content with this snapshot;
-  update and re-review the Plan if a difference affects behavior, scope,
-  compatibility, or verification
+Before execution: compare current revision/content; update and re-review if
+  drift affects behavior, scope, compatibility, or verification
 ```
 
-Capture this after acceptance. Snapshot the implementation scope, not the Plan
-file itself. Unrelated out-of-scope changes do not block.
+Snapshot implementation scope, not the Plan file. Unrelated out-of-scope changes
+do not block.
 
-Block review or execution when the Plan contains:
+Reject before review or execution:
 
 ```text
-tasks that only rename Spec sections, such as "do auth" or "do UI"
-missing owned surfaces
-"test later" or "manual" without a command, steps, and expected result
-no task for an important Eval check without explicit deferral
-one multi-surface mega-task where ownership or verification should split
-placeholders such as "handle edge cases", "add validation", or "wire up"
+section-label/placeholder task | missing or invented surface/API | missing verify/stop
+uncovered non-deferred Eval | multi-surface mega-task | needless task splitting
+unrebased pending work | inactive/proposed work as current | untraced surplus
 ```
-
-Before review, ask whether a fresh worker can execute each task and know when
-to stop. Add only the missing ownership, trace, verification, or boundary.
 
 ## Process
 
-1. Read the locked Spec and Eval. Use
+1. Read locked Spec/Eval and current controlling source; rebase old/pending
+   claims. Use
    [project-context](../project-context/SKILL.md) to restore project structure,
    verification commands, and collision risks.
-2. Write checkbox tasks around testable deliverables and attach owned surfaces,
-   trace, verification, evidence, dependencies, and stop conditions.
+2. Build checkbox tasks around testable deliverables; apply the admission
+   contract and record dependencies, shared surfaces, exclusions, and risks.
 3. Route missing acceptance evidence to [agent-eval](../agent-eval/SKILL.md).
    Keep draft/open candidates upstream.
-4. Mark only disjoint work as a safe lane candidate; delay shared surfaces.
-5. Send the whole reviewable Plan to an independent
+4. Prune, then mark only earned lanes; keep the rest serial.
+5. Send the whole Plan to an independent
    [agent-review](../agent-review/SKILL.md), repair and recheck accepted
-   blocker/major findings, then capture the accepted source snapshot when
-   persistence or handoff requires it.
+   blocker/major findings, then capture the source snapshot when needed.
 6. Hand accepted serial work to execution, or approved parallel work to
    [agent-lanes](../agent-lanes/SKILL.md).
 
@@ -105,30 +108,22 @@ re-review.
 
 Require one independent whole-Plan review before claiming the Plan locked or
 moving to execution/lanes. In Lightweight mode, one fresh inline reviewer is
-sufficient; add reviewers only when risk, evidence, workflow, or the user
-requires them. The moderator owns the draft through review. Close the gate when:
+sufficient; add reviewers only for risk, evidence, workflow, or user need. The
+moderator owns the draft. Only the user may grant an artifact-scoped waiver.
 
-- the review packet named the Plan as the artifact
-- accepted blocker/major findings are fixed and rechecked, or rejected with evidence
-- a true decision/dependency blocker keeps the gate paused, not deferred closed
-- sign-off or an equivalent ready-for-execution outcome is recorded
+Close review only after the packet names the Plan, accepted blocker/major
+findings are repaired and rechecked or rejected with evidence, and sign-off is
+recorded. A real decision/dependency blocker pauses the gate; deferral does not
+close it. Move to execution only when:
 
-Only the user may waive review for this artifact; record the waiver, and retain
-accepted findings and the readiness requirements below. Move to execution only
-when:
-
-- the review gate is closed or explicitly waived
-- tasks are independently understandable and testable
-- every non-deferred requirement/behavior/eval trace item is covered
-- no draft/open candidate appears in tasks, lane candidates, or execution scope
-- setup/dependency tasks explain why they lack direct coverage
-- dependencies and shared surfaces are explicit
-- verification and evidence requirements trace back to Eval
-- file/module/interface ownership is specific enough for a fresh worker
-- no placeholder tasks remain
-- lane candidates have disjoint owned surfaces or are delayed
-- accepted blocker/major findings are fixed and rechecked, or rejected with evidence
-- a persisted or handed-off Plan has its post-acceptance source snapshot
+```text
+review closed/waived
+admission contract passed; every non-deferred requirement/behavior/Eval covered
+fresh worker can execute and stop every task without guessing
+dependencies/collisions explicit; lanes earned or kept serial
+accepted blocker/major findings resolved
+persisted/handoff Plan has its post-acceptance source snapshot
+```
 
 If persistence is needed, use the active workflow location; default:
 `docs/dev-flow/plans/<YYYY-MM-DD>-<slug>-plan.md`.

@@ -3,37 +3,35 @@
 Use this reference when Requirements, Spec, Eval, Plan, lanes, review, or
 handoff need to prove that work did not drop an important need.
 
-## Core Idea
+## Contract
 
-Coverage trace answers five questions:
+Trace forward for omission and backward for surplus:
 
 ```text
-What need is being served?
-What behavior satisfies it?
-What check or evidence proves it?
-What task owns the change?
-What evidence closed it, blocked it, or deferred it?
+forward: confirmed need -> behavior -> check -> task -> evidence
+reverse: task/lane/artifact/harness -> confirmed behavior/check |
+  in-scope source gap | dependency required to deliver them
 ```
 
-The trace can be inline prose, bullets, a small table, or stable labels. Choose
-the lightest form from `mode-gate.md`.
+For each element, answer `what does it serve?`, `who owns it?`, `what proves
+it?`, and `what fails if removed?`. Setup/dependency tasks may lack visible
+behavior, but must name the obligation they unblock. Remove or merge items with
+no current reverse trace, or retain them only as proposed follow-up. Trace never
+promotes draft, inactive conditional, or future candidates into current scope.
 
 ## Scaling
 
-- Lightweight: one compact sentence or bullet is enough.
-- Standard: use compact labels only where multiple items could be confused.
-- Durable: keep the same labels across persisted artifacts.
-- Multi-agent / Lane: include trace labels in worker packets and handoffs so
-  the moderator can check coverage without relying on memory.
+- Lightweight: one sentence or bullet.
+- Standard: labels only where items could be confused.
+- Durable: stable labels across persisted artifacts.
+- Multi-agent / Lane: stable labels in packets and handoffs.
 
-Do not introduce a prescribed numbering scheme. Labels are local handles for
-clarity, not a workflow identity system.
+Use inline prose, bullets, a small table, or local labels. Do not impose a
+numbering/identity system.
 
 ## Promotion Rule
 
 Do not move work to the next lifecycle gate when an important need, behavior,
-check, or task has disappeared without explicit deferral, blocker, or scope
-decision.
-
-Do not mark a task, lane, or final result complete when a non-deferred trace
-item has no owner, no evidence, or only a worker claim.
+check, or task disappeared without an owned deferral, blocker, or scope decision.
+Do not claim completion while a non-deferred item lacks an owner, evidence, or
+has only a worker claim.

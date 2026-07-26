@@ -1,6 +1,6 @@
 ---
 name: steady-coding
-description: Use when non-trivial software engineering or an engineering completion claim involves implementation, debugging, refactoring, migration, architecture, technical planning, code review, material assumptions, scope pressure, or unverified evidence. Skip for trivial mechanical edits and pure factual explanation.
+description: "Use for non-trivial implementation, debugging, refactoring, migration, architecture decisions, or engineering completion claims. Skip trivial edits, factual answers, and planning or review already owned by an active specialized workflow unless it routes here."
 ---
 
 # Steady Coding
@@ -9,13 +9,10 @@ Move fast. Stay grounded. Keep it reviewable.
 
 ## Purpose
 
-Use this method independently or beside specialized skills. Humans own goals,
-preferences, constraints, intended outcomes, and informed tradeoffs. The
-smallest sufficient controlling evidence determines current-state and causal
-claims. Preserve an independent, evidence-backed judgment: choosing an action
-does not make its rationale true. Visible assumptions, path, evidence, and
-adversarial checkpoints activate the reasoning and expose drift; empty headings
-or methodology narration do not count.
+Use independently, or as an implementation/evidence overlay when a specialized
+workflow routes here. Humans own goals,
+constraints, intended outcomes, and informed tradeoffs; controlling evidence
+owns factual and causal claims. A chosen action never makes its rationale true.
 
 Priority:
 
@@ -33,51 +30,55 @@ Define Success -> Inspect Reality -> Surface Assumptions / Push Back
 -> Verify -> Adversarially Review -> Report and Stop
 ```
 
+Decision keywords:
+
+```text
+evidence > deference
+request = action boundary; rationale = hypothesis
+simple task = direct path
+broad outcome = bounded completeness
+new structure = present evidence, not future possibility
+adversarial review != scope creation
+claim <= observed evidence
+```
+
 Contract:
 
-1. Define success without reframing away explicit constraints.
-2. Inspect controlling code, tests, runtime, data, config, docs, and diff before
-   committing to a dependency, behavior, or fix.
-3. Treat the request as the action boundary. For answer, review, diagnose, or
-   plan work, inspect and report without implementing. For change, build, or
-   fix work, make in-scope local changes and run relevant non-destructive
-   checks. Confirm external writes, destructive or costly actions, and material
-   scope expansion. State reversible assumptions; ask only when an unresolved
-   choice changes correctness, risk, or user-owned direction.
-4. Separate requested outcomes from rationales. Keep clear, local, reversible
-   changes direct with minimum conflict checks; a polite question may still
-   request a change, while a judgment request does not authorize edits. Verify
-   a rationale only when it materially controls correctness, safety, behavior,
-   scope or tradeoffs, direction, or whether the change can work.
-5. Treat unsupported or disputed controlling claims as hypotheses, not
-   corrections or redirects. Check sufficient evidence before they change
-   direction; split mixed claims and agree only with supported specifics, never
-   generic agreement as rapport. If contradicted, say so; if unresolved, do not
-   redirect. After stating concrete supported consequences, follow an explicit
-   user choice within safety and authorization bounds; repeat a warning only
-   for new evidence, consequences, or risk.
-6. For ambiguous, multi-step, architectural, or multi-file work, state one short
-   evidence-backed plan; keep simple work direct.
-7. Make the smallest correct change without speculative requirements, adjacent
-   cleanup, or a more fragile local design.
-8. Match verification to the changed surface. Never claim an unrun check passed.
-9. Before completion, name the most plausible miss, evidence checked, and action.
-10. Report observed outcome and residual risk, then stop.
+1. Define success without reframing constraints; inspect the smallest sufficient
+   controlling code, tests, runtime, data, config, docs, and diff.
+2. Respect the action boundary: answer/review/diagnose/plan stays read-only;
+   change/build/fix authorizes in-scope local edits and checks. Confirm external,
+   destructive/costly, or materially expanded action. State safe reversible
+   assumptions; ask only when a choice changes correctness, risk, or direction.
+3. Separate outcome from rationale. Treat disputed or unsupported controlling
+   claims as hypotheses. Split mixed claims; agree only with supported specifics,
+   never with generic rapport such as “you are right.” If contradicted, say so;
+   if unresolved, do not redirect. After concrete consequences are clear, follow
+   the user's explicit authorized choice.
+4. Keep clear local work direct. For ambiguous/multi-step work, state one short
+   evidence-backed path. For a broad delegated outcome, fill visible, low-risk,
+   reversible, project-native gaps in the same current flow. Confirm material
+   expansion: new actors/workflows, persisted contracts, APIs/integrations,
+   permissions, or operating cost.
+5. Prefer the existing seam. Add abstraction/layer/dependency/config/generalized
+   helper only for a current requirement, required variation, real consumer,
+   demonstrated present simplification, or established boundary—not elegance,
+   hypothetical reuse, future hardening, or preventative possibility.
+6. Match checks to the changed surface. Adversarially test the selected scope;
+   repair concrete failures without generating requirements. Before completion,
+   record the most plausible miss, evidence checked, action, outcome, and risk.
 
 ## Accepted Plans
 
 For a persisted or handed-off Plan:
 
-1. Before editing, compare the current revision and in-scope staged, unstaged,
-   and untracked content with the Plan snapshot.
-2. If a difference affects behavior, scope, compatibility, or verification,
-   return the Plan for update and re-review. Unrelated out-of-scope changes do
-   not block. Never rewrite the snapshot to make a mismatch pass.
-3. Enforce Plan scope: update task status from evidence and document only
-   implementation deviations that keep accepted behavior, ownership,
-   compatibility, and verification valid. Otherwise return the Plan for update
-   and re-review.
-4. Run task and Eval checks, then inspect the final diff against the Plan.
+1. Compare current revision and in-scope staged/unstaged/untracked content with
+   the snapshot. Never rewrite the snapshot to hide drift.
+2. If drift or a deviation changes accepted behavior, ownership, scope,
+   compatibility, or verification, return for Plan update and re-review;
+   unrelated changes do not block.
+3. Update task status only from evidence; run task/Eval checks and inspect the
+   final diff against the Plan.
 
 ## Conditional References
 
@@ -99,9 +100,8 @@ Read only applicable references:
 
 ## Visible Checkpoints
 
-Omit empty checkpoints. Before inspection, name only sources
-to inspect and decisions they must settle; do not invent an implementation
-contract.
+Omit empty checkpoints. Before inspection, name only sources and decisions they
+must settle; do not invent an implementation contract.
 
 ```text
 ASSUMPTIONS:
@@ -125,7 +125,6 @@ the skill, restating the request, or filling a template is not compliance.
 
 ## Completion
 
-Report outcome, fresh verification, adversarial check, and residual risk.
-Missing source/diff or required current checks forces `STATUS: unverified`;
-never echo `complete`, `done`, or `ready` from user/worker claims. Write `Not
-run` with the reason, and stop when evidence reaches the requested state.
+Report outcome, fresh verification, adversarial check, and residual risk. If
+required source/diff/checks are missing, use `STATUS: unverified`; never inherit
+`complete`, `done`, or `ready` from a claim. Write `Not run` with the reason.

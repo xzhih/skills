@@ -1,6 +1,6 @@
 ---
 name: discussion-workflows
-description: "Use when the user explicitly invokes $discussion-workflows, or when an active workflow routes here, for long/corrected/decision-heavy discussion governance: recap, boundaries, reference comparison, complexity checks, drift control, confirmed/draft/open state, inbox material, or durable discussion notes."
+description: "Use for explicit $discussion-workflows or workflow-routed governance of long, corrected, or decision-heavy discussions: recap, boundaries, drift, state, durable notes, and decision-ready next steps."
 ---
 
 # Discussion Workflows

@@ -1,6 +1,6 @@
 ---
 name: codex-image-gen
-description: Use when the user wants to generate, render, batch-generate, or edit raster images such as photos, illustrations, product mockups, icons, hero images, textures, concept art, wallpapers, transparent cutouts, or reference-based image edits through a codex-compatible image generation API.
+description: "Use for raster image generation or editing through a Codex-compatible image API: photos, illustrations, mockups, icons, textures, transparent cutouts, batches, or reference-based edits."
 ---
 
 # Codex Image Generation

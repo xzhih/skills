@@ -1,6 +1,6 @@
 ---
 name: agent-self-driving
-description: "Use only when the user explicitly invokes $agent-self-driving, or an active self-driving controller already owns the task, for long-task automation that must keep lifecycle owners, agents, review/repair, evidence, and closure moving until completion or a true user decision. Do not use merely because work is large or for routine debate, review, lanes, or integration."
+description: "Use only for explicit $agent-self-driving or an already-active controller to keep a long task moving through owners, workers, review/repair, evidence, and closure. Not a default for large work."
 ---
 
 # Agent Self-Driving

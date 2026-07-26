@@ -1,15 +1,13 @@
 ---
 name: agent-runtime
-description: "Use only as an internal dependency after another workflow has selected an agent-backed step and explicitly routes here for shared runtime gates. Do not use as a user-facing entry workflow."
+description: "Internal only: use after a workflow routes an agent-backed step here for worker lifecycle, participant/model, capability, authorization, and session gates."
 ---
 
 # Agent Runtime
 
-Agent Runtime owns the common agent capability layer used by development
-workflow skills. It decides who may participate, how selected agents are
-checked, how external/session continuity works, and what can be claimed from
-agent coverage. It does not decide the product workflow, review topology, lane
-split, or implementation plan.
+Shared capability gate for a worker already selected by a lifecycle owner. It
+checks participation, runnability, authorization, model claims, and session
+continuity; it does not choose workflow, topology, lanes, or implementation.
 
 ## Iron Law
 
@@ -17,84 +15,48 @@ split, or implementation plan.
 AUTHORIZATION, RUNNABILITY, AND SUITABILITY ARE SEPARATE GATES.
 ```
 
-Do not collapse "visible", "installed", "authenticated", "authorized", and
-"suitable" into one vague available/unavailable state. A host-visible subagent
-surface and a shell agent such as OpenCode are different invocation surfaces.
-
-## Use For
-
-- Agent Model Profile creation, approval, reuse, and stale checks.
-- User-declared candidate sets and selected participant records.
-- Host subagent, shell agent, editor agent, protocol agent, external service, or
-  model-selectable participant checks.
-- External-agent consent, privacy/cost/account boundaries, and session ledgers.
-- OpenCode runnability, model checks, command shape, and session continuity.
-- Generic task-bearing packet requirements that must travel with selected
-  participants.
-
-Use lifecycle owner skills such as `dev-flow`, `agent-review`, `agent-debate`,
-`agent-lanes`, and `agent-self-driving` to decide why agents are needed. Use
-this skill to decide whether the chosen agents/models/tools are approved,
-runnable, and recordable.
+Keep `visible`, `installed`, `authenticated`, `authorized`, `runnable`, and
+`suitable` separate. Host subagents and shell/external agents are distinct
+invocation surfaces.
 
 ## Dispatch Classes
 
-Classify the selected step before loading gates. Apply the first matching class
-in this order; classes are exclusive. A stronger boundary always wins over a
-lighter participant-selection match:
+Classify before loading gates; first match wins and classes are exclusive:
 
 ```text
 1. external/session:
-   external, paid, account-bound, editor/protocol, data-leaving, or continuity
-   for one of those surfaces -> profile + capability/authorization +
-   lifecycle/session gates
+   external, paid, account-bound, editor/protocol, data-leaving, or its
+   continuity -> profile + capability/authorization + lifecycle/session
 
 2. profile-governed:
    otherwise named/model-selectable participant, requested model/provider
-   diversity, or a claim dependent on participant/model assignment
-   -> Agent Model Profile
+   diversity, or assignment-dependent claim -> Agent Model Profile
 
 3. native-default:
-   otherwise fresh or resumed host-exposed worker with no participant/model
-   choice or external boundary -> worker lifecycle only; no Agent Model Profile
+   otherwise fresh/resumed host worker with no participant/model choice or
+   external boundary -> worker lifecycle only; no profile
 ```
 
-Never classify an external, paid, account-bound, editor/protocol, or data-leaving
-participant as `profile-governed` merely because it is also named or
-model-selectable. Resuming a host-native worker does not by itself make that
-worker `external/session`.
-
-`callable` alone is not a profile trigger. Separate fresh native-default
-sessions may support an independent-session claim, but never an unverified
-model/provider-diversity claim.
+Stronger external/session boundaries win. Native resume alone is not external;
+`callable` alone is not profile-governed. Separate native sessions may support
+independence, never unverified model/provider diversity.
 
 ## Required References
 
 - Read [worker-lifecycle.md](references/worker-lifecycle.md) before
-  dispatching, waiting on, resuming, closing, or re-dispatching any worker or
-  external/session agent.
-- Read [agent-model-profile.md](references/agent-model-profile.md) for a
-  profile-governed or external/session dispatch, not for native-default alone.
-- Read [capability-cache.md](references/capability-cache.md) when checking
-  selected participants, candidate sets, capability state, authorization, or
-  runnability.
-- Read [external-agent-sessions.md](references/external-agent-sessions.md) when
-  assigning external, shell, editor, or protocol agents across rounds, or when
-  continuity for one of those session types matters.
-- Read [opencode.md](references/opencode.md) before declaring OpenCode
-  unavailable, checking an approved OpenCode provider/model, running
-  `opencode`, or resuming an OpenCode session.
+  dispatch/wait/resume/close/re-dispatch.
+- [agent-model-profile.md](references/agent-model-profile.md): profile-governed
+  or external/session, never native-default alone.
+- [capability-cache.md](references/capability-cache.md): candidate/participant,
+  capability, authorization, or runnability checks.
+- [external-agent-sessions.md](references/external-agent-sessions.md): external,
+  shell, editor, or protocol assignment/continuity across rounds.
+- [opencode.md](references/opencode.md): before declaring OpenCode unavailable,
+  checking its provider/model, running it, or resuming its session.
 
 ## Boundary
 
-Do not use this skill to choose requirements, Spec, Eval, Plan, lane
-decomposition, review findings, or implementation changes. Agent outputs remain
-claims until the owning workflow normalizes and verifies them.
-
-Short polling timeouts are runtime state, not failure evidence.
-
-There is no default wall-clock cutoff for a worker. A wait/poll timeout controls
-how long the moderator waits for the next update; it does not limit worker
-execution. Repeated silent polls do not accumulate into an execution timeout.
-Keep the worker running and follow `worker-lifecycle.md` unless a documented
-interruption condition occurs.
+Do not choose requirements, Spec, Eval, Plan, lane decomposition, findings, or
+implementation. Worker output remains a claim until its owner verifies it.
+Polling timeout is runtime state, not failure or an execution deadline; follow
+`worker-lifecycle.md`.

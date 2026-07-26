@@ -1,6 +1,6 @@
 ---
 name: doc-driven-workflows
-description: "Use only when the user explicitly invokes $doc-driven-workflows, or an active workflow/project instruction routes here, for doc-driven code/docs sync, architecture/tech-stack/operation-flow/call-path docs, alignment review, open-question ledgers, or required source-of-truth maintenance. Do not use merely because docs exist."
+description: "Use for explicit $doc-driven-workflows or workflow/project-routed maintenance of source-backed architecture, stack, domain, flow, call-path, alignment, or open-question docs. Not merely because docs exist."
 ---
 
 # Doc-Driven Workflows

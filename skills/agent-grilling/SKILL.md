@@ -1,6 +1,6 @@
 ---
 name: agent-grilling
-description: "Use only when an active workflow routes here and a goal, requirement, design direction, plan boundary, or lane split may hide omitted actors, flows, edge cases, assumptions, dependencies, contradictions, risks, or second-order effects before downstream work. Do not use for review or returned-lane integration."
+description: "Use only when a workflow routes here to expose omitted actors, flows, edge cases, assumptions, contradictions, risks, or second-order effects in a goal or artifact. Not for review or lane integration."
 ---
 
 # Agent Grilling

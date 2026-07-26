@@ -5,27 +5,33 @@ handoff artifacts. Pick the lightest mode that keeps the next step safe.
 
 ## Modes
 
+| Mode | Choose when | Required weight |
+| --- | --- | --- |
+| Lightweight | Small, low-risk, single-threaded | Chat trace; no files, full templates, or labels unless they help the next action. |
+| Standard | Several behaviors, checks, or tasks | Only fields and compact labels that prevent execution or review ambiguity. |
+| Durable | Long-running, high-risk, reusable, or thread-spanning | Persist under the declared owner; index it; keep stable trace. |
+| Multi-agent / Lane | Parallel/disjoint workers, coordinated rounds, external/session agents, or durable coordination | Stable ownership, collisions, evidence, and handoff controls. One focused reviewer alone does not promote the lifecycle. |
+
+## Scope Envelope
+
+Set one envelope before expanding artifact detail:
+
 ```text
-Lightweight
-  Small, single-threaded, low-risk work. Keep the trace in chat. Use short
-  labels only when they clarify the handoff. Do not create files or full
-  templates only to satisfy the lifecycle.
+exact: requested result + delivery invariants
+outcome: coherent current flow; infer visible, low-risk, reversible,
+  project-native completeness
+exploratory: broaden candidates, not commitment; promotion stays with the
+  owning Requirements/Spec gate
 
-Standard
-  Medium work or work with several behaviors, checks, or tasks. Use compact
-  trace labels only when they prevent confusion. Include only fields needed by
-  the next owner.
-
-Durable
-  Long-running, high-risk, reusable, or thread-spanning work. Persist artifacts
-  under the declared owner, update the index, and keep a stable coverage trace.
-
-Multi-agent / Lane
-  Parallel/disjoint workers, coordinated reviewer rounds, external/session
-  agents, or work needing durable coordination. Stable ownership, collision,
-  evidence, and handoff controls are required. One focused native-default
-  reviewer does not promote the whole lifecycle to this mode by itself.
+material expansion: new actor | independent workflow | persisted contract |
+  API/integration | permission model | material operating cost
+complete = necessary + sufficient for the selected envelope
 ```
+
+Treat material expansion as candidate scope unless the outcome requires it or
+the project already establishes it. Discovery may diverge; committed work must
+converge on the envelope. Future release, operations, hardening, and consumers
+do not become current work merely because they are plausible.
 
 ## Review Weight
 
@@ -39,90 +45,46 @@ Multi-agent / Lane: blind whole-artifact first round; normalize and converge
   when high-impact findings, disagreement, or repeated repair triggers it
 ```
 
-An owner-mandated review uses a reviewer independent of artifact drafting. If no
-independent reviewer is available, keep the gate paused unless the user records
-an artifact-scoped waiver. Independence does not require multiple models.
+Use a reviewer independent of drafting; independence does not require multiple
+models. If unavailable, pause an owner-mandated gate unless the user grants an
+artifact-scoped waiver. Close accepted blocker/major findings only by a fresh
+recheck after repair or evidence-backed rejection. A real decision/dependency
+blocker pauses the gate; deferral closes nothing. Move work out of scope only
+through its owning requirement/Spec/Eval/Plan, then record owner and risk.
 
-An accepted blocker/major closes only when fixed and rechecked, or rejected with
-evidence. A true user decision or unavailable required dependency pauses the
-gate. Ordinary deferral never closes it. To move work out of scope, first update
-the owning requirement/Spec/Eval/Plan with proper authority and trace; only then
-may the resulting minor/out-of-scope/future item be deferred with owner/risk.
+## Trace And Output Weight
 
-## Trace Rule
+Use [coverage-trace.md](coverage-trace.md). Trace prevents loss; it does not
+trigger ceremony.
 
-Coverage trace is a safety tool, not a ceremony trigger. Use
-`coverage-trace.md` for the shared trace rules.
-
-- Lightweight mode may use inline trace notes such as `need -> behavior ->
-  check -> task -> evidence`.
-- Standard mode may use compact labels when more than one need, behavior,
-  check, or task could be confused.
-- Durable and Multi-agent / Lane modes require stable trace and enough coverage
-  detail for another thread, reviewer, or worker to restore state without
-  memory.
+- Lightweight: concrete artifact in chat; inline trace is enough.
+- Standard: include only relevant sections and disambiguating labels.
+- Durable: persist enough stable trace for another thread to restore state.
+- Multi-agent / Lane: packetize exact ownership, exclusions, evidence, blockers,
+  and stable trace.
 
 Do not promote untraced work across lifecycle gates. Do not make a low-risk
-single-threaded task heavy merely to fill every output field.
+single-threaded task heavy to fill a schema. Treat output shapes as completeness
+checks, not templates: include a field only when it changes a decision, action,
+handoff, verification, or understanding.
 
-## Output Rule
+## Substance Gate
 
-Every lifecycle skill should scale its output:
-
-- Lightweight: complete and concrete artifact in chat—detailed enough to act,
-  not a slogan summary.
-- Standard: focused artifact with only relevant sections, each section still
-  detailed enough for the next owner to act without guessing.
-- Durable: persisted artifact in the declared owner location.
-- Multi-agent / Lane: persisted or packetized artifact with exact ownership,
-  exclusions, evidence, and blocker rules.
-
-Output shapes are checklists for completeness, not fill-in templates. Include a
-section only when it changes the next decision, handoff, verification, or
-reader's understanding. Prefer concrete action-oriented detail over empty
-schema or padded prose.
-
-## Substance Rule (detail without emptiness)
-
-**Target: detailed and concrete, never hollow, never padded.**
-
-- Prefer **specific detail** over short vagueness.
-- Prefer **compact completeness** over long filler, empty headings, or repeated
-  slogans.
-- Length should follow how many behaviors, checks, and surfaces must be locked—
-  not a brevity contest and not a word-count contest.
-
-Mode controls ceremony (files, templates, stable IDs), not whether behavior,
-checks, and tasks are fully specified.
+Target `compact completeness`: mode scales ceremony, not required decisions.
+Length follows the number of behaviors, checks, and surfaces.
 
 Reject or expand before the next gate when an artifact is mostly:
 
 ```text
-vague goals ("improve UX", "make it work")
-wish outcomes without observable behavior
-one-line "behaviors" with no edge/error/empty states
-checks that only restate the goal ("works correctly")
-tasks like "implement feature" / "add tests" with no surface or verify path
-missing non-goals, constraints, or affected surfaces when scope could expand
-"TBD" / "handle edge cases" without a decision or explicit deferral owner
-long prose that still never pins accept/reject or verify/stop criteria
+vague goal | wish without observable behavior | hollow check
+missing relevant edge/error/empty behavior | placeholder/TBD
+task without owned surface, verify path, or stop condition
+missing boundary where scope could expand
+long prose without accept/reject or verify/stop criteria
 ```
 
-Minimum bar by mode:
-
-```text
-Lightweight:
-  Still detailed enough: concrete behavior, real check/evidence per important
-  behavior, tasks a stranger can execute without re-asking "what exactly?".
-  May stay in chat; may not be a hollow summary.
-
-Standard / Durable / Multi-agent:
-  Each important behavior, check, and task is specific enough that two
-  implementers would build the same thing and two reviewers could accept or
-  reject it from the artifact alone. Add the detail that removes ambiguity;
-  omit only empty ceremony.
-```
-
-When in doubt: **downgrade ceremony, upgrade missing concrete detail.** Never
-"downgrade" by deleting decisions the next owner needs, and never "upgrade" by
-adding empty length.
+Minimum bar: every important behavior has observable acceptance/evidence; every
+task is executable by a fresh worker without inventing decisions. For Standard
+and above, two implementers should build the same behavior and two reviewers
+should reach the same acceptance result from the artifact. When in doubt:
+`ceremony down; concrete detail up`.

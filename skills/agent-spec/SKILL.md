@@ -1,6 +1,6 @@
 ---
 name: agent-spec
-description: "Use only when the user explicitly invokes $agent-spec, or when an active workflow routes here, and a governed Requirements Baseline is ready to become implementation behavior before Eval."
+description: "Use only for explicit $agent-spec or workflow-routed conversion of a governed Requirements Baseline into implementation behavior before Eval."
 ---
 
 # Agent Spec

@@ -1,7 +1,7 @@
 # Requirements Convergence and Baseline
 
-Canonical contract for Candidate Requirement Set convergence, pruning, gate
-evidence, blockers, and Requirements Baseline qualification.
+Contract for Candidate Set convergence, pruning, gate evidence, blockers, and
+Baseline qualification.
 
 ## Terms
 
@@ -14,21 +14,10 @@ evidence, blockers, and Requirements Baseline qualification.
 
 ## Lifecycle
 
-```mermaid
-flowchart LR
-    CP["Core Problem Contract"] --> GD["agent-grilling discovery"]
-    GD --> CS["Candidate Requirement Set"]
-    CS --> DB["agent-debate convergence"]
-    DB --> KM["keep or modify"]
-    DB --> CD["cut or defer"]
-    DB --> UD["true user decision"]
-    KM --> RB["Requirements Baseline"]
-    CD --> PL["Compact Scope Pruning Ledger"]
-    UD --> BLOCKING{"blocking?"}
-    BLOCKING -->|yes| PAUSE["Pause baseline until decision closes"]
-    BLOCKING -->|no| DL["Record non-blocking decision"]
-    DL --> RB
-    PL --> RB
+```text
+Core Problem -> discovery -> Candidate Set -> convergence
+-> keep/modify: Core Version | cut/defer: pruning ledger
+| user-decision: pause if blocking -> Requirements Baseline
 ```
 
 Discovery expands; convergence prunes.
@@ -37,13 +26,9 @@ Discovery expands; convergence prunes.
 
 ```text
 affected actor or customer:
-observed problem or unmet need:
-cause and evidence:
-desired user/business outcome:
-must-preserve constraints:
-explicit non-goal:
-success signal:
-source and requirement state:
+problem / cause and evidence / desired outcome:
+must-preserve constraints / explicit non-goal / success signal:
+source / requirement state:
 ```
 
 State the problem, not a preferred solution. Split independently evidenced Core
@@ -51,31 +36,23 @@ Problems or record an explicit scope decision.
 
 ## Candidate Requirement Set
 
-The Requirements owner assembles and versions every material feature, rule,
-exception, or recovery path from consumed discovery deltas, or from governed
-input plus canonical discovery-skip evidence:
+The owner versions every material feature, rule, exception, or recovery path
+from consumed discovery deltas or canonical discovery-skip evidence:
 
 ```text
-candidate handle:
-tree path:
-feature or rule considered:
-contribution to the Core Problem:
-source and state:
-affected actor / flow:
-value or success signal:
-cost, complexity, risk, and dependency:
-evidence gap or true decision:
+candidate handle / tree path / feature or rule:
+Core Problem contribution / source-state / actor-flow / value signal:
+cost-complexity-risk-dependency / evidence gap or true decision:
 ```
 
-Only the Requirements owner publishes the complete set; workers return deltas
-and snapshots. Formulate candidates only deeply enough to judge.
+Only the owner publishes the complete set; workers return deltas/snapshots.
+Formulate only deeply enough to judge.
 
 ## Adversarial Convergence
 
-Give every participant the same Core Problem, candidates, tree handles, evidence,
-constraints, and decisions. Every participant evaluates every material candidate.
-
-Challenge each candidate on:
+Give every participant the same Core Problem, Candidate Set version, tree
+handles, evidence, constraints, and decisions. Each evaluates every material
+candidate against:
 
 ```text
 core alignment | necessity now | evidence | user value | simpler substitute
@@ -83,10 +60,10 @@ complexity and maintenance | failure/security/privacy risk | dependencies
 compatibility | release timing | effect on other surviving branches
 ```
 
-Evidence outranks votes. Agents cannot cut/materially change a confirmed user
-requirement or authoritative constraint; return the conflict as `user-decision`.
-Rebut blocker/major disagreement; stop after every candidate has one outcome and
-no agent-answerable major remains.
+Evidence outranks votes. Agents cannot cut or materially change a confirmed user
+requirement/authoritative constraint; return that conflict as `user-decision`.
+Rebut blocker/major disagreement until every candidate has one outcome and no
+agent-answerable major remains.
 
 ## Outcome Semantics
 
@@ -100,27 +77,19 @@ Assign exactly one outcome to every material candidate:
 | `defer` | Potentially useful later, but explicitly non-blocking/future/out-of-scope | Pruning ledger with owner/reopen trigger, plus Convergence Map |
 | `user-decision` | Authority, taste, priority, cost/privacy, or business direction must choose | Decision ledger and Convergence Map; pause if blocking |
 
-Do not use `defer` as a softer spelling of unresolved. Source- or
-agent-answerable questions remain open work, and blocking user decisions prevent
-the Requirements Baseline.
+`defer` is not unresolved: source/agent-answerable questions remain open work;
+blocking user decisions prevent a Baseline.
 
-When an answered decision closes, replace `user-decision` with `keep`, `modify`,
-`cut`, or `defer`; retain the decision trace. If the answer materially changes
-the candidate or another branch, run targeted discovery/convergence before
-passing the gate.
+When answered, replace `user-decision` with a final outcome and retain trace. A
+materially changed candidate/branch requires targeted discovery/convergence.
 
-## Visual / Markdown Two-Layer Contract
+## Visual / Markdown Contract
 
-| Layer | Owns |
-| --- | --- |
-| Mermaid Requirement Search Tree | What was analyzed, how branches split, and which frontier/state remains |
-| Mermaid Requirements Convergence Map | Which candidates were kept, modified, cut, deferred, or left for user decision; only keep/modify form the Core Version |
-| Mermaid Feature Flow Packets | How surviving functions behave at product level |
-| Markdown | Core Problem evidence, detailed requirement rules, constraints, reasons, sources, pruning memory, decisions, and reopen triggers |
-
-Use identical candidate handles across Mermaid and Markdown. Keep every
-`modify/cut/defer/user-decision` visible; group routine `keep` when needed. Split
-large maps. Cut/deferred nodes never enter Baseline behavior views.
+The tree owns analyzed branches/frontiers; the Convergence Map owns concise
+outcomes; Feature Flow Packets own surviving product behavior; Markdown owns
+evidence, rules, constraints, reasons, pruning memory, decisions, and reopen
+triggers. Reuse handles. Keep every `modify/cut/defer/user-decision` visible;
+routine `keep` may group. Cut/deferred nodes never enter Baseline behavior views.
 
 ## Scope Pruning Ledger
 
@@ -130,14 +99,11 @@ Include every `cut`, `defer`, material `modify`, and only non-obvious `keep`.
 | Candidate | Considered branch | Outcome | Why / evidence | Retained memory |
 ```
 
-`Retained memory`: protecting non-goal/constraint, surviving implication,
-deferral owner + observable reopen trigger, or `none`. No transcripts or replay.
+Retained memory is a protecting non-goal/constraint, surviving implication,
+deferral owner plus observable reopen trigger, or `none`; never transcripts.
 
-Markdown coverage rule: every candidate handle appears exactly once as a kept baseline
-requirement, a modified baseline requirement plus pruning row, a cut/deferred
-pruning row, or a user-decision. This proves convergence without duplicating
-detailed requirement memory. The Mermaid Convergence Map may repeat the handle
-only as the brief visual layer.
+Every handle appears exactly once in Markdown as kept, modified plus pruning row,
+cut/deferred row, or user-decision. The map may repeat it only visually.
 
 ## Gate Evidence and Evidence Closure
 
@@ -145,23 +111,19 @@ Gate Evidence separates execution, owner consumption, and governed result:
 
 ```text
 gate: discovery | convergence
-snapshot handle:
-producer / source:
+snapshot handle / producer-source:
 execution_status: not_started | running | completed | interrupted | failed | unavailable | skipped
 consumption_status: pending | consumed | not_applicable
 gate_result: pending | passed | blocked
-same-scope target:
-input or candidate-set version:
-material deltas or candidate coverage:
-skip or blocker evidence:
+same-scope target / input or Candidate Set version:
+material deltas or coverage / skip or blocker evidence:
 ```
 
-Valid pass: `completed / consumed / passed`; valid skip:
-`skipped / not_applicable / passed`. Unconsumed completion is
-`completed / pending / pending`; consumed unresolved debate is
-`completed / consumed / blocked`. Dispatch/running/interrupted is not passed.
-Debate evidence names the owner-assembled Candidate Set version derived from the
-consumed discovery snapshot or canonical discovery-skip evidence.
+Valid pass: `completed/consumed/passed`; valid skip:
+`skipped/not_applicable/passed`. Unconsumed completion is
+`completed/pending/pending`; consumed unresolved debate is
+`completed/consumed/blocked`. Dispatch/running/interrupted never passes. Debate
+evidence names the owner-assembled Candidate Set version.
 
 Record phase state and blockers separately:
 
@@ -173,9 +135,14 @@ Record phase state and blockers separately:
 | A blocking true user decision remains | `blocked` | `user_decision` |
 | Required source, access, worker capacity, or external capability is unavailable | `blocked` | `dependency` |
 
-Blocking reasons are a set, so an artifact blocked by both a user decision and
-missing source evidence records both. When no blocker remains and all readiness
-conditions pass, use `baseline_ready`.
+Blocking reasons are a set; record all. Use `baseline_ready` only after every
+readiness condition passes.
+
+Do not infer `convergence_major` from a pending candidate or evidence frontier:
+the consumed snapshot must name a blocker/major. Otherwise source/agent-answerable
+work is `discovery_pending`; unavailable required evidence is `blocked/dependency`.
+While such a frontier controls an outcome, convergence is
+`completed/consumed/pending`; resolve evidence, then reconverge that candidate.
 
 Candidate views show available state; never invent outcomes or a Core Version.
 
@@ -186,32 +153,24 @@ Candidate views show available state; never invent outcomes or a Core Version.
 `current/existing/reuse/unchanged/authoritative`, vendor capability, and runtime
 behavior require inspected evidence, explicit user invariant, or `frontier`.
 
-Every unresolved row must name one stable frontier handle, and that same handle
-must appear as `frontier:open` in the Mermaid Requirement Search Tree and in the
-frontier ledger. A prose `open`, draft candidate, or grouped parent branch does
-not close this trace.
+Every unresolved row names one stable handle also shown as `frontier:open` in the
+tree and ledger. Prose `open`, a draft, or grouped parent does not close trace.
 
 ## Requirements Baseline
 
 Call an artifact `Requirements Baseline` only when:
 
-- the Core Problem Contract is evidence-backed and stable enough for the phase
-- discovery covered the affected dimensions and its Gate Evidence passed
-- the Convergence Gate has `gate_result: passed` through normal
-  `completed / consumed` evidence or the eligible trivial-change skip
-- every material candidate has an outcome
-- cut branches are absent from the Core Version, Baseline behavior tree, flow
-  inventory, and Feature Flow Packets
-- modified branches and retained implications are reconciled everywhere
-- Core Version behavior, the Baseline tree, flow inventory, and Feature Flow
-  Packets contain only implementation-eligible confirmed requirements
-- blocking user decisions and high-impact source/agent frontiers are closed
-- the existing visual, evidence-consistency, and Spec-readiness gates pass
+- Core Problem is evidence-backed; discovery covered affected dimensions
+- discovery and convergence Gate Evidence passed normally or by eligible skip
+- every candidate has one outcome; modified/retained implications reconcile
+- cut branches are absent from Core Version, Baseline tree, inventory, packets
+- all Baseline behavior is confirmed and implementation-eligible
+- blocking decisions and high-impact source/agent frontiers are closed
+- visual, evidence-consistency, coverage, and Spec-readiness gates pass
 
 Before that point call it `Requirements Candidate`, record its lifecycle state,
 and retain all applicable blocking reasons.
 
-Core Version = smallest implementation-eligible confirmed `keep/modify` set.
-Draft/open and governance items stay in ledgers, never product flows. Persist a
-Baseline ID when another owner needs stable traceability. Name consumed snapshots
-and candidate coverage; omit candidate replay and participant arguments.
+Core Version is the smallest eligible confirmed `keep/modify` set. Draft/open and
+governance stay in ledgers, never flows. Persist an ID when another owner needs
+stable trace; name snapshots/coverage, not candidate replay or arguments.

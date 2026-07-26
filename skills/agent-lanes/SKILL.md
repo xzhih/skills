@@ -1,6 +1,6 @@
 ---
 name: agent-lanes
-description: "Use only when the user explicitly invokes $agent-lanes, or when an active workflow routes here, to coordinate the initial or integration-approved dispatch of two or more independent lane/worktree/subagent tasks with owned surfaces, collision checks, coverage trace, handoff packets, and direct dispatch. Do not use for debate, review, returned-lane integration, or next-batch eligibility."
+description: "Use only for explicit $agent-lanes or workflow-routed dispatch of 2+ independent lanes, worktrees, or subagents with owned surfaces, collision checks, trace, and handoffs. Not for debate, same-artifact review, or returned-lane integration."
 ---
 
 # Agent Lanes
@@ -16,12 +16,13 @@ NO LANE DISPATCH WITHOUT OWNED SURFACES AND A COLLISION CHECK.
 
 ## Shared Rules
 
-Use [mode-gate.md](../dev-flow/references/mode-gate.md),
-[coverage-trace.md](../dev-flow/references/coverage-trace.md), and
+Lane work is `Multi-agent / Lane` mode. Read
+[mode-gate.md](../dev-flow/references/mode-gate.md) only when no upstream
+mode/scope envelope exists. Apply
+[coverage-trace.md](../dev-flow/references/coverage-trace.md) and
 [task-checkboxes.md](../dev-flow/references/task-checkboxes.md). Use
 [agent-runtime](../agent-runtime/SKILL.md) for every dispatched worker's class,
-lifecycle, and applicable profile/authorization/session gates. Lane implementation is
-Multi-agent / Lane mode.
+lifecycle, and applicable profile/authorization/session gates.
 
 ## Use For
 

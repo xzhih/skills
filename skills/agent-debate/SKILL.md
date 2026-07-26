@@ -1,6 +1,6 @@
 ---
 name: agent-debate
-description: "Use only when the user explicitly invokes $agent-debate, or when a loaded workflow routes here, and same-topic shared material needs adversarial product tradeoffs, requirement convergence, scope pruning, or decision clarity. Do not use for lanes, returned-lane review, code review, or single-agent brainstorming."
+description: "Use only for explicit $agent-debate or workflow-routed adversarial convergence on shared product or requirements material. Not for code review, lane work, or independent brainstorming."
 ---
 
 # Agent Debate

@@ -1,6 +1,6 @@
 ---
 name: agent-improve
-description: "Use when the user explicitly invokes $agent-improve or asks what is worth improving in a codebase or branch and wants a read-only ranked audit. Return source-backed findings and stop. Do not use to review a specific artifact or diff (agent-review), implement a known change (steady-coding), or deliver a chosen finding (dev-flow)."
+description: "Use for explicit $agent-improve or a read-only, source-backed audit ranking worthwhile codebase or branch improvements. Stop before specific-artifact review, planning, or implementation."
 ---
 
 # Agent Improve

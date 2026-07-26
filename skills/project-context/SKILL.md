@@ -1,6 +1,6 @@
 ---
 name: project-context
-description: "Use only when an active workflow routes here, to restore authoritative project state before planning, delegation, integration, or doc maintenance: handoff, coordination, specs, lanes, discussion state, source-of-truth docs, verification conventions, and collision risks. Do not use merely because ordinary docs exist."
+description: "Internal only: use when a workflow routes uncertain persisted project state here before planning, delegation, integration, or handoff. Restore authoritative state; not ordinary docs."
 ---
 
 # Project Context
