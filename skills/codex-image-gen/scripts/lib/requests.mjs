@@ -64,6 +64,14 @@ export async function buildResponsesBody(args, stream) {
 }
 
 export function validateProviderSupport(args, auth) {
+  if (args.background === "transparent") {
+    if (args.api !== "images") {
+      throw new Error("native transparent output requires --api images; the supported public Image API path is /v1/images/generations or /v1/images/edits");
+    }
+    if (auth.mode === "chatgpt") {
+      throw new Error("native transparent output requires --mode apikey with a provider that supports gpt-image-1.5; ChatGPT/Codex private routes do not guarantee alpha");
+    }
+  }
   if (args.mask) {
     if (auth.mode === "chatgpt") throw new Error("--mask is not supported through ChatGPT/Codex private image routes");
     if (args.api !== "images") throw new Error("--mask is only supported on the images edit path");

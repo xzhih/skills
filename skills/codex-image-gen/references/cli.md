@@ -129,6 +129,50 @@ available and the actual image exceeds the threshold.
 
 ## Alpha Verification
 
+## Native Transparent Output
+
+Native alpha uses the public Images API, not the ChatGPT/Codex private route. It
+requires an API-key-backed provider and `gpt-image-1.5`; this model is limited to
+`1024x1024`, `1536x1024`, `1024x1536`, or `auto`.
+
+```bash
+node scripts/generate.mjs \
+  --prompt "A ceramic mug cutout, no text" \
+  --mode apikey \
+  --api images \
+  --image-model gpt-image-1.5 \
+  --background transparent \
+  --format png \
+  --size 1536x1024 \
+  --out build/mug-native-alpha.png
+```
+
+## 4K Transparent Delivery
+
+`gpt-image-2` supports `3840x2160` but does not support native transparent
+backgrounds. Generate a flat chroma-key background through the public Images API,
+then remove it locally:
+
+```bash
+node scripts/generate.mjs \
+  --prompt "A ceramic mug centered on a perfectly flat #00ff00 chroma-key background, no shadows, no gradients, no text" \
+  --mode apikey \
+  --api images \
+  --image-model gpt-image-2 \
+  --size 3840x2160 \
+  --format png \
+  --out build/mug-key-4k.png
+
+python3 scripts/remove_chroma_key.py \
+  --input build/mug-key-4k.png \
+  --out build/mug-transparent-4k.png \
+  --auto-key border \
+  --soft-matte \
+  --spill-cleanup
+```
+
+## Alpha Verification
+
 ```bash
 python3 - <<'PY'
 from PIL import Image

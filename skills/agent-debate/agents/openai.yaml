@@ -1,6 +1,0 @@
-interface:
-  display_name: "Agent Debate"
-  short_description: "Run same-topic agent debate"
-  default_prompt: "Use $agent-debate to moderate a same-topic debate on shared material, compare evidence and tradeoffs, rebut major disagreements, and return a concise decision or unresolved user choice."
-policy:
-  allow_implicit_invocation: false

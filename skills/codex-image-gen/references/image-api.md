@@ -22,7 +22,7 @@ will honor every field.
 | `quality` | yes | yes | ChatGPT private routes may ignore tiers. |
 | `output_format` | yes | yes | `png`, `jpeg`, `webp`. |
 | `output_compression` | jpeg/webp | jpeg/webp | Rejected for PNG by local parser. |
-| `background` | provider-dependent | provider-dependent | `transparent` is not promised for gpt-image-2. |
+| `background` | provider-dependent | provider-dependent | `gpt-image-2` rejects `transparent`; use public Images API + `gpt-image-1.5` for native alpha. |
 | `partial_images` | no | yes | Progress only; never save partial previews as final. |
 | `input_image` | edit/reference | edit/reference | Data URLs are redacted in dry-run output. |
 | `mask` | API-key images only | no | ChatGPT/Codex private mask support is not assumed. |
@@ -46,13 +46,18 @@ size.
 
 ## Transparency
 
-`background: transparent` is not treated as reliable on gpt-image-2 or private
-ChatGPT/Codex paths. For production cutouts, use a flat chroma-key background and
-`scripts/remove_chroma_key.py`.
+`gpt-image-2` does not support `background: transparent`. Native alpha requires
+`--mode apikey --api images --image-model gpt-image-1.5 --background transparent`
+with PNG or WebP output. That model only accepts `1024x1024`, `1536x1024`,
+`1024x1536`, or `auto`.
+
+For a 4K transparent delivery, use `gpt-image-2` at 4K against a flat chroma-key
+background and then run `scripts/remove_chroma_key.py`. Do not use the private
+ChatGPT/Codex route when native alpha or exact 4K output is required.
 
 Only promise true alpha when all of these are true:
 
-- API-key mode is used.
+- API-key mode and the public Images API are used.
 - The selected provider/model documents transparent output.
 - The saved file is verified to contain alpha.
 

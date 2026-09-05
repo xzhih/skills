@@ -31,7 +31,7 @@ an existing icon system, or a vector/logo edit that should remain editable as co
    no watermark.` Do not add `No text`.
 6. Requested size is not a guarantee. Always check the saved file summary for actual
    dimensions, especially for custom or 4K requests.
-7. Do not promise true alpha through ChatGPT/Codex private routes.
+7. For a native transparent asset in Codex that does not need exact CLI dimensions or API controls, use the built-in `image_gen` tool and ask for a genuinely transparent background. For explicit CLI/API native alpha, use `--mode apikey --api images --image-model gpt-image-1.5 --background transparent --format png`. Do not send native-alpha requests through ChatGPT/Codex private routes.
 
 ## Single Generation
 
@@ -97,6 +97,17 @@ Use `--dry-run` to inspect resolved jobs without network calls.
 
 ## Transparent Backgrounds
 
+For native transparency inside Codex, use the built-in `image_gen` tool when the
+user does not require exact dimensions, model selection, or other CLI-only controls.
+Ask for a genuinely transparent background in the prompt, preserve the returned
+alpha channel, and inspect a local edit target with `view_image` before editing it.
+The built-in tool chooses the actual output dimensions, so do not describe a
+prompt-level 4K request as guaranteed 4K.
+
+Keep the Node CLI for explicit API/model control, exact 4K requests, batches, masks,
+and local post-processing. Its native alpha route and 4K chroma-key route remain
+separate as described below.
+
 For simple cutouts, generate on a perfectly flat key color and remove it locally:
 
 ```bash
@@ -113,9 +124,13 @@ python3 scripts/remove_chroma_key.py \
   --force
 ```
 
-True model alpha should be used only when an API-key provider and model are known to
-support transparent backgrounds. ChatGPT/Codex private routes may accept background
-fields while still returning opaque or smaller images.
+`gpt-image-2` supports 4K requests but not `--background transparent`. Native alpha
+requires the public Images API with `--mode apikey --api images --image-model
+gpt-image-1.5 --background transparent --format png`; that model is limited to
+`1536x1024`, `1024x1536`, `1024x1024`, or `auto`. For a 4K transparent delivery,
+request `gpt-image-2` at 4K on a chroma-key background, then remove the key locally.
+ChatGPT/Codex private routes may return smaller images and must not be used when the
+requested output needs native alpha or exact 4K dimensions.
 
 Verify alpha when transparency matters:
 

@@ -1,116 +1,16 @@
 ---
 name: agent-review
-description: "Use only for explicit $agent-review or workflow-routed review of one concrete artifact or result by one or more reviewers. Not for debate, lane dispatch, or returned-lane integration."
+description: "Review a concrete specification, plan, diff, implementation, or result against its goals and evidence. Use for artifact review or post-execution review; not broad improvement discovery."
 ---
 
 # Agent Review
 
-Review one concrete artifact or result. The moderator owns scope, normalization,
-repair decisions, and final claims.
+Review the concrete artifact against its goal, scope, and evidence; formal upstream documents are unnecessary.
 
-## Iron Law
+Inspect relevant source, and for implementation the full relevant diff, affected callers, and verification. Check incorrect behavior, omissions, contradictory assumptions, weak acceptance, and surplus scope. Plans need grounded surfaces and purposeful steps; specifications need unambiguous behavior.
 
-```text
-REVIEW THE SAME ARTIFACT BEFORE SHARDING FOLLOW-UP.
-```
+Each material finding needs location/evidence, consequence, severity, and a focused correction or next check. Separate defects from questions and optional improvements. Do not invent findings to demonstrate effort.
 
-Do not split by section in Round 1. Every reviewer sees the whole artifact
-unless a later targeted follow-up is justified.
+Use the current model, re-reading from acceptance criteria. Label self-review honestly; independence requires an actual separate reviewer.
 
-## Use For
-
-- one focused review or multi-agent review of Spec, Eval, Plan, design, diff,
-  implementation, evidence, deployment, or final result
-- model-diverse review when one framing may miss issues
-- fresh recheck after repair
-
-Use [agent-debate](../agent-debate/SKILL.md) for open product/requirements
-debate. Use [integration-review](../integration-review/SKILL.md) for returned
-lane status, conflicts, and next batches.
-
-## Preflight
-
-Before sending review work:
-
-- identify artifact, goal, boundary, and evidence standard
-- route every reviewer dispatched as a worker through
-  [agent-runtime](../agent-runtime/SKILL.md); it classifies native-default,
-  profile-governed, and external/session gates
-- get authorization before sending content to external, paid, account-bound, or
-  data-leaving reviewers
-
-## Review Rules
-
-- Use [mode-gate.md](../dev-flow/references/mode-gate.md) **Review Weight** for
-  ceremony/intensity; do not make a mandatory owner gate optional or turn one
-  focused review into multi-agent ceremony without another trigger.
-- First round uses a reviewer independent of artifact drafting and is
-  source-first. Keep it blind to other conclusions when risk matters.
-- Reviewer agreement is not proof.
-- Accept findings only with artifact/source evidence.
-- Treat **hollowness as a defect**: vague goals, missing concrete detail,
-  hollow checks, placeholder tasks, or gaps that force implementers to invent
-  decisions are at least **major** (blocker if the next gate would rely on
-  them). Prefer detailed-and-concrete over short-and-vague; reject long-and-empty
-  the same way. See mode-gate Substance Rule.
-- Review omission **and surplus**. In Plans, untraced or invented execution
-  scope/surfaces (`behavior/Eval | in-scope gap | required dependency`) are at
-  least major; remove, merge, or return the unknown upstream. Never prune
-  required correctness, security, accessibility, compatibility, migration,
-  data-safety, or operational evidence.
-- Use [review-convergence.md](references/review-convergence.md)
-  for accepted blocker/major findings, evidence disputes, rebuttal, or their
-  required fresh recheck—not for a minor-only focused recheck.
-- Use [output-normalization.md](../agent-self-driving/references/output-normalization.md)
-  before comparing/promoting multi-agent, heterogeneous, resumed, or
-  shape-inconsistent output. A single focused source-first review may use this
-  skill's native Output contract directly.
-
-## Implementation Against Plan
-
-When reviewing implementation against an accepted Plan:
-
-- read the Plan, full diff, changed files, and current verification
-- map each meaningful change to a Plan task or a documented within-scope
-  implementation deviation; reject changes that invalidate accepted behavior,
-  ownership, compatibility, or verification
-- independently check affected Plan/Eval checks and new test assertions
-- return the normal sign-off, repair, or recheck; do not repair in the review role
-
-## Packet Minimum
-
-```text
-Artifact
-Goal
-Boundary
-Required checks
-Evidence rules
-Finding scale: blocker | major | minor | question | note
-Sign-off options
-Stop condition
-```
-
-## Output
-
-Lead with review status. Preserve evidence, unresolved blocker/major findings,
-and required repair or recheck; omit repeated reviewer narration:
-
-```text
-Accepted blocker/major:
-Minor/deferred:
-Rejected:
-Evidence checked:
-Repair or recheck:
-Sign-off:
-```
-
-Omit empty headings.
-
-## Red Flags
-
-- Sharding before whole-artifact review.
-- Treating agreement as proof.
-- Accepting findings without evidence.
-- Asking reviewers to invent the plan they should verify.
-- Reviewing only for omissions, or promoting conditional/proposed/future work.
-- Claiming sign-off while accepted blocker/major findings remain.
+Report findings, evidence checked, and coverage limits. A review-only request does not authorize repairs. In a delivery workflow, return findings for repair and recheck; close them only through verification or evidence-backed rejection.

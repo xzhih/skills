@@ -2,6 +2,8 @@ export const MAX_EDGE = 3840;
 export const MIN_PIXELS = 655_360;
 export const MAX_PIXELS = 8_294_400;
 export const MAX_RATIO = 3.0;
+export const GPT_IMAGE_2 = "gpt-image-2";
+export const LEGACY_IMAGE_SIZES = new Set(["1024x1024", "1536x1024", "1024x1536", "auto"]);
 
 const GENERATE_DEFAULTS = {
   size: "1024x1024",
@@ -109,7 +111,7 @@ Options:
   --size WIDTHxHEIGHT|auto           output size (default 1024x1024)
   --quality low|medium|high|auto     image quality
   --format png|jpeg|webp             output format
-  --background auto|opaque|transparent
+  --background auto|opaque|transparent  gpt-image-2 cannot use transparent
   --output-compression 0-100         compression for jpeg/webp
   --partial-images 0|1|2|3           responses-only partial previews
   --moderation auto|low              moderation level
@@ -121,7 +123,7 @@ Options:
   --api images|responses             API shape (default images)
   --mode auto|apikey|chatgpt         auth mode
   --model MODEL                      responses model
-  --image-model MODEL                image model
+  --image-model MODEL                image model (gpt-image-2 default; gpt-image-1.5 for native alpha)
   --timeout SECONDS                  request timeout
   --dry-run                          print sanitized request without network
   --force                            overwrite existing output files
@@ -155,7 +157,13 @@ Options:
 `);
 }
 
-export function validateSize(size) {
+export function validateSize(size, imageModel = GPT_IMAGE_2) {
+  if (imageModel !== GPT_IMAGE_2) {
+    if (!LEGACY_IMAGE_SIZES.has(size)) {
+      throw new Error(`${imageModel} size must be one of ${Array.from(LEGACY_IMAGE_SIZES).join("|")}`);
+    }
+    return;
+  }
   if (size === "auto") return;
   const match = /^(\d+)x(\d+)$/i.exec(String(size || ""));
   if (!match) throw new Error(`size must be 'auto' or WIDTHxHEIGHT, got ${JSON.stringify(size)}`);
@@ -224,7 +232,9 @@ function validateGenerateArgs(args, options) {
   if (requireOutput && !args.out && !args.outDir) throw new Error("--out or --out-dir is required");
   validateCommonChoices(args);
   validateNumbers(args);
-  validateSize(args.size);
+  validateImageModel(args.imageModel);
+  validateSize(args.size, args.imageModel);
+  validateImageModelOptions(args);
   validateDownscale(args);
   if (args.mask && imageAction(args) !== "edit") throw new Error("--mask requires edit action");
   if (args.mask && !(args.inputImage || []).length) throw new Error("--mask requires at least one --input-image");
@@ -245,6 +255,24 @@ function validateCommonChoices(args) {
     if (args[key] !== undefined && !allowed.includes(args[key])) {
       throw new Error(`--${dashCase(key)} must be one of ${allowed.join("|")}`);
     }
+  }
+}
+
+function validateImageModel(imageModel) {
+  if (!String(imageModel || "").startsWith("gpt-image-")) {
+    throw new Error("--image-model must be a GPT Image model, for example gpt-image-2 or gpt-image-1.5");
+  }
+}
+
+function validateImageModelOptions(args) {
+  if (args.background === "transparent" && !["png", "webp"].includes(args.format)) {
+    throw new Error("--background transparent requires --format png or webp");
+  }
+  if (args.imageModel === GPT_IMAGE_2 && args.background === "transparent") {
+    throw new Error("gpt-image-2 does not support --background transparent; use --image-model gpt-image-1.5 for native alpha, or generate a chroma-key background and remove it locally for 4K output");
+  }
+  if (args.imageModel === GPT_IMAGE_2 && args.inputFidelity !== "auto") {
+    throw new Error("gpt-image-2 always uses high-fidelity inputs; omit --input-fidelity");
   }
 }
 

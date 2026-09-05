@@ -1,6 +1,6 @@
 interface:
   display_name: "Agent Requirements Analysis"
-  short_description: "Converge requirements into a baseline"
-  default_prompt: "Use $agent-requirements-analysis to identify the Core Problem, discover and prune candidate branches, show analysis and tradeoffs in concise Mermaid, and preserve detailed requirements and reasons in Markdown."
+  short_description: "Grow and prune a clear requirement tree"
+  default_prompt: "Use $agent-requirements-analysis to expand this need, prune alternatives with reasons, and present requirements with a Mermaid tree."
 policy:
   allow_implicit_invocation: false

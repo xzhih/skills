@@ -42,6 +42,36 @@ test("invalid sizes are rejected", () => {
   assert.throws(() => validateSize("512x512"), /total pixels/);
 });
 
+test("gpt-image-1.5 accepts native transparency only at legacy sizes", () => {
+  assert.doesNotThrow(() => parseGenerateArgs([
+    "--prompt", "x",
+    "--image-model", "gpt-image-1.5",
+    "--background", "transparent",
+    "--format", "png",
+    "--size", "1536x1024",
+  ]));
+  assert.throws(() => parseGenerateArgs([
+    "--prompt", "x",
+    "--image-model", "gpt-image-1.5",
+    "--background", "transparent",
+    "--format", "png",
+    "--size", "3840x2160",
+  ]), /gpt-image-1.5 size/);
+});
+
+test("gpt-image-2 rejects unsupported native transparency", () => {
+  assert.throws(() => parseGenerateArgs([
+    "--prompt", "x",
+    "--background", "transparent",
+  ]), /gpt-image-2 does not support/);
+  assert.throws(() => parseGenerateArgs([
+    "--prompt", "x",
+    "--image-model", "gpt-image-1.5",
+    "--background", "transparent",
+    "--format", "jpeg",
+  ]), /requires --format png or webp/);
+});
+
 test("mask requires an edit input", () => {
   assert.throws(() => parseGenerateArgs(["--prompt", "x", "--mask", "mask.png", "--action", "generate"]), /requires edit action/);
   assert.throws(() => parseGenerateArgs(["--prompt", "x", "--mask", "mask.png", "--action", "edit"]), /requires at least one/);
