@@ -1,0 +1,6 @@
+interface:
+  display_name: "Team Orchestration"
+  short_description: "Split work, compare solutions or coordinate reviews by risk"
+  default_prompt: "Use $team-orchestration to propose a work split or independent candidates for my task and explain how to verify the result."
+policy:
+  allow_implicit_invocation: false

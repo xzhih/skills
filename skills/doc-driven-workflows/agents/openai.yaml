@@ -1,6 +1,0 @@
-interface:
-  display_name: "Doc-Driven Workflows"
-  short_description: "Maintain source-backed technical documents"
-  default_prompt: "Use $doc-driven-workflows to update the requested technical documentation from current source evidence."
-policy:
-  allow_implicit_invocation: false

@@ -1,7 +1,9 @@
 # Skill maintenance
 
-Current workflow: compact, independently callable stages with optional composition. Historical records in [archive](archive/) describe superseded behavior and are not current requirements.
+The [routing cases](routing-cases.md) cover the six current entries, their invocation policy and the deliverable each request authorizes.
 
-For maintenance, check the requested behavior, edit its owning skill, validate frontmatter and links, and review representative positive and negative scenarios. Keep repository evaluation notes out of installed runtime instructions. Do not require multi-agent testing or installation to an unrelated user directory.
+Edit the skill that owns the behavior and validate its frontmatter, interface metadata and local links. On routing changes, replay the affected requests from raw inputs. Check the selected entry, scope and stopping point, and distinguish a model's answer from work actually executed.
 
-See [current scenarios](2026-09-05-lean-workflows.md) for this revision's scope and validation limits.
+To compare prompt revisions, give each version the same request, starting files, model and reasoning effort. Check the delivered text or run the changed entry against the same acceptance conditions.
+
+The [September 2026 scenarios](2026-09-05-lean-workflows.md) and [earlier records](archive/) describe the revisions evaluated at the time.

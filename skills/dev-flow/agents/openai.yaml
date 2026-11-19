@@ -1,6 +1,6 @@
 interface:
   display_name: "Dev Flow"
-  short_description: "Guide a compact development workflow"
-  default_prompt: "Use $dev-flow to complete the requested development workflow, reusing existing decisions and reviewing the result."
+  short_description: "Select a playbook and carry out the requested work"
+  default_prompt: "Use $dev-flow to choose the shortest workflow for this task and verify the requested result."
 policy:
   allow_implicit_invocation: false

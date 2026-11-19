@@ -1,6 +1,0 @@
-interface:
-  display_name: "Agent Grilling"
-  short_description: "Investigate assumptions and root causes"
-  default_prompt: "Use $agent-grilling to investigate this question through evidence, competing explanations, and causal checks."
-policy:
-  allow_implicit_invocation: false

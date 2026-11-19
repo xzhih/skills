@@ -7,6 +7,7 @@ docs/skill-evals/*
 .worktrees/
 
 !docs/skill-evals/README.md
+!docs/skill-evals/routing-cases.md
 !docs/skill-evals/2026-09-05-lean-workflows.md
 !docs/skill-evals/archive/
 docs/skill-evals/archive/*

@@ -1,6 +1,6 @@
 interface:
   display_name: "Agent Plan"
-  short_description: "Plan grounded, testable implementation"
-  default_prompt: "Use $agent-plan to produce a practical implementation plan grounded in current source, then stop."
+  short_description: "Specify behavior, compare designs or plan delivery and checks"
+  default_prompt: "Use $agent-plan for the requirements, specification, architecture choice, implementation plan or acceptance checks I asked for."
 policy:
   allow_implicit_invocation: false

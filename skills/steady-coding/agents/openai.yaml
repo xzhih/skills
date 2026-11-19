@@ -1,7 +1,6 @@
 interface:
   display_name: "Steady Coding"
-  short_description: "Implement and verify bounded changes"
-  default_prompt: "Use $steady-coding to implement this change within scope and verify the result."
-
+  short_description: "Improve prompts and guide everyday tasks and changes"
+  default_prompt: "Use $steady-coding to rewrite this prompt for a teammate who has not seen our chat, preserving its goal and output format."
 policy:
   allow_implicit_invocation: true

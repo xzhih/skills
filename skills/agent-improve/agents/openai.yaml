@@ -1,6 +1,0 @@
-interface:
-  display_name: "Agent Improve"
-  short_description: "Independently rank worthwhile improvements"
-  default_prompt: "Use $agent-improve to audit this codebase, rank evidence-backed improvements, and stop before planning or implementation."
-policy:
-  allow_implicit_invocation: true

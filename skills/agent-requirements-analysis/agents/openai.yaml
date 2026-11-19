@@ -1,6 +1,0 @@
-interface:
-  display_name: "Agent Requirements Analysis"
-  short_description: "Grow and prune a clear requirement tree"
-  default_prompt: "Use $agent-requirements-analysis to expand this need, prune alternatives with reasons, and present requirements with a Mermaid tree."
-policy:
-  allow_implicit_invocation: false

@@ -1,6 +1,0 @@
-interface:
-  display_name: "Agent Eval"
-  short_description: "Define acceptance and verification evidence"
-  default_prompt: "Use $agent-eval to define acceptance criteria and meaningful verification for this request."
-policy:
-  allow_implicit_invocation: false

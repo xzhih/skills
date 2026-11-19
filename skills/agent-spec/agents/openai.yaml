@@ -1,6 +1,0 @@
-interface:
-  display_name: "Agent Spec"
-  short_description: "Define behavior and practical boundaries"
-  default_prompt: "Use $agent-spec to define observable behavior, scope, and important failure boundaries for this request."
-policy:
-  allow_implicit_invocation: false

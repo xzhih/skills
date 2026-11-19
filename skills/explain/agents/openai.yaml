@@ -1,0 +1,6 @@
+interface:
+  display_name: "Explain"
+  short_description: "Explain how features and UI work and why they changed"
+  default_prompt: "Use $explain to walk me through this page from one user action to the visible result and explain any documented design choices."
+policy:
+  allow_implicit_invocation: false
